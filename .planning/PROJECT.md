@@ -56,6 +56,8 @@ Every counselor at every pool can always see — in real time — exactly which 
 - **Auth**: Email-based password reset explicitly excluded; admin resets passwords manually
 - **Devices**: iPad and laptop are first-class; iPhone is best-effort (no separate native app)
 - **Pool config**: Pool count and names must be manageable without touching code
+- **Hosting**: Hostinger (camp already has a subscription) — stack must be deployable there; VPS plan needed for WebSocket support
+- **Source control**: GitHub
 
 ## Key Decisions
 
@@ -64,6 +66,8 @@ Every counselor at every pool can always see — in real time — exactly which 
 | Admin resets passwords (no email flow) | Simpler, fewer moving parts, camp admins are hands-on | — Pending |
 | Buddy pairs do not transfer between pools | Kids re-register at new pool; keeps each pool's board independent and simple | — Pending |
 | Session history retained on close | Data is already in DB; no reason to delete; may be useful for safety records | — Pending |
+| Host on Hostinger | Camp already pays for it; VPS plan required for WebSocket support | — Pending |
+| Source control on GitHub | Camp preference; enables CI/CD pipelines | — Pending |
 
 ## Evolution
 
