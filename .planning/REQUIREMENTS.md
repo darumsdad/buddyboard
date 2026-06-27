@@ -79,10 +79,37 @@
 
 ## Traceability
 
-*(Populated by roadmapper)*
-
-| REQ-ID | Phase |
-|--------|-------|
+| REQ-ID | Phase | Status |
+|--------|-------|--------|
+| AUTH-01 | Phase 1 | Pending |
+| AUTH-02 | Phase 1 | Pending |
+| AUTH-03 | Phase 2 | Pending |
+| AUTH-04 | Phase 2 | Pending |
+| AUTH-05 | Phase 2 | Pending |
+| CAMP-01 | Phase 3 | Pending |
+| CAMP-02 | Phase 3 | Pending |
+| CAMP-03 | Phase 3 | Pending |
+| CAMP-04 | Phase 3 | Pending |
+| CAMP-05 | Phase 3 | Pending |
+| CAMP-06 | Phase 3 | Pending |
+| POOL-01 | Phase 3 | Pending |
+| POOL-02 | Phase 3 | Pending |
+| SESS-01 | Phase 4 | Pending |
+| SESS-02 | Phase 4 | Pending |
+| SESS-03 | Phase 4 | Pending |
+| SESS-04 | Phase 4 | Pending |
+| PAIR-01 | Phase 4 | Pending |
+| PAIR-02 | Phase 4 | Pending |
+| PAIR-03 | Phase 4 | Pending |
+| PAIR-04 | Phase 4 | Pending |
+| PAIR-05 | Phase 5 | Pending |
+| BOARD-01 | Phase 5 | Pending |
+| BOARD-02 | Phase 5 | Pending |
+| BOARD-03 | Phase 6 | Pending |
+| BOARD-04 | Phase 5 | Pending |
+| BOARD-05 | Phase 5 | Pending |
+| UX-01 | Phase 6 | Pending |
+| UX-02 | Phase 6 | Pending |
 
 ---
 
