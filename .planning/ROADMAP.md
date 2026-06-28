@@ -172,7 +172,26 @@ Plans:
   3. The buddy board shows a live swimmer count and pair count (e.g. "12 swimmers — 6 pairs")
   4. A prominent banner shows "Connected", "Reconnecting", or "Disconnected — data may be stale" reflecting the actual WebSocket state
   5. An empty board clearly distinguishes "No pairs checked in" from "Not connected" or "Loading"
-**Plans**: TBD
+**Plans**: 6 plans
+
+Plans:
+- [ ] 05-01-PLAN.md — Supabase client singleton, package install, Wave 0 test scaffolding, manual publication/env setup (Wave 1)
+- [ ] 05-02-PLAN.md — Mutation callback layer: remove revalidatePath, add onSuccess/onRemoved to AddPairForm/PairRow (Wave 1)
+- [ ] 05-03-PLAN.md — GET /api/sessions/[sessionId]/pairs Route Handler with Better Auth gate (Wave 2)
+- [ ] 05-04-PLAN.md — ConnectionBanner + PairSkeleton + SessionBoard/PairList live-prop threading (Wave 2)
+- [ ] 05-05-PLAN.md — LiveBoard client component: dual-table Realtime subscription, debounced refetch, derived counts (Wave 3)
+- [ ] 05-06-PLAN.md — page.tsx wiring (LiveBoard replaces SessionBoard) + multi-device verification (Wave 4)
+
+**Wave dependencies:** Wave 2 *(05-03 blocked on 05-01; 05-04 blocked on 05-01 + 05-02)* | Wave 3 *(05-05 blocked on 05-01 + 05-03 + 05-04)* | Wave 4 *(05-06 blocked on 05-05)*
+
+**Cross-cutting constraints:**
+- Subscribe to BOTH pair_member (INSERT) AND pair (DELETE) on one channel — cascade-deleted pair_member rows do not fire Realtime events (RESEARCH Critical Finding #1)
+- useEffect cleanup MUST use supabase.removeChannel(channel), never channel.unsubscribe()
+- Route Handler MUST await params (Promise in Next.js 16) before destructuring sessionId
+- Debounce refreshPairs at 150ms to collapse the trio INSERT burst
+- revalidatePath removed from addPairAction/addPairMemberAction/removePairAction; retained in closeSessionAction
+- Both pair and pair_member must be on the supabase_realtime publication (manual setup, Plan 05-01)
+
 **UI hint**: yes
 
 ### Phase 6: Buddy Call Screen & Polish
@@ -200,5 +219,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 2.2. Admin Nav & UI Polish | 0/2 | Not started | - |
 | 3. Admin Data Setup | 4/4 | Complete   | 2026-06-28 |
 | 4. Sessions & Buddy Pairs | 5/5 | Complete   | 2026-06-28 |
-| 5. Real-time & Live Board | 0/? | Not started | - |
+| 5. Real-time & Live Board | 0/6 | Not started | - |
 | 6. Buddy Call Screen & Polish | 0/? | Not started | - |
