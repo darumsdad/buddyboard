@@ -2,10 +2,11 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { db } from "@/db";
-import { poolSession, pairMember, pool, camper } from "@/db/schema";
+import { poolSession, pool } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import { LiveBoard } from "./components/LiveBoard";
 import { JoinSessionModal } from "./components/JoinSessionModal";
+import { getPairsForSession } from "@/lib/pairs";
 
 // -------------------------------------------------------------------
 // Private helper: get-or-create the active session for a pool.
@@ -57,44 +58,6 @@ async function getOrCreateActiveSession(
     .limit(1);
 
   return { session: afterRace[0], wasJustCreated: false };
-}
-
-// -------------------------------------------------------------------
-// Private helper: fetch all pairs for a session, grouped by pairId.
-// -------------------------------------------------------------------
-async function getPairsForSession(sessionId: string) {
-  const rows = await db
-    .select({
-      pairId: pairMember.pairId,
-      camperId: pairMember.camperId,
-      firstName: camper.firstName,
-      lastName: camper.lastName,
-      bunk: camper.bunk,
-      code: camper.code,
-    })
-    .from(pairMember)
-    .innerJoin(camper, eq(pairMember.camperId, camper.id))
-    .where(eq(pairMember.sessionId, sessionId));
-
-  // Group by pairId in application code.
-  const pairMap = new Map<
-    string,
-    { id: string; members: Array<{ camperId: string; firstName: string; lastName: string; bunk: string; code: string }> }
-  >();
-
-  for (const row of rows) {
-    const entry = pairMap.get(row.pairId) ?? { id: row.pairId, members: [] };
-    entry.members.push({
-      camperId: row.camperId,
-      firstName: row.firstName,
-      lastName: row.lastName,
-      bunk: row.bunk,
-      code: row.code,
-    });
-    pairMap.set(row.pairId, entry);
-  }
-
-  return Array.from(pairMap.values());
 }
 
 // -------------------------------------------------------------------
