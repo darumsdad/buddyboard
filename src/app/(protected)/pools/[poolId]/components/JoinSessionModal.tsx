@@ -5,11 +5,21 @@ import { useRouter } from "next/navigation";
 
 type Props = {
   poolName: string;
+  sessionId: string;
 };
 
-export function JoinSessionModal({ poolName }: Props) {
-  const [dismissed, setDismissed] = useState(false);
+const storageKey = (sessionId: string) => `joined-session:${sessionId}`;
+
+export function JoinSessionModal({ poolName, sessionId }: Props) {
+  const [dismissed, setDismissed] = useState(
+    () => typeof window !== "undefined" && !!sessionStorage.getItem(storageKey(sessionId)),
+  );
   const router = useRouter();
+
+  function handleJoin() {
+    sessionStorage.setItem(storageKey(sessionId), "1");
+    setDismissed(true);
+  }
 
   if (dismissed) return null;
 
@@ -25,7 +35,7 @@ export function JoinSessionModal({ poolName }: Props) {
         </p>
         <div className="flex flex-col gap-3 mt-6">
           <button
-            onClick={() => setDismissed(true)}
+            onClick={handleJoin}
             className="min-h-[44px] w-full bg-blue-600 hover:bg-blue-700 text-white text-base font-semibold rounded-md transition-colors duration-150"
           >
             Join session

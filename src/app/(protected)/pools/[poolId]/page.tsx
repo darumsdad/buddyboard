@@ -150,7 +150,7 @@ export default async function PoolSessionPage({
 
   return (
     <>
-      {sessionOpenedByOtherUser && <JoinSessionModal poolName={poolRecord[0].name} />}
+      {sessionOpenedByOtherUser && <JoinSessionModal poolName={poolRecord[0].name} sessionId={session.id} />}
       <SessionBoard
         poolName={poolRecord[0].name}
         swimmerCount={swimmerCount}
