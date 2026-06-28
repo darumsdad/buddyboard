@@ -1,4 +1,5 @@
 import { PairRow } from "./PairRow";
+import { PairSkeleton } from "./PairSkeleton";
 
 type PairMember = {
   camperId: string;
@@ -17,9 +18,15 @@ type PairListProps = {
   pairs: Pair[];
   sessionId: string;
   poolId: string;
+  onPairRemoved: () => void;
+  isRefreshing: boolean;
 };
 
-export function PairList({ pairs, sessionId, poolId }: PairListProps) {
+export function PairList({ pairs, sessionId, poolId, onPairRemoved, isRefreshing }: PairListProps) {
+  if (isRefreshing) {
+    return <PairSkeleton />;
+  }
+
   if (pairs.length === 0) {
     return (
       <div className="py-12 text-center">
@@ -34,7 +41,7 @@ export function PairList({ pairs, sessionId, poolId }: PairListProps) {
   return (
     <div className="divide-y divide-slate-200">
       {pairs.map((p) => (
-        <PairRow key={p.id} pair={p} sessionId={sessionId} poolId={poolId} />
+        <PairRow key={p.id} pair={p} sessionId={sessionId} poolId={poolId} onRemoved={onPairRemoved} />
       ))}
     </div>
   );
