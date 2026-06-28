@@ -9,9 +9,10 @@ type Props = {
   onResolved: (camper: CamperSuggestion | null) => void;
   error?: string | null;
   inputRef?: React.RefObject<HTMLInputElement | null>;
+  labelSuffix?: React.ReactNode;
 };
 
-export function CamperField({ sessionId, label, onResolved, error, inputRef }: Props) {
+export function CamperField({ sessionId, label, onResolved, error, inputRef, labelSuffix }: Props) {
   const [suggestions, setSuggestions] = useState<CamperSuggestion[]>([]);
   const [resolved, setResolved] = useState<CamperSuggestion | null>(null);
   const [inputValue, setInputValue] = useState("");
@@ -94,12 +95,15 @@ export function CamperField({ sessionId, label, onResolved, error, inputRef }: P
 
   return (
     <div className="flex flex-col gap-1">
-      <label
-        htmlFor={fieldId}
-        className="text-sm font-semibold text-slate-900"
-      >
-        {label}
-      </label>
+      <div className="flex items-center justify-between">
+        <label
+          htmlFor={fieldId}
+          className="text-sm font-semibold text-slate-900"
+        >
+          {label}
+        </label>
+        {labelSuffix}
+      </div>
 
       <div className="relative">
         {resolved ? (

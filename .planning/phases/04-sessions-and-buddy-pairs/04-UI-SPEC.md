@@ -48,10 +48,11 @@ Exceptions:
 
 - **44px minimum touch target** — all interactive controls (buttons, inputs, icon buttons)
   use `min-h-[44px]`. Established rule from phases 1–3. Applies to: pair row Remove button,
-  +1 button, Add pair button, Close session button, Log out button, pool selection buttons.
-- **40px round icon buttons** — `w-10 h-10` (40px) for icon-only actions (Remove pair, +1 add
-  trio). This matches the Phase 2 pattern (`DeleteConfirmDialog`, `ResetPasswordForm` icon
-  buttons). These are 40px not 44px because they are supplemented by surrounding row height.
+  Add pair/trio button, Close session button, Log out button, pool selection buttons.
+- **40px round icon buttons** — `w-10 h-10` (40px) for icon-only actions (Remove pair, + trio
+  button in the entry form). This matches the Phase 2 pattern (`DeleteConfirmDialog`,
+  `ResetPasswordForm` icon buttons). These are 40px not 44px because they are supplemented by
+  surrounding row height.
 
 ---
 
@@ -150,16 +151,24 @@ communication explicit and requires an affirmative action)
 
 ### 4. Add Pair Form
 
-**Source:** CONTEXT.md D-04, D-05
+**Source:** CONTEXT.md D-04, D-05, D-06
 
 - Container: `bg-slate-50 rounded-md p-4` below the sticky header
 - Layout: `flex flex-col gap-4` (stacked on mobile) or `flex gap-3 items-end` (row on
-  md+, two CamperField columns + Add pair button)
-- Labels: "Camper 1" / "Camper 2" (text-sm, semibold, text-slate-900)
-- Add pair button: `min-h-[44px] px-6 bg-blue-600 hover:bg-blue-700 text-white text-base
+  md+, two CamperField columns + optional Camper 3 + Add pair/trio button)
+- Labels: "Camper 1" / "Camper 2" / "Camper 3" (text-sm, semibold, text-slate-900)
+- **"+" button** (inline next to Camper 2, visible when Camper 3 is not shown):
+  `w-10 h-[44px] rounded-full border border-slate-300 text-slate-500 hover:bg-slate-100`
+  — icon: `Plus` from lucide-react (size 18), title="Add third camper"
+  — clicking reveals the Camper 3 CamperField
+- **Camper 3 field**: "Camper 3" label with an `×` dismiss button (`X` icon, size 14,
+  text-slate-400) inline in the label row via `labelSuffix` prop on CamperField
+  — clicking `×` hides the field and clears the Camper 3 selection
+- Add pair/trio button: `min-h-[44px] px-6 bg-blue-600 hover:bg-blue-700 text-white text-base
   font-semibold rounded-md disabled:opacity-50 disabled:cursor-not-allowed`
-  — disabled until both campers are resolved (D-05)
-- Loading state on Add pair button: button text changes to "Adding…", opacity-50
+  — disabled until both Camper 1 and Camper 2 are resolved (Camper 3 is optional)
+  — label reads "Add pair" when only two campers; "Add trio" when Camper 3 is also resolved
+- Loading state: button text changes to "Adding…", opacity-50
 - Server error (generic): red alert below the form (`role="alert" text-base text-red-600`)
 
 ### 5. CamperField — input with chip resolution and typeahead
@@ -214,35 +223,19 @@ communication explicit and requires an affirmative action)
 
 ### 8. Pair Row
 
-**Source:** CONTEXT.md D-08, D-06; Claude's discretion for exact layout
+**Source:** CONTEXT.md D-08; Claude's discretion for exact layout
 
 - Layout: `flex items-center justify-between px-4 py-3`
 - Left: camper names block
-  - All members listed: "[Name 1] · [Bunk] — [Name 2] · [Bunk]" (pairs)
-  - Trio: "[Name 1] · [Bunk] — [Name 2] · [Bunk] — [Name 3] · [Bunk]"
+  - All members listed: "[Code] — [Name 1]  ·  [Code] — [Name 2]" (pairs)
+  - Trio: "[Code] — [Name 1]  ·  [Code] — [Name 2]  ·  [Code] — [Name 3]"
   - Font: text-base, text-slate-900
-- Right: action buttons row (`flex items-center gap-2`)
-  - "+1" button (shown only for pairs, not trios): `w-10 h-10 rounded-full flex items-center
-    justify-center text-slate-600 hover:bg-slate-100 transition-colors`
-    — icon: `UserPlus` from lucide-react (size 18), title="Add third camper"
-  - Remove button: `w-10 h-10 rounded-full flex items-center justify-center text-red-600
+- Right: Remove button only (no +1 button — trios are formed at entry, not post-hoc)
+  - `w-10 h-10 rounded-full flex items-center justify-center text-red-600
     hover:bg-red-50 transition-colors`
-    — icon: `Trash2` from lucide-react (size 18), title="Remove pair"
-    — matches Phase 2 DeleteConfirmDialog button style exactly
+  - icon: `Trash2` from lucide-react (size 18), title="Remove pair"
 
-### 9. Trio Picker
-
-**Source:** CONTEXT.md D-06
-
-- Triggered by "+1" button on a pair row
-- Rendered as a centered modal overlay (same overlay class as Join Session Prompt)
-- Card: `bg-white rounded-lg p-8 w-full max-w-sm shadow-sm`
-- Heading (text-xl, semibold): "Add a third camper"
-- Single CamperField (same component as Add Pair Form)
-- Buttons below: "Add to pair" (blue-600, min-h-[44px], full width, disabled until resolved)
-  + "Keep pair as-is" (text link, text-slate-600)
-
-### 10. Close Session Confirmation Dialog
+### 9. Close Session Confirmation Dialog
 
 **Source:** CONTEXT.md D-12; pattern from `DeleteConfirmDialog.tsx`
 
@@ -266,9 +259,9 @@ All interactive elements must declare all four states:
 
 | Element | Default | Hover | Active / Submitting | Disabled |
 |---------|---------|-------|---------------------|----------|
-| Add pair button | bg-blue-600 text-white | bg-blue-700 | opacity-50, text "Adding…" | opacity-50 cursor-not-allowed |
+| Add pair/trio button | bg-blue-600 text-white | bg-blue-700 | opacity-50, text "Adding…" | opacity-50 cursor-not-allowed |
 | Remove button | text-red-600 transparent bg | bg-red-50 | opacity-50 | — |
-| +1 button | text-slate-600 transparent bg | bg-slate-100 | opacity-50 | hidden (trio) |
+| + (add third camper) | border-slate-300 text-slate-500 | bg-slate-100 text-slate-700 | — | hidden when Camper 3 shown |
 | Close session button | border-slate-300 text-slate-700 | bg-slate-50 | opacity-50 | — |
 | Pool selection button | bg-blue-600 text-white | bg-blue-700 | opacity-80 | — |
 | CamperField input | border-slate-300 | border-slate-400 | — | border-red-400 (PAIR-04) |
@@ -301,12 +294,13 @@ All interactive elements must declare all four states:
 ├─────────────────────────────────────────────┤
 │  ┌──────────────────────────────────────┐   │
 │  │  [Camper 1 chip/input]               │   │  ← Add Pair Form (bg-slate-50)
-│  │  [Camper 2 chip/input]               │   │
-│  │                      [Add pair]      │   │
+│  │  [Camper 2 chip/input] [+]           │   │     [+] reveals Camper 3 field
+│  │  [Camper 3 chip/input ×] (optional)  │   │
+│  │                  [Add pair/trio]     │   │
 │  └──────────────────────────────────────┘   │
 ├─────────────────────────────────────────────┤
-│  Noah S. · Bunk 4 — Liam R. · Bunk 7  [+1][🗑] │  ← pair rows (divide-y)
-│  Maya T. · Bunk 2 — Zoe K. · Bunk 2   [+1][🗑] │
+│  Noah S. · Bunk 4 — Liam R. · Bunk 7  [🗑] │  ← pair rows (divide-y)
+│  Maya T. · Bunk 2 — Zoe K. · Bunk 2   [🗑] │
 │  …                                          │
 └─────────────────────────────────────────────┘
 ```
@@ -317,7 +311,7 @@ All interactive elements must declare all four states:
 
 | Element | Copy |
 |---------|------|
-| Primary CTA | "Add pair" |
+| Primary CTA | "Add pair" (two campers) / "Add trio" (three campers) |
 | Pool page heading | "Select a Pool" (existing, keep) |
 | Session header — zero state | "0 swimmers · 0 pairs" |
 | Session header — active | "[N] swimmers · [N] pairs" |
@@ -327,11 +321,9 @@ All interactive elements must declare all four states:
 | Join session cancel | "Go back" |
 | Empty pair list heading | "No pairs checked in yet" |
 | Empty pair list body | "Use the form above to add the first buddy pair." |
-| +1 button title | "Add third camper" |
+| + button title | "Add third camper" |
+| Remove third camper aria-label | "Remove third camper" |
 | Remove pair button title | "Remove pair" |
-| Trio picker heading | "Add a third camper" |
-| Trio picker confirm | "Add to pair" |
-| Trio picker cancel | "Keep pair as-is" |
 | Close session button | "Close session" |
 | Close session dialog heading | "Close session?" |
 | Close session dialog body (with pairs) | "[N] pairs are still in the water. Close anyway? All pair data will be archived." |
@@ -349,7 +341,7 @@ All interactive elements must declare all four states:
 
 ## Accessibility Contract
 
-- All icon-only buttons carry a `title` attribute (e.g. `title="Remove pair"`, `title="Add third camper"`)
+- All icon-only buttons carry a `title` or `aria-label` (e.g. `title="Remove pair"`, `title="Add third camper"`, `aria-label="Remove third camper"` on the × dismiss)
 - All error messages carry `role="alert"` for screen reader announcement
 - Typeahead dropdown: `aria-live="polite"` on the list container; `aria-selected` on active option
 - CamperField input: `aria-label="Camper 1"` / `aria-label="Camper 2"` (label element links via htmlFor)

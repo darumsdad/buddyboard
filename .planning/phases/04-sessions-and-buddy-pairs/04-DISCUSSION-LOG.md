@@ -47,17 +47,19 @@
 
 **Minimum to register a pair:**
 **User's choice (free-text):** "one more requirement - odd numbers.. the normal use case is pairs - we should have a button that allows a third camper to join the pair if that camper has no buddy (poor kid :))"
-**Notes:** User introduced trios — a "+1" button on each pair row lets a third camper join. Max group size 3. The "+1" button disappears once trio is formed.
+**Notes:** User introduced trios. Initially implemented as a "+1" button on each pair row (post-hoc modal); later revised — user wanted the trio to be entered upfront, not as an afterthought hunt through the pair list.
+
+**Revised decision (2026-06-28):** "I dont like that - can we make that add icon (+) next to camper 2 and then that will open a new box and then you add all 3 at that time - this way you don't have to hunt and find a pair to edit - i.e. the triple gets added initially - the third is not an afterthought"
 
 | Option | Description | Selected |
 |--------|-------------|----------|
-| +1 button on each pair row | Opens single camper picker; max 3 members | ✓ |
-| Third field in entry form | Optional Camper 3 field from the start | |
+| +1 button on each pair row | Opens single camper picker; max 3 members | (initial impl, superseded) |
+| + button next to Camper 2 in the entry form | Reveals optional Camper 3 field; all 3 submitted together | ✓ |
 
 | Option | Description | Selected |
 |--------|-------------|----------|
-| Max 3 (pairs and trios only) | +1 button disappears at 3 | ✓ |
-| Unlimited group size | +1 always shows | |
+| Max 3 (pairs and trios only) | No +1 button after trio formed | ✓ |
+| Unlimited group size | Always allow more | |
 
 | Option | Description | Selected |
 |--------|-------------|----------|

@@ -28,14 +28,14 @@ Counselors can select a pool, run a shared session, register buddy pairs (by Swi
 ### Pair Entry UX
 - **D-04:** Pair entry uses two fields (Camper 1 and Camper 2), submitted together. Both fields accept code or name in the same input — if input matches a SwimCode exactly, resolve immediately; if it looks like a name, show typeahead dropdown (format: "Noah Schwartz · Bunk 4" per D-11 from Phase 3). No mode toggle.
 - **D-05:** The "Add pair" button is disabled until both campers are resolved. A resolved camper shows as a chip/tag in the field. After successful submission, both fields clear and focus returns to Camper 1 for fast repeated entry.
-- **D-06:** Trios — a third camper can join an existing pair via a "+1" button on the pair row. Clicking it opens a single camper picker (code or name typeahead). Maximum group size is 3 (pairs and trios only). The +1 button disappears once a group has 3 members.
+- **D-06:** Trios — a "+" button sits inline next to the Camper 2 field in the entry form. Clicking it reveals an optional Camper 3 field; all three campers are submitted together in a single action. Maximum group size is 3. The "+" button is not shown on existing pair rows — trios must be declared at entry time, not added as an afterthought. The submit button reads "Add trio" when Camper 3 is resolved.
 - **D-07:** PAIR-04 (duplicate camper prevention) is enforced at the database level. A camper already in an active pair in this session cannot be added to another pair. The UI surfaces the server error inline.
 
 ### Session Page Layout
 - **D-08:** Single-page layout for the session screen at `/pools/[poolId]`:
   - **Header (sticky):** Pool name | Total swimmers + total pairs/trios count (prominently displayed — this is the primary thing counselors read during a buddy call) | "Close session" button | "View all pairs" link (navigates to the detail list, which Phase 6 will build into the buddy call screen)
-  - **Entry form:** Camper 1 field + Camper 2 field + "Add pair" button
-  - **Pair list (below form):** Compact rows — one row per pair/trio. Each row: Camper names + bunk (all members). Remove button (right side). +1 button (right side, hidden once trio). Scrollable.
+  - **Entry form:** Camper 1 field + Camper 2 field + inline "+" button (reveals Camper 3) + "Add pair" / "Add trio" button
+  - **Pair list (below form):** Compact rows — one row per pair/trio. Each row: Camper names (all members). Remove button (right side only — no +1 button on rows). Scrollable.
 - **D-09:** The swimmer/pair count in the header is the hero element — large text, high contrast. It updates immediately after each add/remove (HTTP response drives the update). Phase 5 makes it real-time; Phase 4 it reflects the state after each mutation.
 - **D-10:** URL structure: `/pools` for pool selection, `/pools/[poolId]` for the active session. Pool IDs come from the `pool` table seeded in Phase 3.
 
@@ -108,7 +108,7 @@ Counselors can select a pool, run a shared session, register buddy pairs (by Swi
 ## Specific Ideas
 
 - **Buddy call mental model:** The primary use case is: counselors count off pairs verbally and verify the total matches the number on screen. The swimmer/pair count in the header is the hero — large, prominent, high contrast. The individual pair list is secondary (used only when counts don't match). Phase 6 builds the full high-contrast buddy call screen.
-- **Trios:** A "+1" button on each pair row (disappears once trio). Clicking opens a single camper picker. Max group size 3.
+- **Trios:** A "+" button inline next to the Camper 2 field reveals a Camper 3 field. All three are submitted together. Max group size 3. No post-hoc add — the trio must be declared at entry time.
 - **Join session prompt:** When a second counselor opens `/pools/[poolId]` where a session is already active, they see "Session in progress — join?" before seeing the board.
 - **After close:** Redirect to `/pools`. Counselor can start a fresh session for the same pool by clicking it again.
 - **Logout button:** Add to the session header (top-right) and the admin nav — calls `authClient.signOut()` then redirects to `/login`. This is the todo folded from `.planning/todos/pending/2026-06-28-add-logout-button.md`.

@@ -91,6 +91,7 @@ export async function addPairAction(
   poolId: string,
   camper1Id: string,
   camper2Id: string,
+  camper3Id?: string,
 ): Promise<AddPairResult> {
   await requireAuth();
 
@@ -98,10 +99,12 @@ export async function addPairAction(
     await db.transaction(async (tx) => {
       const pairId = crypto.randomUUID();
       await tx.insert(pair).values({ id: pairId, sessionId, createdAt: new Date() });
-      await tx.insert(pairMember).values([
+      const members: { pairId: string; camperId: string; sessionId: string }[] = [
         { pairId, camperId: camper1Id, sessionId },
         { pairId, camperId: camper2Id, sessionId },
-      ]);
+      ];
+      if (camper3Id) members.push({ pairId, camperId: camper3Id, sessionId });
+      await tx.insert(pairMember).values(members);
     });
   } catch (err: unknown) {
     if (isUniqueViolation(err)) {

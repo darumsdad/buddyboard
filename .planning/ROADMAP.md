@@ -143,7 +143,7 @@ Plans:
 Plans:
 - [x] 04-01-PLAN.md — Schema additions (poolSession + pair + pairMember tables, relations), drizzle-kit push [BLOCKING] (Wave 1)
 - [x] 04-02-PLAN.md — Server Actions (requireAuth, searchCampersAction, addPairAction, addPairMemberAction, removePairAction, closeSessionAction), unit test files (Wave 2)
-- [x] 04-03-PLAN.md — Leaf UI components: JoinSessionModal, CloseSessionDialog, TrioPicker, CamperField, PairRow (Wave 3)
+- [x] 04-03-PLAN.md — Leaf UI components: JoinSessionModal, CloseSessionDialog, CamperField, PairRow (Wave 3; TrioPicker removed — trio entry moved upfront into AddPairForm)
 - [x] 04-04-PLAN.md — Composite components: LogoutButton, AddPairForm, PairList, SessionHeader, SessionBoard (Wave 4)
 - [x] 04-05-PLAN.md — Page wiring: pools/page.tsx (DB-driven + logout), pools/[poolId]/page.tsx (get-or-create session, full board), end-to-end verification (Wave 5)
 
