@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ChevronRight } from "lucide-react";
+import { Users } from "lucide-react";
 import { CloseSessionDialog } from "./CloseSessionDialog";
 import { LogoutButton } from "./LogoutButton";
 
@@ -33,10 +33,10 @@ export function SessionHeader({
           </p>
           <Link
             href={`/pools/${poolId}/buddy-call`}
-            className="inline-flex items-center gap-1 text-base text-slate-600 hover:text-slate-900 min-h-[44px]"
+            className="inline-flex items-center gap-2 mt-2 px-4 py-2 rounded-md bg-blue-600 text-white text-base font-semibold hover:bg-blue-700 min-h-[44px]"
           >
-            View all pairs
-            <ChevronRight size={16} />
+            <Users size={18} />
+            Buddy Call
           </Link>
         </div>
 
@@ -57,10 +57,10 @@ export function SessionHeader({
         </p>
         <Link
           href={`/pools/${poolId}/buddy-call`}
-          className="inline-flex items-center gap-1 text-base text-slate-600 hover:text-slate-900 min-h-[44px]"
+          className="inline-flex items-center gap-2 mt-2 px-4 py-2 rounded-md bg-blue-600 text-white text-base font-semibold hover:bg-blue-700 min-h-[44px]"
         >
-          View all pairs
-          <ChevronRight size={16} />
+          <Users size={18} />
+          Buddy Call
         </Link>
       </div>
     </header>

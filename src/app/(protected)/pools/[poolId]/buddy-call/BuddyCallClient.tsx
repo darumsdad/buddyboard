@@ -123,28 +123,28 @@ export function BuddyCallClient({
       {/* Giant count block — primary content for outdoor buddy call */}
       <main className="flex-1 flex flex-col items-center justify-center px-4 py-12 text-center">
         <div className="flex flex-col items-center gap-y-6">
-          {/* Swimmer count — dominant display */}
+          {/* Pair count — dominant display */}
           <div className="flex flex-col items-center gap-y-1">
             <output
               aria-live="polite"
               aria-atomic="true"
               className="text-6xl font-semibold text-slate-900 leading-none tabular-nums"
             >
-              {swimmerCount}
+              {pairCount}
             </output>
-            <p className="text-xl font-semibold text-slate-500">swimmers</p>
+            <p className="text-xl font-semibold text-slate-500">pairs</p>
           </div>
 
-          {/* Pair count */}
+          {/* Swimmer count — secondary */}
           <div className="flex flex-col items-center gap-y-1">
             <output
               aria-live="polite"
               aria-atomic="true"
-              className="text-4xl md:text-6xl font-semibold text-slate-900 leading-none tabular-nums"
+              className="text-4xl font-semibold text-slate-400 leading-none tabular-nums"
             >
-              {pairCount}
+              {swimmerCount}
             </output>
-            <p className="text-xl font-semibold text-slate-500">pairs</p>
+            <p className="text-base font-semibold text-slate-400">swimmers</p>
           </div>
         </div>
 
