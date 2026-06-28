@@ -4,6 +4,7 @@ import { ilike, or, sql, desc } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { db } from "@/db";
 import { camper } from "@/db/schema";
+import { Download } from "lucide-react";
 import { CamperTable } from "./components/CamperTable";
 import { AddCamperModal } from "./components/AddCamperModal";
 import { ClearAllCampersDialog } from "./components/ClearAllCampersDialog";
@@ -53,18 +54,23 @@ export default async function CampersPage({
       <div className="max-w-4xl mx-auto p-6">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-semibold text-slate-900">Campers</h1>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1">
             <ClearAllCampersDialog />
+            <a
+              href="/sample-roster.csv"
+              download
+              className="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded transition-colors"
+              title="Download CSV template"
+              aria-label="Download CSV template"
+            >
+              <Download size={20} />
+            </a>
+            <ImportModal />
             <AddCamperModal />
           </div>
         </div>
 
-        <div className="flex gap-3 mt-6 items-center">
-          <div className="flex-1">
-            <SearchBar defaultValue={q} />
-          </div>
-          <ImportModal />
-        </div>
+        <SearchBar defaultValue={q} />
 
         <CamperTable campers={campers} searchQuery={q || undefined} />
 
