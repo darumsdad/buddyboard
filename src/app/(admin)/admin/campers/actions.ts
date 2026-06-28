@@ -6,6 +6,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@/db";
 import { camper } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import * as xlsx from "xlsx";
 
 async function requireAdmin() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -80,4 +81,161 @@ export async function clearAllCampersAction() {
   await requireAdmin();
   await db.delete(camper);
   revalidatePath("/admin/campers");
+}
+
+// --- Excel Import ---
+
+export type ImportResult =
+  | { success: true; count: number }
+  | { success: false; errors: string[] };
+
+/** Normalize a string to title case — applied to names only, never to codes (D-13) */
+function toTitleCase(s: string): string {
+  return s
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+    .join(" ");
+}
+
+export async function importCampersAction(
+  _prev: ImportResult | null,
+  formData: FormData,
+): Promise<ImportResult> {
+  await requireAdmin();
+
+  const mode = ((formData.get("mode") as string) ?? "merge").trim();
+
+  const file = formData.get("file") as File | null;
+  if (!file || file.size === 0) {
+    return { success: false, errors: ["No file selected."] };
+  }
+
+  let rows: Record<string, string>[];
+  try {
+    const buffer = Buffer.from(await file.arrayBuffer());
+    const workbook = xlsx.read(buffer, {
+      type: "buffer",
+      cellText: true,
+      cellDates: false,
+    });
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    rows = xlsx.utils.sheet_to_json<Record<string, string>>(sheet, {
+      defval: "",
+      raw: false,
+    });
+  } catch {
+    return {
+      success: false,
+      errors: ["Could not parse file. Please upload an Excel file (.xlsx or .xls)."],
+    };
+  }
+
+  const errors: string[] = [];
+  const seenCodes = new Map<string, number>();
+  const parsed: Array<{
+    firstName: string;
+    lastName: string;
+    code: string;
+    bunk: string;
+    notes: string | null;
+  }> = [];
+
+  for (let i = 0; i < rows.length; i++) {
+    const rowNum = i + 2; // row 1 = header
+    // Normalize header keys — trim trailing/leading whitespace (Pitfall 6)
+    const norm = Object.fromEntries(
+      Object.entries(rows[i]).map(([k, v]) => [k.trim(), String(v).trim()]),
+    );
+
+    // D-06: CampMinder column mapping
+    const lastName = norm["Last Name"] ?? "";
+    const swimCode = norm["SwimCode"] ?? "";
+    const preferredName = norm["Preferred Name"] ?? "";
+    const division = norm["Division"] ?? "";
+    const grade = norm["Camp Grade"] ?? "";
+
+    // Fuzzy Bunk match — any column whose name contains "bunk" (D-06)
+    const bunkKey =
+      Object.keys(norm).find((k) => k.toLowerCase().includes("bunk")) ?? "";
+    const bunkValue = bunkKey ? (norm[bunkKey] ?? "") : "";
+
+    // D-06: notes field from Division + Camp Grade
+    const notesParts: string[] = [];
+    if (division) notesParts.push("Division: " + division);
+    if (grade) notesParts.push("Grade: " + grade);
+    const notes = notesParts.length > 0 ? notesParts.join(" | ") : null;
+
+    // D-13: apply title case to names only
+    const firstName = preferredName ? toTitleCase(preferredName) : "";
+    const lastNameNorm = lastName ? toTitleCase(lastName) : "";
+
+    // D-05/D-12: row-level validation — collect all errors
+    if (!lastNameNorm) errors.push(`Row ${rowNum}: Last Name is blank`);
+    if (!swimCode) {
+      errors.push(`Row ${rowNum}: SwimCode is blank`);
+    } else if (seenCodes.has(swimCode)) {
+      errors.push(
+        `Row ${rowNum}: duplicate SwimCode '${swimCode}' (also in row ${seenCodes.get(swimCode)})`,
+      );
+    } else {
+      seenCodes.set(swimCode, rowNum);
+    }
+    // D-08: bunk required (NOT NULL in DB)
+    if (!bunkValue) errors.push(`Row ${rowNum}: Bunk is blank`);
+
+    parsed.push({
+      firstName,
+      lastName: lastNameNorm,
+      code: swimCode,
+      bunk: bunkValue,
+      notes,
+    });
+  }
+
+  // All-or-nothing: any row error aborts before any DB write
+  if (errors.length > 0) return { success: false, errors };
+
+  if (mode === "replace") {
+    // D-04: Replace — delete all, then insert all
+    await db.transaction(async (tx) => {
+      await tx.delete(camper);
+      if (parsed.length > 0) {
+        await tx.insert(camper).values(
+          parsed.map((r) => ({
+            id: crypto.randomUUID(),
+            firstName: r.firstName,
+            lastName: r.lastName,
+            code: r.code,
+            bunk: r.bunk,
+            notes: r.notes,
+          })),
+        );
+      }
+    });
+    revalidatePath("/admin/campers");
+    return { success: true, count: parsed.length };
+  } else {
+    // D-04: Merge — insert only new SwimCodes, skip existing
+    const existingCodes = new Set(
+      (await db.select({ code: camper.code }).from(camper)).map((r) => r.code),
+    );
+    const toInsert = parsed.filter((r) => !existingCodes.has(r.code));
+    await db.transaction(async (tx) => {
+      if (toInsert.length > 0) {
+        await tx.insert(camper).values(
+          toInsert.map((r) => ({
+            id: crypto.randomUUID(),
+            firstName: r.firstName,
+            lastName: r.lastName,
+            code: r.code,
+            bunk: r.bunk,
+            notes: r.notes,
+          })),
+        );
+      }
+    });
+    revalidatePath("/admin/campers");
+    return { success: true, count: toInsert.length };
+  }
 }

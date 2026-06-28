@@ -211,30 +211,16 @@ function makeAdminSession() {
   };
 }
 
-/** Build a real xlsx buffer from an array of row objects */
-function makeXlsxFile(rows: Record<string, string>[]): File {
-  const wb = xlsx.utils.book_new();
-  const ws = xlsx.utils.json_to_sheet(rows);
-  xlsx.utils.book_append_sheet(wb, ws, "Roster");
-  const buffer: Buffer = xlsx.write(wb, { type: "buffer", bookType: "xlsx" });
-  return {
-    arrayBuffer: () => Promise.resolve(buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength)),
-    size: buffer.length,
-    name: "test.xlsx",
-  } as unknown as File;
-}
+const XLSX_MIME = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
-/** Build xlsx buffer using explicit aoa_to_sheet so column order matches CampMinder format */
+/** Build xlsx buffer using explicit aoa_to_sheet so column order matches CampMinder format.
+ *  Returns a real File object so FormData handles it correctly in jsdom. */
 function makeXlsxFileAoa(headers: string[], rows: string[][]): File {
   const wb = xlsx.utils.book_new();
   const ws = xlsx.utils.aoa_to_sheet([headers, ...rows]);
   xlsx.utils.book_append_sheet(wb, ws, "Roster");
   const buffer: Buffer = xlsx.write(wb, { type: "buffer", bookType: "xlsx" });
-  return {
-    arrayBuffer: () => Promise.resolve(buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength)),
-    size: buffer.length,
-    name: "test.xlsx",
-  } as unknown as File;
+  return new File([buffer], "test.xlsx", { type: XLSX_MIME });
 }
 
 describe("importCampersAction", () => {
@@ -367,12 +353,10 @@ describe("importCampersAction", () => {
     const { auth } = await import("@/lib/auth");
     vi.mocked(auth.api.getSession).mockResolvedValueOnce(makeAdminSession());
     const { db } = await import("@/db");
-    // Existing code "042" in DB
+    // Existing code "042" in DB — action calls db.select({code}).from(camper) with no .where
     vi.mocked(db.select).mockReturnValue({
-      from: vi.fn().mockReturnValue({
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        where: vi.fn().mockResolvedValue([{ code: "042" }] as any),
-      }),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      from: vi.fn().mockResolvedValue([{ code: "042" }] as any),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any);
     const txInsertValues = vi.fn().mockResolvedValue([]);
@@ -449,11 +433,7 @@ describe("importCampersAction", () => {
     ws["C2"] = { v: "042", t: "s" };
     xlsx.utils.book_append_sheet(wb, ws, "Roster");
     const buffer: Buffer = xlsx.write(wb, { type: "buffer", bookType: "xlsx" });
-    const file = {
-      arrayBuffer: () => Promise.resolve(buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength)),
-      size: buffer.length,
-      name: "test.xlsx",
-    } as unknown as File;
+    const file = new File([buffer], "test.xlsx", { type: XLSX_MIME });
 
     const formData = new FormData();
     formData.set("mode", "replace");
