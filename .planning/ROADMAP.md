@@ -13,7 +13,7 @@ BuddyBoard ships in six phases that follow the hard dependency chain in the stac
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation & Auth** - Project scaffolding, Supabase schema, Drizzle migrations, Better Auth setup, and login flow (completed 2026-06-28)
-- [ ] **Phase 2: Admin User Management** - Admin can create, remove, and reset passwords for counselor accounts
+- [x] **Phase 2: Admin User Management** - Admin can create, remove, and reset passwords for counselor accounts (completed 2026-06-28)
 - [ ] **Phase 3: Admin Data Setup** - Admin can configure pools and load the full camper roster (Excel import + CRUD)
 - [ ] **Phase 4: Sessions & Buddy Pairs** - Counselors can run a complete pool session and manage buddy pairs over HTTP
 - [ ] **Phase 5: Real-time & Live Board** - All devices at a pool see live buddy board updates with connection status
@@ -55,7 +55,7 @@ Plans:
 Plans:
 - [x] 02-01-auth-plugin-PLAN.md — Better Auth admin plugin wiring, schema migration, DB push, seed admin backfill (Wave 1)
 - [x] 02-02-admin-layout-PLAN.md — Admin route group, role-enforcing layout, server actions with requireAdmin guard, basic server-rendered users page (Wave 2)
-- [ ] 02-03-users-page-PLAN.md — Interactive UI components (UserTable, CreateUserModal, DeleteConfirmDialog, ResetPasswordForm), component tests, page wiring (Wave 3)
+- [x] 02-03-users-page-PLAN.md — Interactive UI components (UserTable, CreateUserModal, DeleteConfirmDialog, ResetPasswordForm), component tests, page wiring (Wave 3)
 
 **Wave dependencies:** Wave 2 *(blocked on Wave 1 completion)* | Wave 3 *(blocked on Wave 2 completion)*
 
@@ -128,7 +128,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation & Auth | 4/4 | Complete   | 2026-06-28 |
-| 2. Admin User Management | 2/3 | In Progress|  |
+| 2. Admin User Management | 3/3 | Complete   | 2026-06-28 |
 | 3. Admin Data Setup | 0/? | Not started | - |
 | 4. Sessions & Buddy Pairs | 0/? | Not started | - |
 | 5. Real-time & Live Board | 0/? | Not started | - |
