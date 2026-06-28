@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BuddyBoard — Project Overview</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #1a1a1a;
+      background: #fff;
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 48px 40px;
+    }
+
+    /* Header */
+    .header {
+      border-bottom: 3px solid #1a56db;
+      padding-bottom: 20px;
+      margin-bottom: 32px;
+    }
+    .header h1 {
+      font-size: 32px;
+      font-weight: 700;
+      color: #1a56db;
+      letter-spacing: -0.5px;
+    }
+    .header .tagline {
+      font-size: 16px;
+      color: #555;
+      margin-top: 6px;
+    }
+    .header .meta {
+      margin-top: 12px;
+      font-size: 12px;
+      color: #888;
+    }
+
+    /* Section headings */
+    h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-top: 36px;
+      margin-bottom: 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #374151;
+      margin-top: 20px;
+      margin-bottom: 8px;
+    }
+
+    /* Body text */
+    p { margin-bottom: 12px; color: #374151; }
+
+    /* Callout box */
+    .callout {
+      background: #eff6ff;
+      border-left: 4px solid #1a56db;
+      padding: 14px 18px;
+      border-radius: 0 6px 6px 0;
+      margin: 20px 0;
+    }
+    .callout strong { color: #1e40af; }
+
+    /* Safety callout */
+    .callout-safety {
+      background: #fef2f2;
+      border-left: 4px solid #dc2626;
+    }
+    .callout-safety strong { color: #991b1b; }
+
+    /* Feature cards grid */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .feature-card {
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .feature-card h4 {
+      font-size: 13px;
+      font-weight: 700;
+      color: #1a56db;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .feature-card ul {
+      padding-left: 16px;
+    }
+    .feature-card ul li {
+      font-size: 13px;
+      color: #374151;
+      margin-bottom: 4px;
+    }
+
+    /* Role table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 13px;
+    }
+    th {
+      background: #f3f4f6;
+      text-align: left;
+      padding: 10px 12px;
+      font-weight: 600;
+      color: #111827;
+      border: 1px solid #e5e7eb;
+    }
+    td {
+      padding: 10px 12px;
+      border: 1px solid #e5e7eb;
+      color: #374151;
+      vertical-align: top;
+    }
+    tr:nth-child(even) td { background: #f9fafb; }
+
+    /* Out of scope list */
+    .out-of-scope {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 16px 20px;
+    }
+    .out-of-scope ul { padding-left: 18px; }
+    .out-of-scope li { font-size: 13px; color: #6b7280; margin-bottom: 4px; }
+
+    /* Devices section */
+    .device-row {
+      display: flex;
+      gap: 16px;
+      margin-top: 12px;
+    }
+    .device-card {
+      flex: 1;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+    .device-card .label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #6b7280;
+      margin-bottom: 4px;
+    }
+    .device-card .device-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 4px;
+    }
+    .device-card p { font-size: 12px; color: #6b7280; margin: 0; }
+    .primary .device-name { color: #1a56db; }
+
+    /* Footer */
+    .footer {
+      margin-top: 48px;
+      padding-top: 16px;
+      border-top: 1px solid #e5e7eb;
+      font-size: 11px;
+      color: #9ca3af;
+      text-align: center;
+    }
+
+    @media print {
+      body { padding: 24px 32px; font-size: 12px; }
+      .feature-grid { break-inside: avoid; }
+      h2 { break-after: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>BuddyBoard</h1>
+    <div class="tagline">Real-Time Pool Safety Tracking for Camp</div>
+    <div class="meta">Project Overview &nbsp;·&nbsp; Prepared June 2026 &nbsp;·&nbsp; Confidential</div>
+  </div>
+
+  <!-- What it is -->
+  <h2>What Is BuddyBoard?</h2>
+  <p>
+    BuddyBoard is a web-based safety system that gives camp pool counselors a live, shared view of every
+    camper currently in the water. When two kids enter the pool together, a counselor registers them as
+    a <strong>buddy pair</strong>. That pair appears instantly on every device at that pool — so all
+    counselors always know exactly who is in the water, in real time.
+  </p>
+  <p>
+    When kids leave the pool, their pair is removed. When it's time for a <strong>buddy call</strong>,
+    counselors open a clean, easy-to-read screen and call off every pair by name. If everyone answers,
+    the pool is safe.
+  </p>
+
+  <div class="callout">
+    <strong>Core purpose:</strong> Every counselor at every pool can always see — in real time — exactly
+    which camper pairs are currently in the water, so no child goes unaccounted for.
+  </div>
+
+  <!-- Who uses it -->
+  <h2>Who Uses It</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Role</th>
+        <th>Who They Are</th>
+        <th>What They Do in BuddyBoard</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Pool Counselor</strong></td>
+        <td>Staff at the poolside, managing kids checking in and out</td>
+        <td>Start a pool session, register buddy pairs, view the live buddy board, run buddy calls, remove pairs when kids leave</td>
+      </tr>
+      <tr>
+        <td><strong>Admin</strong></td>
+        <td>Camp leadership or office staff who manage the system</td>
+        <td>Upload and maintain the camper roster, manage counselor accounts, configure the pool list</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Key features -->
+  <h2>Key Features</h2>
+
+  <div class="feature-grid">
+    <div class="feature-card">
+      <h4>Fast Buddy Check-In</h4>
+      <ul>
+        <li>Counselor enters two campers to form a pair</li>
+        <li>Look up by <strong>camper code</strong> (fastest — single field)</li>
+        <li>Or look up by <strong>name typeahead</strong> (start typing, pick from list)</li>
+        <li>Pair appears on all devices at that pool instantly</li>
+      </ul>
+    </div>
+
+    <div class="feature-card">
+      <h4>Live Buddy Board</h4>
+      <ul>
+        <li>All current pairs shown in a scrollable list</li>
+        <li>Live swimmer count: "12 swimmers — 6 pairs"</li>
+        <li>Updates in real time as counselors add or remove pairs</li>
+        <li>Clear status when disconnected — never silently stale</li>
+      </ul>
+    </div>
+
+    <div class="feature-card">
+      <h4>Buddy Call Screen</h4>
+      <ul>
+        <li>Full-screen, high-contrast view for outdoor use</li>
+        <li>Large text and touch targets for iPad / poolside conditions</li>
+        <li>Scrollable ordered list of all active pairs</li>
+        <li>Designed for bright sunlight readability</li>
+      </ul>
+    </div>
+
+    <div class="feature-card">
+      <h4>Camper Roster Management</h4>
+      <ul>
+        <li>Bulk import via Excel spreadsheet upload</li>
+        <li>Add, edit, or remove individual campers at any time</li>
+        <li>Each camper has a staff-assigned code for fast check-in</li>
+        <li>Search and filter the full roster by name or code</li>
+      </ul>
+    </div>
+
+    <div class="feature-card">
+      <h4>Pool &amp; Session Management</h4>
+      <ul>
+        <li>Configurable pool list (defaults to 3 pools)</li>
+        <li>Counselors start and close sessions per pool</li>
+        <li>Confirmation required before closing with active pairs</li>
+        <li>Session history is archived — records are never deleted</li>
+      </ul>
+    </div>
+
+    <div class="feature-card">
+      <h4>User &amp; Account Management</h4>
+      <ul>
+        <li>Counselors log in with username and password</li>
+        <li>Sessions persist across browser restarts</li>
+        <li>Admins add and remove staff accounts</li>
+        <li>Admins reset passwords directly — no email flow needed</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Safety design -->
+  <h2>Safety Design Decisions</h2>
+
+  <div class="callout callout-safety">
+    <strong>Safety-critical design:</strong> Several features are deliberately designed around the
+    consequence of getting them wrong — a child unaccounted for in a pool.
+  </div>
+
+  <h3>Real-Time Across All Devices</h3>
+  <p>
+    When any counselor at Pool 2 registers or removes a pair, every other device connected to Pool 2
+    updates within seconds — no page refresh, no manual sync. Multiple counselors can check kids in
+    simultaneously without stepping on each other.
+  </p>
+
+  <h3>Connection Status Always Visible</h3>
+  <p>
+    If a tablet loses its connection to the system, a prominent banner immediately alerts the counselor:
+    <em>"Disconnected — data may be stale."</em> A board that silently stops updating is more dangerous
+    than one that clearly shows it has a problem.
+  </p>
+
+  <h3>Remove Requires Server Confirmation</h3>
+  <p>
+    When a counselor removes a buddy pair, the pair does not disappear from the screen until the server
+    confirms the removal. This prevents a pair from vanishing from the board while the children are still
+    in the water due to a network hiccup.
+  </p>
+
+  <h3>Duplicate Detection</h3>
+  <p>
+    The system prevents the same camper from being registered in two pairs at the same time — even if
+    two counselors attempt to add them simultaneously. The database enforces this rule; it cannot be
+    bypassed by a fast enough click.
+  </p>
+
+  <!-- Devices -->
+  <h2>Devices &amp; Access</h2>
+  <p>BuddyBoard is a web application — no installation required. Open a browser and log in.</p>
+
+  <div class="device-row">
+    <div class="device-card primary">
+      <div class="label">Primary</div>
+      <div class="device-name">iPad &amp; Laptop</div>
+      <p>Full experience — all features, optimized layout for poolside use</p>
+    </div>
+    <div class="device-card">
+      <div class="label">Secondary</div>
+      <div class="device-name">iPhone</div>
+      <p>All features accessible — compact layout, best-effort on smaller screen</p>
+    </div>
+    <div class="device-card">
+      <div class="label">Hosting</div>
+      <div class="device-name">Web (Cloud)</div>
+      <p>Hosted online — accessible from any device on the camp network or internet</p>
+    </div>
+  </div>
+
+  <!-- Multi-pool -->
+  <h2>Multi-Pool Support</h2>
+  <p>
+    Each pool has its own independent buddy board. Counselors at Pool 1 see only Pool 1's pairs;
+    counselors at Pool 2 see only Pool 2's pairs. Multiple counselors can manage the same pool
+    simultaneously — two or three people checking kids in at once, all seeing each other's updates live.
+  </p>
+  <p>
+    When a camper switches pools, they are removed from their current pool's board by that counselor,
+    and re-registered as a new pair when they arrive at the next pool. Each pool's board stays
+    independent and clean.
+  </p>
+
+  <div class="footer">
+    BuddyBoard &nbsp;·&nbsp; Camp Pool Safety Tracking &nbsp;·&nbsp; June 2026
+  </div>
+
+</body>
+</html>
