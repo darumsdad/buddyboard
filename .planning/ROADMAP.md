@@ -15,6 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Foundation & Auth** - Project scaffolding, Supabase schema, Drizzle migrations, Better Auth setup, and login flow (completed 2026-06-28)
 - [x] **Phase 2: Admin User Management** - Admin can create, remove, and reset passwords for counselor accounts (completed 2026-06-28)
 - [ ] **Phase 2.1: User Name Fields** *(INSERTED)* - Admin can store and see first/last name on each user account (schema migration + form + table column)
+- [ ] **Phase 2.2: Admin Nav & UI Polish** *(INSERTED)* - Role-based post-login redirect, bidirectional admin/buddy-board nav links (admin-only on buddy board), round icon buttons in user table actions
 - [ ] **Phase 3: Admin Data Setup** - Admin can configure pools and load the full camper roster (Excel import + CRUD)
 - [ ] **Phase 4: Sessions & Buddy Pairs** - Counselors can run a complete pool session and manage buddy pairs over HTTP
 - [ ] **Phase 5: Real-time & Live Board** - All devices at a pool see live buddy board updates with connection status
@@ -76,6 +77,19 @@ Plans:
   1. Admin can enter first name and last name when creating a new user account (both required)
   2. The User Management table shows a Name column (first + last) for every user
   3. The seed admin account has a name after migration and backfill run
+**Plans**: TBD
+**UI hint**: yes
+
+### Phase 2.2: Admin Nav & UI Polish *(INSERTED)*
+**Goal**: Role-based post-login redirect, bidirectional navigation between admin and buddy board screens, and round icon buttons in the user management table
+**Mode:** mvp
+**Depends on**: Phase 2
+**Requirements**: (extension of AUTH UX — no new REQ-IDs)
+**Success Criteria** (what must be TRUE):
+  1. Admin who logs in lands on `/admin/users`; counselor who logs in lands on `/pools`
+  2. Admin screen has a "View Buddy Board" link top-right that navigates to `/pools`
+  3. Pools screen has an "Admin" link top-right that is visible only to admins and navigates to `/admin/users`
+  4. UserTable actions column shows round icon buttons (key + trash) with title tooltips instead of text links
 **Plans**: TBD
 **UI hint**: yes
 
@@ -159,6 +173,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 1. Foundation & Auth | 4/4 | Complete   | 2026-06-28 |
 | 2. Admin User Management | 3/3 | Complete   | 2026-06-28 |
 | 2.1. User Name Fields | 0/? | Not started | - |
+| 2.2. Admin Nav & UI Polish | 0/? | Not started | - |
 | 3. Admin Data Setup | 0/4 | Not started | - |
 | 4. Sessions & Buddy Pairs | 0/? | Not started | - |
 | 5. Real-time & Live Board | 0/? | Not started | - |
