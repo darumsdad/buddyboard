@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@better-auth/drizzle-adapter": "^1.6.22",
+    "@supabase/supabase-js": "^2.108.2",
     "@types/papaparse": "^5.5.2",
     "better-auth": "^1.6.22",
     "drizzle-orm": "^0.45.2",
