@@ -122,7 +122,7 @@ export function AddPairForm({ sessionId, poolId, onSuccess }: AddPairFormProps) 
           type="submit"
           disabled={isDisabled}
           aria-disabled={isDisabled ? "true" : undefined}
-          className="min-h-[44px] px-6 bg-blue-600 hover:bg-blue-700 text-white text-base font-semibold rounded-md disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-150"
+          className="min-h-[44px] w-full md:w-auto px-6 bg-blue-600 hover:bg-blue-700 text-white text-base font-semibold rounded-md disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-150"
         >
           {isPending ? "Adding…" : isTrio ? "Add trio" : "Add pair"}
         </button>

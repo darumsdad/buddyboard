@@ -105,7 +105,9 @@ describe("BOARD-02", () => {
     );
 
     // swimmerCount = 2 + 3 = 5, pairCount = 2
-    expect(screen.getByText(/5 swimmers · 2 pairs/)).toBeInTheDocument();
+    // The count appears in two DOM elements (md+ inline block + mobile stacked row)
+    const countEls = screen.getAllByText(/5 swimmers · 2 pairs/);
+    expect(countEls.length).toBeGreaterThanOrEqual(1);
   });
 });
 
