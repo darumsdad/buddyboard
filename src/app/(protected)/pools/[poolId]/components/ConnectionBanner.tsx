@@ -16,7 +16,7 @@ export function ConnectionBanner({ status, onRefresh }: ConnectionBannerProps) {
     return (
       <div
         role="status"
-        className="sticky top-[57px] z-9 bg-slate-100 border-b border-slate-200 px-4 py-2 flex items-center gap-2"
+        className="fixed top-[57px] left-0 right-0 z-20 bg-slate-100 border-b border-slate-200 px-4 py-2 flex items-center gap-2"
       >
         <Loader2 size={16} className="animate-spin text-slate-600" aria-hidden="true" />
         <span className="text-sm text-slate-600">Reconnecting…</span>
@@ -28,7 +28,7 @@ export function ConnectionBanner({ status, onRefresh }: ConnectionBannerProps) {
   return (
     <div
       role="status"
-      className="sticky top-[57px] z-9 bg-amber-50 border-b border-amber-200 px-4 min-h-[44px] flex items-center justify-between"
+      className="fixed top-[57px] left-0 right-0 z-20 bg-amber-50 border-b border-amber-200 px-4 min-h-[44px] flex items-center justify-between"
     >
       <span className="text-sm text-amber-900">Disconnected — data may be stale.</span>
       <button
