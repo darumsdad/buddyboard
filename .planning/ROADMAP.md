@@ -12,7 +12,7 @@ BuddyBoard ships in six phases that follow the hard dependency chain in the stac
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [x] **Phase 1: Foundation & Auth** - Project scaffolding, Supabase schema, Drizzle migrations, Better Auth setup, and login flow (completed 2026-06-28)
+- [x] **Phase 1: Foundation & Auth** - Project scaffolding, Supabase schema, Drizzle migrations, Better Auth setup, and login flow (completed 2026-06-28)
 - [ ] **Phase 2: Admin User Management** - Admin can create, remove, and reset passwords for counselor accounts
 - [ ] **Phase 3: Admin Data Setup** - Admin can configure pools and load the full camper roster (Excel import + CRUD)
 - [ ] **Phase 4: Sessions & Buddy Pairs** - Counselors can run a complete pool session and manage buddy pairs over HTTP
@@ -50,7 +50,13 @@ Plans:
   1. Admin can create a new account with a username, password, and role (admin or counselor)
   2. Admin can remove a user account; the removed user can no longer log in
   3. Admin can set a new password for any user; no email flow is involved
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 02-01-auth-plugin-PLAN.md — Better Auth admin plugin wiring, schema migration, DB push, seed admin backfill (Wave 1)
+- [ ] 02-02-admin-layout-PLAN.md — Admin route group, role-enforcing layout, server actions with requireAdmin guard, basic server-rendered users page (Wave 2)
+- [ ] 02-03-users-page-PLAN.md — Interactive UI components (UserTable, CreateUserModal, DeleteConfirmDialog, ResetPasswordForm), component tests, page wiring (Wave 3)
+
 **UI hint**: yes
 
 ### Phase 3: Admin Data Setup
@@ -115,7 +121,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation & Auth | 4/4 | Complete   | 2026-06-28 |
-| 2. Admin User Management | 0/? | Not started | - |
+| 2. Admin User Management | 0/3 | Not started | - |
 | 3. Admin Data Setup | 0/? | Not started | - |
 | 4. Sessions & Buddy Pairs | 0/? | Not started | - |
 | 5. Real-time & Live Board | 0/? | Not started | - |
