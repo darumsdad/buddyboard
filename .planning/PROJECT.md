@@ -13,12 +13,12 @@ Every counselor at every pool can always see — in real time — exactly which 
 ### Validated
 
 - [x] Counselor can log in with username and password — Validated in Phase 1: Foundation & Auth
+- [x] Admin can add and remove user accounts — Validated in Phase 2: Admin User Management
+- [x] Admin can reset any user's password — Validated in Phase 2: Admin User Management
 
 ### Active
 
 - [ ] Counselor can log in with username and password
-- [ ] Admin can add and remove user accounts
-- [ ] Admin can reset any user's password
 - [ ] Counselor can start a pool session by selecting from a configurable pool list (default: 3 pools)
 - [ ] Counselor can register a buddy pair by entering two camper names (via code or typeahead)
 - [ ] Camper lookup by unique code (fast single-field entry)
@@ -89,4 +89,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-06-26 after initialization*
+*Last updated: 2026-06-28 — Phase 2 complete (admin user management)*
