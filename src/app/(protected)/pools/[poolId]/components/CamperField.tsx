@@ -8,7 +8,7 @@ type Props = {
   label: string;
   onResolved: (camper: CamperSuggestion | null) => void;
   error?: string | null;
-  inputRef?: React.RefObject<HTMLInputElement>;
+  inputRef?: React.RefObject<HTMLInputElement | null>;
 };
 
 export function CamperField({ sessionId, label, onResolved, error, inputRef }: Props) {
