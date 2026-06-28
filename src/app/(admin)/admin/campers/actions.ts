@@ -48,6 +48,7 @@ export async function addCamperAction(formData: FormData) {
 export async function editCamperAction(formData: FormData) {
   await requireAdmin();
   const id = ((formData.get("id") as string) ?? "").trim();
+  if (!id) throw new Error("Camper ID is required");
   const firstName = ((formData.get("first-name") as string) ?? "").trim();
   const lastName = ((formData.get("last-name") as string) ?? "").trim();
   const code = ((formData.get("code") as string) ?? "").trim();
