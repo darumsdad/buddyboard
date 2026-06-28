@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 6 context gathered
-last_updated: "2026-06-28T20:41:53.252Z"
+stopped_at: Phase 6 UI-SPEC approved
+last_updated: "2026-06-28T21:32:17.756Z"
 last_activity: 2026-06-28 -- Phase 05 execution started
 progress:
   total_phases: 8
   completed_phases: 6
   total_plans: 25
-  completed_plans: 19
+  completed_plans: 23
   percent: 75
 ---
 
@@ -98,6 +98,6 @@ None — logout button todo folded into Phase 4 scope.
 
 ## Session Continuity
 
-Last session: 2026-06-28T20:41:53.242Z
-Stopped at: Phase 6 context gathered
-Resume file: .planning/phases/06-buddy-call-screen-polish/06-CONTEXT.md
+Last session: 2026-06-28T21:32:17.741Z
+Stopped at: Phase 6 UI-SPEC approved
+Resume file: .planning/phases/06-buddy-call-screen-polish/06-UI-SPEC.md
