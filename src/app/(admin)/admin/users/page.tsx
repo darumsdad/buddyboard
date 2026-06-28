@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { asc } from "drizzle-orm";
@@ -42,10 +41,7 @@ export default async function UsersPage() {
           <h1 className="text-3xl font-semibold text-slate-900">
             User Management
           </h1>
-          <div className="flex items-center gap-4">
-            <Link href="/pools" className="text-sm text-slate-600 hover:text-slate-900">View Buddy Board</Link>
-            <CreateUserModal />
-          </div>
+          <CreateUserModal />
         </div>
         <UserTable users={users} />
       </div>
