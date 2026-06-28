@@ -18,9 +18,9 @@ export default async function PoolsPage() {
       <div className="max-w-4xl mx-auto p-6">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-semibold text-slate-900">Pools</h1>
+          <AddPoolForm />
         </div>
         <PoolList pools={pools} />
-        <AddPoolForm />
       </div>
     </main>
   );
