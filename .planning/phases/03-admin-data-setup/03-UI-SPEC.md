@@ -43,7 +43,6 @@ admin components.
 |-------|-------|----------------|-------|
 | xs | 4px | gap-1 | Sidebar nav link gap |
 | sm | 8px | gap-2, mt-2 | Button-row gaps, helper text separation |
-| sm+ | 12px | px-3 / py-3 | Input field padding, table row padding |
 | md | 16px | p-4, gap-4, px-4 | Form field gaps, table cell padding, nav padding |
 | lg | 24px | p-6, mt-6 | Page container padding, dialog button area top margin |
 | xl | 32px | p-8, mt-8 | Modal content padding, section top margin |
@@ -51,6 +50,7 @@ admin components.
 | 3xl | 64px | — | Not currently used |
 
 Exceptions:
+- sm+: 12px (`px-3 / py-3`) — exception from standard set; retained because `px-3 py-3` is the established input-field and table-row padding pattern extracted from Phase 1–2 components (CreateUserModal, DeleteConfirmDialog, UserTable); changing to 8px would collapse internal padding noticeably; this exception is pre-approved.
 - Touch targets: `min-h-[44px]` on all interactive elements (inputs, buttons, table action links).
   This is a hard constraint across all phases — do not reduce below 44px.
 - Modal max-width: `max-w-sm` (384px) — consistent with existing CreateUserModal and DeleteConfirmDialog.
