@@ -115,7 +115,7 @@ Seed script pattern (from RESEARCH.md):
   </done>
 </task>
 
-<task type="auto">
+<task type="checkpoint:human-verify">
   <name>Task 2: [BLOCKING] Apply database migration and seed admin user</name>
   <files>scripts/seed-admin.ts</files>
   <read_first>
