@@ -43,6 +43,7 @@ admin components.
 |-------|-------|----------------|-------|
 | xs | 4px | gap-1 | Sidebar nav link gap |
 | sm | 8px | gap-2, mt-2 | Button-row gaps, helper text separation |
+| sm+ | 12px | px-3 / py-3 | Input field padding, table row padding |
 | md | 16px | p-4, gap-4, px-4 | Form field gaps, table cell padding, nav padding |
 | lg | 24px | p-6, mt-6 | Page container padding, dialog button area top margin |
 | xl | 32px | p-8, mt-8 | Modal content padding, section top margin |
@@ -52,8 +53,6 @@ admin components.
 Exceptions:
 - Touch targets: `min-h-[44px]` on all interactive elements (inputs, buttons, table action links).
   This is a hard constraint across all phases — do not reduce below 44px.
-- Input horizontal padding: `px-3` (12px) — intentional exception for input fields, not buttons.
-- Table cell vertical padding: `py-3` (12px) — intentional exception for table rows.
 - Modal max-width: `max-w-sm` (384px) — consistent with existing CreateUserModal and DeleteConfirmDialog.
 
 ---
@@ -71,6 +70,8 @@ Exactly 4 sizes, 2 weights. Extracted from existing components and matched to Ta
 
 Body labels (form field labels) use `text-base font-semibold` — body size at semibold weight.
 This is the established pattern from CreateUserModal (`text-base font-semibold text-slate-900`).
+
+Weights in use: 400 (body default) and 600 (font-semibold on headings, labels, active nav, inactive nav, buttons). No other weights are used.
 
 ---
 
@@ -129,14 +130,16 @@ The `(admin)/layout.tsx` is modified to wrap children in a flex row with the new
 ```
 
 - Sidebar: `w-48 shrink-0 bg-slate-50 border-r border-slate-200 min-h-screen p-4`
-- Active link: `block px-3 py-2 rounded-md text-base font-semibold bg-blue-600 text-white`
-- Inactive link: `block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-slate-200 transition-colors`
+- Active link: `block px-3 py-2 rounded-md text-base font-semibold bg-blue-600 text-white transition-colors`
+- Inactive link: `block px-3 py-2 rounded-md text-base font-semibold text-slate-700 hover:bg-slate-200 transition-colors`
 - Main content wrapper: `flex-1 min-w-0`
 - Page container (inside main): `max-w-4xl mx-auto p-6`
 
-Source: RESEARCH.md Pattern 4 (AdminSidebar). Sidebar `font-medium` and `font-semibold` distinction:
-inactive links use `font-medium` (500) and active uses `font-semibold` (600) — this is the only
-place font-medium appears. Declared here explicitly to avoid confusion.
+Active and inactive sidebar links both use `font-semibold` (600). They are differentiated only by
+background color: active uses `bg-blue-600 text-white`, inactive uses no background with
+`hover:bg-slate-200`.
+
+Source: RESEARCH.md Pattern 4 (AdminSidebar).
 
 ### Campers Page Layout
 
@@ -146,6 +149,8 @@ Search row:         [Search input — full width]                               
 Table:              [CamperTable — see below]
 Pagination:         [← Previous]  Page X of Y  [Next →]
 ```
+
+Primary visual anchor: the blue "Add camper" button (blue-600, top-right of heading row).
 
 - "Clear all campers" is a text link (`text-red-600`), not a filled button, to reduce destructive salience.
   It lives top-right next to "Add camper" to make the flow clear: both are roster-level actions.
@@ -175,6 +180,8 @@ Page heading row:   [h1 "Pools"]
 Pool list:          [Pool Name]  [Rename]  [Remove ← red]   (one row per pool)
 Add pool form:      [Pool name input]  [Add pool ← blue button]   (inline, below list)
 ```
+
+Primary visual anchor: the blue "Add pool" inline form submit button (blue-600, below the pool list).
 
 - Pool list is a simple `<ul>` — no table needed (no extra columns beyond name and actions).
 - Rename action: opens an EditPoolModal (same max-w-sm modal pattern). Not inline editing.
@@ -215,7 +222,7 @@ Add pool form:      [Pool name input]  [Add pool ← blue button]   (inline, bel
 - Confirm label pattern: "Remove camper" / "Clear all campers" / "Remove pool"
 
 ### Import Modal States
-1. **Default:** File input (`accept=".xlsx,.xls"`), "Download sample template" link, "Upload" button
+1. **Default:** File input (`accept=".xlsx,.xls"`), "Download sample template" link, "Upload roster" button
 2. **Pending:** "Uploading..." button text, disabled, no spinner (consistent with existing loading states)
 3. **Error:** Unordered list of row-level errors below the file input, styled `text-sm text-red-600`, wrapped in `role="alert"`
 4. **Success:** "Imported N campers successfully." in `text-sm text-green-700`, modal offers "Close" link
