@@ -171,6 +171,7 @@ export async function importCampersAction(
     const lastNameNorm = lastName ? toTitleCase(lastName) : "";
 
     // D-05/D-12: row-level validation — collect all errors
+    if (!firstName) errors.push(`Row ${rowNum}: Preferred Name is blank`);
     if (!lastNameNorm) errors.push(`Row ${rowNum}: Last Name is blank`);
     if (!swimCode) {
       errors.push(`Row ${rowNum}: SwimCode is blank`);
