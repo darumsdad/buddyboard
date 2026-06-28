@@ -17,6 +17,8 @@ export async function createUserAction(formData: FormData) {
   const username = formData.get("username") as string;
   const password = formData.get("password") as string;
   const role = formData.get("role") as "user" | "admin";
+  const firstName = formData.get("first-name") as string;
+  const lastName = formData.get("last-name") as string;
 
   const result = await auth.api.createUser({
     body: {
@@ -24,7 +26,7 @@ export async function createUserAction(formData: FormData) {
       password,
       name: username,
       role,
-      data: { username },
+      data: { username, firstName, lastName },
     },
     headers: await headers(),
   });
