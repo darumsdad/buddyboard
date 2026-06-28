@@ -90,7 +90,11 @@ Plans:
   2. Admin screen has a "View Buddy Board" link top-right that navigates to `/pools`
   3. Pools screen has an "Admin" link top-right that is visible only to admins and navigates to `/admin/users`
   4. UserTable actions column shows round icon buttons (key + trash) with title tooltips instead of text links
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 02.2-01-PLAN.md — Role-based redirect + nav links (Wave 1)
+- [ ] 02.2-02-PLAN.md — lucide-react install + round icon buttons (Wave 1, has slopcheck checkpoint)
 **UI hint**: yes
 
 ### Phase 3: Admin Data Setup
@@ -173,7 +177,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 1. Foundation & Auth | 4/4 | Complete   | 2026-06-28 |
 | 2. Admin User Management | 3/3 | Complete   | 2026-06-28 |
 | 2.1. User Name Fields | 0/? | Not started | - |
-| 2.2. Admin Nav & UI Polish | 0/? | Not started | - |
+| 2.2. Admin Nav & UI Polish | 0/2 | Not started | - |
 | 3. Admin Data Setup | 0/4 | Not started | - |
 | 4. Sessions & Buddy Pairs | 0/? | Not started | - |
 | 5. Real-time & Live Board | 0/? | Not started | - |
