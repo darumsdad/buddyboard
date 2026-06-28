@@ -26,8 +26,8 @@ See: .planning/PROJECT.md (updated 2026-06-26)
 ## Current Position
 
 Phase: 06 (buddy-call-screen-polish) — EXECUTING
-Plan: 1 of 3
-Status: Wave 1 dispatched (06-01, 06-02)
+Plan: 3 of 3
+Status: Wave 1 complete — awaiting Wave 2 human verification checkpoint
 Last activity: 2026-06-28 -- Phase 06 planning complete
 
 Progress: [██████████] 100%

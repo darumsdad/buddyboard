@@ -206,8 +206,8 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 06-01-PLAN.md — Buddy call screen: extract getPairsForSession to src/lib/pairs.ts, new buddy-call route + BuddyCallClient with live Realtime count (Wave 1)
-- [ ] 06-02-PLAN.md — Responsive polish: SessionHeader two-row mobile layout + View all pairs link, AddPairForm full-width submit (Wave 1)
+- [x] 06-01-PLAN.md — Buddy call screen: extract getPairsForSession to src/lib/pairs.ts, new buddy-call route + BuddyCallClient with live Realtime count (Wave 1)
+- [x] 06-02-PLAN.md — Responsive polish: SessionHeader two-row mobile layout + View all pairs link, AddPairForm full-width submit (Wave 1)
 - [ ] 06-03-PLAN.md — Human-verify checkpoint: buddy call readability + disconnect banner + responsive board at 375/768/1024px (Wave 2)
 
 **UI hint**: yes
