@@ -71,7 +71,7 @@ export function CamperTable({ campers, searchQuery }: Props) {
             campers.map((c) => (
               <tr key={c.id}>
                 <td className="text-base text-slate-900 px-4 py-3">
-                  {c.firstName} {c.lastName} · {c.bunk}
+                  {c.firstName} {c.lastName}
                 </td>
                 <td className="text-base text-slate-900 px-4 py-3">
                   {c.code}
