@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 type Props = {
@@ -11,10 +11,12 @@ type Props = {
 const storageKey = (sessionId: string) => `joined-session:${sessionId}`;
 
 export function JoinSessionModal({ poolName, sessionId }: Props) {
-  const [dismissed, setDismissed] = useState(
-    () => typeof window !== "undefined" && !!sessionStorage.getItem(storageKey(sessionId)),
-  );
+  const [dismissed, setDismissed] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    if (sessionStorage.getItem(storageKey(sessionId))) setDismissed(true);
+  }, [sessionId]);
 
   function handleJoin() {
     sessionStorage.setItem(storageKey(sessionId), "1");
