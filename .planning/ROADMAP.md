@@ -133,17 +133,6 @@ Plans:
 **Plans**: TBD
 **UI hint**: yes
 
-## Backlog
-
-### Phase 999.1: User management screen actions as round icon buttons (BACKLOG)
-
-**Goal:** [Captured for future planning]
-**Requirements:** TBD
-**Plans:** 0 plans
-
-Plans:
-- [ ] TBD (promote with /gsd:review-backlog when ready)
-
 ## Progress
 
 **Execution Order:**

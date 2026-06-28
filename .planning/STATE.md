@@ -72,6 +72,7 @@ Recent decisions affecting current work:
 ### Pending Todos
 
 - `2026-06-28-admin-login-redirect-and-nav-links.md` — Admin login redirect and cross-screen nav links (area: auth)
+- `2026-06-28-user-management-round-action-buttons.md` — User management screen actions as round icon buttons (area: ui)
 
 ### Blockers/Concerns
 
