@@ -2,9 +2,9 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { db } from "@/db";
-import { poolSession, pair, pairMember, pool, camper } from "@/db/schema";
-import { eq, and, sql } from "drizzle-orm";
-import { SessionBoard } from "./components/SessionBoard";
+import { poolSession, pairMember, pool, camper } from "@/db/schema";
+import { eq, and } from "drizzle-orm";
+import { LiveBoard } from "./components/LiveBoard";
 import { JoinSessionModal } from "./components/JoinSessionModal";
 
 // -------------------------------------------------------------------
@@ -129,21 +129,7 @@ export default async function PoolSessionPage({
   // Step 4 — Fetch pairs for the session.
   const pairs = await getPairsForSession(session.id);
 
-  // Step 5 — Count swimmers and pairs in parallel.
-  const [swimmerCount, pairCount] = await Promise.all([
-    db
-      .select({ count: sql<number>`count(*)` })
-      .from(pairMember)
-      .where(eq(pairMember.sessionId, session.id))
-      .then((r) => Number(r[0]?.count ?? 0)),
-    db
-      .select({ count: sql<number>`count(*)` })
-      .from(pair)
-      .where(eq(pair.sessionId, session.id))
-      .then((r) => Number(r[0]?.count ?? 0)),
-  ]);
-
-  // Step 6 — Render.
+  // Step 5 — Render.
   // JoinSessionModal overlays the board when a session pre-existed this page load.
   const sessionOpenedByOtherUser =
     !wasJustCreated && session.openedById !== authSession.user.id;
@@ -151,13 +137,11 @@ export default async function PoolSessionPage({
   return (
     <>
       {sessionOpenedByOtherUser && <JoinSessionModal poolName={poolRecord[0].name} sessionId={session.id} />}
-      <SessionBoard
-        poolName={poolRecord[0].name}
-        swimmerCount={swimmerCount}
-        pairCount={pairCount}
+      <LiveBoard
+        initialPairs={pairs}
         sessionId={session.id}
         poolId={poolId}
-        pairs={pairs}
+        poolName={poolRecord[0].name}
       />
     </>
   );
