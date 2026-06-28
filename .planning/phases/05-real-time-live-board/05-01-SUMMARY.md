@@ -2,7 +2,7 @@
 phase: "05-real-time-live-board"
 plan: "01"
 subsystem: "realtime"
-status: "partial — checkpoint:human-action pending (Task 3)"
+status: "complete"
 tags: ["supabase", "realtime", "test-infrastructure", "wave-0"]
 dependency_graph:
   requires: []
@@ -10,6 +10,8 @@ dependency_graph:
     - "src/lib/supabase-browser.ts (Supabase singleton client)"
     - "src/test/mocks/supabase.ts (reusable Supabase vi.mock)"
     - "Wave 0 stub test files for BOARD-01, BOARD-02, BOARD-04, BOARD-05, V4 access control"
+    - "NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY set locally and on Vercel"
+    - "pair and pair_member tables on supabase_realtime publication"
   affects:
     - "All Phase 5 plans (supabase-browser.ts consumed by LiveBoard.tsx in 05-02)"
     - "Test infrastructure consumed by 05-02 (LiveBoard tests) and 05-03 (route tests)"
@@ -36,7 +38,7 @@ decisions:
   - "Pre-existing test failures (5 in admin+pools files, DB ECONNREFUSED) documented as out-of-scope — not caused by this plan"
 metrics:
   completed_date: "2026-06-28"
-  tasks_completed: 2
+  tasks_completed: 3
   tasks_total: 3
   files_created: 5
   files_modified: 2
@@ -44,9 +46,9 @@ metrics:
 
 # Phase 05 Plan 01: Supabase Foundation & Wave 0 Test Scaffolding Summary
 
-**One-liner:** Installed @supabase/supabase-js, created the singleton browser client, and scaffolded Wave 0 test stubs (mock + 3 it.todo files) covering all BOARD-0x and V4 access control requirements.
+**One-liner:** Installed @supabase/supabase-js, created the singleton browser client, scaffolded Wave 0 test stubs (mock + 3 it.todo files), and completed manual Supabase setup (env vars + dual-table publication).
 
-**Status: PARTIAL — Tasks 1 and 2 complete. Task 3 is a blocking checkpoint:human-action awaiting manual Supabase Dashboard setup.**
+**Status: COMPLETE — All 3 tasks done.**
 
 ---
 
@@ -56,17 +58,19 @@ metrics:
 |---|------|--------|-------|
 | 1 | Install @supabase/supabase-js and create singleton browser client | `9edab06` | `src/lib/supabase-browser.ts`, `package.json`, `package-lock.json` |
 | 2 | Scaffold Wave 0 test infrastructure (Supabase mock + 3 stub test files) | `e732a47` | `src/test/mocks/supabase.ts`, `LiveBoard.test.tsx`, `ConnectionBanner.test.tsx`, `route.test.ts` |
+| 3 | Complete manual Supabase setup (env vars + dual-table publication) | human-action | `.env.local`, Vercel env vars, supabase_realtime publication |
 
 ---
 
-## Task 3 — Pending Human Action
+## Task 3 — Human Action Confirmed
 
-Task 3 is a `checkpoint:human-action` gate. The continuation agent will execute it after the human provides:
-- The Supabase anon key from Dashboard
-- Confirmation that both `pair` and `pair_member` tables are on the `supabase_realtime` publication
-- Confirmation that env vars are set locally (`.env.local`) and on Vercel
+Task 3 was a `checkpoint:human-action` gate completed by the user on 2026-06-28. The user confirmed:
 
-See checkpoint details in the CHECKPOINT REACHED section below.
+- `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are set in `.env.local` (local development).
+- Both variables are also set on Vercel (Production + Preview + Development environments).
+- Both `pair` and `pair_member` tables are members of the `supabase_realtime` publication (verified via `select tablename from pg_publication_tables where pubname='supabase_realtime';`).
+
+This enables Postgres Realtime change events for both tables, which is required for the subscription in LiveBoard.tsx (Plan 05-02) to receive pair and pair_member updates.
 
 ---
 
@@ -86,6 +90,12 @@ See checkpoint details in the CHECKPOINT REACHED section below.
 - `route.test.ts` contains `Route Handler V4 access control` — PASS
 - None of the stub files import `./LiveBoard`, `./ConnectionBanner`, or `../pairs/route` — PASS
 - Running stub files in isolation: `3 skipped (9 todo)`, exit 0 — PASS
+
+### Task 3
+- `NEXT_PUBLIC_SUPABASE_URL` set in `.env.local` and Vercel — CONFIRMED by user
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` set in `.env.local` and Vercel — CONFIRMED by user
+- `pair` table on `supabase_realtime` publication — CONFIRMED by user
+- `pair_member` table on `supabase_realtime` publication — CONFIRMED by user
 
 ---
 
@@ -121,16 +131,9 @@ No new network endpoints, auth paths, or schema changes introduced in this plan.
 
 ## Self-Check
 
-Checking created files exist:
-
-- FOUND: `src/lib/supabase-browser.ts`
-- FOUND: `src/test/mocks/supabase.ts`
-- FOUND: `src/app/(protected)/pools/[poolId]/components/LiveBoard.test.tsx`
-- FOUND: `src/app/(protected)/pools/[poolId]/components/ConnectionBanner.test.tsx`
-- FOUND: `src/app/api/sessions/[sessionId]/pairs/route.test.ts`
-
 Checking commits:
-- FOUND: `9edab06` (Task 1)
-- FOUND: `e732a47` (Task 2)
+- FOUND: `9edab06` (Task 1 — install + browser client)
+- FOUND: `e732a47` (Task 2 — Wave 0 test scaffolding)
+- Task 3 human-action confirmed by user on 2026-06-28
 
 ## Self-Check: PASSED
