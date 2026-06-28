@@ -31,7 +31,7 @@ export function EditPoolModal({ pool }: Props) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="text-base text-slate-600 hover:text-slate-900 min-h-[44px] flex items-center"
+        className="min-h-[44px] px-3 border border-slate-300 rounded-md text-base text-slate-700 font-medium hover:bg-slate-50 transition-colors"
       >
         Rename
       </button>

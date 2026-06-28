@@ -9,13 +9,19 @@ export function AddPoolForm() {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    const form = e.currentTarget;
     setLoading(true);
     setError(null);
     try {
-      await createPoolAction(new FormData(e.currentTarget));
-      (e.currentTarget as HTMLFormElement).reset();
-    } catch {
-      setError("Could not add pool. Please try again.");
+      await createPoolAction(new FormData(form));
+      form.reset();
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "";
+      if (msg.includes("already exists")) {
+        setError("A pool with that name already exists.");
+      } else {
+        setError("Could not add pool. Please try again.");
+      }
     } finally {
       setLoading(false);
     }

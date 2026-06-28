@@ -30,7 +30,7 @@ export function CamperDeleteDialog({ camperId, name }: Props) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="text-base text-red-600 hover:underline min-h-[44px] flex items-center"
+        className="min-h-[44px] px-3 border border-red-200 rounded-md text-base text-red-600 font-medium hover:bg-red-50 transition-colors"
       >
         Remove
       </button>

@@ -10,12 +10,13 @@ export function AddCamperModal() {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    const form = e.currentTarget;
     setLoading(true);
     setError(null);
     try {
-      await addCamperAction(new FormData(e.currentTarget));
+      await addCamperAction(new FormData(form));
       setOpen(false);
-      (e.currentTarget as HTMLFormElement).reset();
+      form.reset();
     } catch (err) {
       const msg = err instanceof Error ? err.message : "";
       if (msg.includes("duplicate") || msg.includes("unique")) {

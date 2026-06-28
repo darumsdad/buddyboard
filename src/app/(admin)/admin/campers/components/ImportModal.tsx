@@ -7,6 +7,7 @@ import type { ImportResult } from "../actions";
 export function ImportModal() {
   const [open, setOpen] = useState(false);
   const [modalKey, setModalKey] = useState(0);
+  const [errorsDismissed, setErrorsDismissed] = useState(false);
   const [state, formAction, isPending] = useActionState<ImportResult | null, FormData>(
     importCampersAction,
     null,
@@ -14,8 +15,16 @@ export function ImportModal() {
 
   function handleOpen() {
     setModalKey((k) => k + 1);
+    setErrorsDismissed(false);
     setOpen(true);
   }
+
+  function handleClose() {
+    setOpen(false);
+    setErrorsDismissed(false);
+  }
+
+  const showErrors = state?.success === false && !errorsDismissed;
 
   return (
     <>
@@ -27,8 +36,8 @@ export function ImportModal() {
       </button>
 
       {open && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-8 w-full max-w-sm shadow-sm">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-8 w-full max-w-sm shadow-sm max-h-[90vh] overflow-y-auto">
             <h2 className="text-xl font-semibold text-slate-900 text-center mb-6">
               Import roster
             </h2>
@@ -66,19 +75,18 @@ export function ImportModal() {
                 </div>
               </fieldset>
 
-              {/* File input */}
+              {/* File input — no accept filter so picker shows all files */}
               <div>
                 <label
                   htmlFor="import-file"
                   className="block text-base font-semibold text-slate-900 mb-1"
                 >
-                  Roster file
+                  Roster file (.xlsx)
                 </label>
                 <input
                   id="import-file"
                   type="file"
                   name="file"
-                  accept=".xlsx,.xls"
                   className="min-h-[44px] w-full border border-slate-300 rounded-md px-3 text-base text-slate-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
                 />
                 <a
@@ -91,14 +99,24 @@ export function ImportModal() {
               </div>
 
               {/* Error state */}
-              {state?.success === false && (
-                <div>
-                  <p className="mt-2 text-sm text-red-600 font-medium">
-                    Import failed &mdash; fix the following issues and try again:
-                  </p>
+              {showErrors && state.success === false && (
+                <div className="border border-red-200 rounded-md bg-red-50 p-3">
+                  <div className="flex items-start justify-between gap-2 mb-2">
+                    <p className="text-sm text-red-700 font-medium">
+                      {state.errors.length} issue{state.errors.length !== 1 ? "s" : ""} found &mdash; fix and re-upload
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setErrorsDismissed(true)}
+                      className="text-red-400 hover:text-red-600 text-xl leading-none flex-shrink-0"
+                      aria-label="Dismiss errors"
+                    >
+                      &times;
+                    </button>
+                  </div>
                   <ul
                     role="alert"
-                    className="mt-1 text-sm text-red-600 list-disc list-inside space-y-1"
+                    className="text-sm text-red-700 list-disc list-inside space-y-1 max-h-40 overflow-y-auto"
                   >
                     {state.errors.map((e, i) => (
                       <li key={i}>{e}</li>
@@ -109,7 +127,7 @@ export function ImportModal() {
 
               {/* Success state */}
               {state?.success === true && (
-                <p className="mt-4 text-sm text-green-700">
+                <p className="text-sm text-green-700 bg-green-50 border border-green-200 rounded-md px-3 py-2">
                   Imported {state.count} camper{state.count !== 1 ? "s" : ""} successfully.
                 </p>
               )}
@@ -117,6 +135,7 @@ export function ImportModal() {
               <button
                 type="submit"
                 disabled={isPending}
+                onClick={() => setErrorsDismissed(false)}
                 className="min-h-[44px] w-full bg-blue-600 hover:bg-blue-700 text-white text-base font-semibold rounded-md transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isPending ? "Uploading..." : "Upload roster"}
@@ -124,8 +143,8 @@ export function ImportModal() {
 
               <button
                 type="button"
-                onClick={() => setOpen(false)}
-                className="text-base text-slate-600 hover:text-slate-900 text-center mt-2 block mx-auto"
+                onClick={handleClose}
+                className="min-h-[44px] w-full border border-slate-300 rounded-md text-base text-slate-700 font-medium hover:bg-slate-50 transition-colors"
               >
                 Close
               </button>
