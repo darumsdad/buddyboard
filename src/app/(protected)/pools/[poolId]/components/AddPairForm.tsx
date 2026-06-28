@@ -46,21 +46,25 @@ export function AddPairForm({ sessionId, poolId }: AddPairFormProps) {
   return (
     <form onSubmit={handleSubmit} className="bg-slate-50 rounded-md p-4">
       <div className="flex flex-col gap-4 md:flex md:flex-row md:gap-3 md:items-end">
-        <CamperField
-          key={`camper1-${resetKey}`}
-          sessionId={sessionId}
-          label="Camper 1"
-          onResolved={setCamper1}
-          error={null}
-          inputRef={camper1Ref}
-        />
-        <CamperField
-          key={`camper2-${resetKey}`}
-          sessionId={sessionId}
-          label="Camper 2"
-          onResolved={setCamper2}
-          error={null}
-        />
+        <div className="md:w-72">
+          <CamperField
+            key={`camper1-${resetKey}`}
+            sessionId={sessionId}
+            label="Camper 1"
+            onResolved={setCamper1}
+            error={null}
+            inputRef={camper1Ref}
+          />
+        </div>
+        <div className="md:w-72">
+          <CamperField
+            key={`camper2-${resetKey}`}
+            sessionId={sessionId}
+            label="Camper 2"
+            onResolved={setCamper2}
+            error={null}
+          />
+        </div>
         <button
           type="submit"
           disabled={isDisabled}
