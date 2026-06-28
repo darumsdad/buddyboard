@@ -139,6 +139,8 @@ Vitest mock pattern (from src/app/(auth)/login/login.test.tsx):
       return <>{children}</>;
     No visual chrome — no nav, no sidebar, no html/body tags (D-06: nav deferred to Phase 3; root layout provides html/body).
     Do NOT enable cookieCache or touch middleware.ts — the layout's DB-validated session check is sufficient (RESEARCH.md Approach B).
+
+    D-08 override (user-approved 2026-06-28): Layout-level role check via (admin)/layout.tsx replaces the originally specified middleware.ts extension. Rationale: server component does DB-validated role check; admin plugin validates every API call independently. middleware.ts remains unchanged.
   </action>
   <verify>
     <automated>npx tsc --noEmit</automated>
@@ -154,7 +156,7 @@ Vitest mock pattern (from src/app/(auth)/login/login.test.tsx):
     - layout.tsx contains `session.user.role !== "admin"` check with `redirect("/pools")`
     - layout.tsx returns `{children}` (no wrapping html/body elements)
     - `npx tsc --noEmit` exits 0
-    - src/middleware.ts is unchanged
+    - src/middleware.ts is unchanged (D-08 override: user-approved 2026-06-28 — Approach B layout-level enforcement; see action note)
   </acceptance_criteria>
   <done>Non-admin authenticated users redirected to /pools; unauthenticated to /login; displayRole utility in place</done>
 </task>
@@ -274,12 +276,12 @@ Vitest mock pattern (from src/app/(auth)/login/login.test.tsx):
 
 ## STRIDE Threat Register
 
-| Threat ID | Category | Component | Disposition | Mitigation Plan |
-|-----------|----------|-----------|-------------|-----------------|
-| T-02-03 | Elevation of Privilege | src/app/(admin)/layout.tsx | mitigate | Layout calls auth.api.getSession() (DB-validated, not cache) and redirects non-admin to /pools; requireAdmin() in every server action is a second layer (D-08 dual-layer approach) |
-| T-02-04 | Spoofing | src/app/(admin)/users/actions.ts | mitigate | requireAdmin() calls auth.api.getSession({ headers: await headers() }) on every invocation — fresh DB check, not cookie-cached; forged/replayed requests get rejected |
-| T-02-05 | Tampering | createUserAction — missing headers | mitigate | Always pass `headers: await headers()` to auth.api.createUser; without it the admin plugin's permission check is skipped (RESEARCH.md Pitfall 1); requireAdmin() provides defense-in-depth |
-| T-02-SC | Tampering | npm installs | accept | No new packages installed in this plan |
+| Threat ID | Category | Component | Severity | Disposition | Mitigation Plan |
+|-----------|----------|-----------|----------|-------------|-----------------|
+| T-02-03 | Elevation of Privilege | src/app/(admin)/layout.tsx | High | mitigate | Layout calls auth.api.getSession() (DB-validated, not cache) and redirects non-admin to /pools; requireAdmin() in every server action is a second layer (D-08 dual-layer approach) |
+| T-02-04 | Spoofing | src/app/(admin)/users/actions.ts | High | mitigate | requireAdmin() calls auth.api.getSession({ headers: await headers() }) on every invocation — fresh DB check, not cookie-cached; forged/replayed requests get rejected |
+| T-02-05 | Tampering | createUserAction — missing headers | High | mitigate | Always pass `headers: await headers()` to auth.api.createUser; without it the admin plugin's permission check is skipped (RESEARCH.md Pitfall 1); requireAdmin() provides defense-in-depth |
+| T-02-SC | Tampering | npm installs | Low | accept | No new packages installed in this plan |
 </threat_model>
 
 <verification>

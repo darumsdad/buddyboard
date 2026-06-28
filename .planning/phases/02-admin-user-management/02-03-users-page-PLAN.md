@@ -320,12 +320,12 @@ From src/app/(auth)/login/page.tsx — Tailwind classes to replicate exactly:
 
 ## STRIDE Threat Register
 
-| Threat ID | Category | Component | Disposition | Mitigation Plan |
-|-----------|----------|-----------|-------------|-----------------|
-| T-02-06 | Tampering | CreateUserModal role select → createUserAction | mitigate | UI dropdown limits role to "user" / "admin"; admin plugin validates role against its allowed-roles list on every createUser call server-side |
-| T-02-07 | Denial of Service | DeleteConfirmDialog → removeUserAction (self-delete) | accept | Better Auth admin plugin returns YOU_CANNOT_REMOVE_YOURSELF error; UI catch block shows "Could not remove user. Please try again." — no self-deletion possible, no crash |
-| T-02-08 | Tampering | Confirmation dialog bypass (direct server action call) | accept | requireAdmin() in removeUserAction is the authoritative security check; client-side confirmation dialog is UX only; server rejects unauthorized calls regardless of dialog state |
-| T-02-SC | Tampering | npm installs | accept | No new packages installed in this plan |
+| Threat ID | Category | Component | Severity | Disposition | Mitigation Plan |
+|-----------|----------|-----------|----------|-------------|-----------------|
+| T-02-06 | Tampering | CreateUserModal role select → createUserAction | High | mitigate | UI dropdown limits role to "user" / "admin"; admin plugin validates role against its allowed-roles list on every createUser call server-side |
+| T-02-07 | Denial of Service | DeleteConfirmDialog → removeUserAction (self-delete) | Medium | accept | Better Auth admin plugin returns YOU_CANNOT_REMOVE_YOURSELF error; UI catch block shows "Could not remove user. Please try again." — no self-deletion possible, no crash |
+| T-02-08 | Tampering | Confirmation dialog bypass (direct server action call) | High | accept | requireAdmin() in removeUserAction is the authoritative security check; client-side confirmation dialog is UX only; server rejects unauthorized calls regardless of dialog state |
+| T-02-SC | Tampering | npm installs | Low | accept | No new packages installed in this plan |
 </threat_model>
 
 <verification>

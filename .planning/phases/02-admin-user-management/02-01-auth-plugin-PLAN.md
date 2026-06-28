@@ -165,11 +165,11 @@ Output: auth.ts with admin() + minPasswordLength, auth-client.ts with adminClien
 
 ## STRIDE Threat Register
 
-| Threat ID | Category | Component | Disposition | Mitigation Plan |
-|-----------|----------|-----------|-------------|-----------------|
-| T-02-01 | Tampering | emailAndPassword config | mitigate | Set `minPasswordLength: 8` explicitly in auth.ts (D-11); the default is 8 but explicit config documents intent and prevents silent change if Better Auth defaults shift |
-| T-02-02 | Tampering | src/db/schema.ts (CLI overwrite) | mitigate | Read and memorize relations block BEFORE running CLI; verify after CLI run; restore manually if dropped (Pitfall 5 in RESEARCH.md) |
-| T-02-SC | Tampering | @better-auth/cli, drizzle-kit installs | accept | Both packages pre-installed and audited in Phase 1 RESEARCH; no new package installs in this plan |
+| Threat ID | Category | Component | Severity | Disposition | Mitigation Plan |
+|-----------|----------|-----------|----------|-------------|-----------------|
+| T-02-01 | Tampering | emailAndPassword config | Medium | mitigate | Set `minPasswordLength: 8` explicitly in auth.ts (D-11); the default is 8 but explicit config documents intent and prevents silent change if Better Auth defaults shift |
+| T-02-02 | Tampering | src/db/schema.ts (CLI overwrite) | Medium | mitigate | Read and memorize relations block BEFORE running CLI; verify after CLI run; restore manually if dropped (Pitfall 5 in RESEARCH.md) |
+| T-02-SC | Tampering | @better-auth/cli, drizzle-kit installs | Low | accept | Both packages pre-installed and audited in Phase 1 RESEARCH; no new package installs in this plan |
 </threat_model>
 
 <verification>
