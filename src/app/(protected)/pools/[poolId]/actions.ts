@@ -113,7 +113,6 @@ export async function addPairAction(
     return { success: false, error: "Could not add pair. Please try again." };
   }
 
-  revalidatePath(`/pools/${poolId}`);
   return { success: true };
 }
 
@@ -134,14 +133,12 @@ export async function addPairMemberAction(
     return { success: false, error: "Could not add to pair. Please try again." };
   }
 
-  revalidatePath(`/pools/${poolId}`);
   return { success: true };
 }
 
 export async function removePairAction(pairId: string, poolId: string): Promise<void> {
   await requireAuth();
   await db.delete(pair).where(eq(pair.id, pairId));
-  revalidatePath(`/pools/${poolId}`);
 }
 
 export async function closeSessionAction(sessionId: string, poolId: string): Promise<void> {

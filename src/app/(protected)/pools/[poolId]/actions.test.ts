@@ -124,7 +124,7 @@ describe("addPairAction", () => {
     expect(result).toEqual({ success: false, error: "PAIR-04" });
   });
 
-  it("returns { success: true } and calls revalidatePath when transaction resolves", async () => {
+  it("returns { success: true } and does NOT call revalidatePath when transaction resolves", async () => {
     const { auth } = await import("@/lib/auth");
     vi.mocked(auth.api.getSession).mockResolvedValueOnce(makeAuthSession());
     const { db } = await import("@/db");
@@ -136,7 +136,7 @@ describe("addPairAction", () => {
     const { addPairAction } = await import("./actions");
     const result = await addPairAction("sess-1", "pool-1", "c1", "c2");
     expect(result).toEqual({ success: true });
-    expect(revalidatePath).toHaveBeenCalledWith("/pools/pool-1");
+    expect(revalidatePath).not.toHaveBeenCalledWith("/pools/pool-1");
   });
 });
 
@@ -145,7 +145,7 @@ describe("removePairAction", () => {
     vi.resetAllMocks();
   });
 
-  it("PAIR-03: calls db.delete and revalidatePath", async () => {
+  it("PAIR-03: calls db.delete and does NOT call revalidatePath", async () => {
     const { auth } = await import("@/lib/auth");
     vi.mocked(auth.api.getSession).mockResolvedValueOnce(makeAuthSession());
     const { db } = await import("@/db");
@@ -157,7 +157,7 @@ describe("removePairAction", () => {
     const { removePairAction } = await import("./actions");
     await removePairAction("pair-1", "pool-1");
     expect(db.delete).toHaveBeenCalled();
-    expect(revalidatePath).toHaveBeenCalledWith("/pools/pool-1");
+    expect(revalidatePath).not.toHaveBeenCalledWith("/pools/pool-1");
   });
 });
 
