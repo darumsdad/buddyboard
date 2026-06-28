@@ -12,17 +12,17 @@
 
 ### Camper Roster (CAMP)
 
-- [ ] **CAMP-01**: Admin can upload an Excel spreadsheet to bulk-import campers (name + admin-assigned code)
-- [ ] **CAMP-02**: Camper codes are stored and treated as strings (preserves leading zeros)
-- [ ] **CAMP-03**: Admin can add an individual camper manually (name + code)
-- [ ] **CAMP-04**: Admin can edit a camper's name or code
-- [ ] **CAMP-05**: Admin can remove a camper from the roster
-- [ ] **CAMP-06**: Admin can search and filter the camper list by name or code
+- [x] **CAMP-01**: Admin can upload an Excel spreadsheet to bulk-import campers (name + admin-assigned code)
+- [x] **CAMP-02**: Camper codes are stored and treated as strings (preserves leading zeros)
+- [x] **CAMP-03**: Admin can add an individual camper manually (name + code)
+- [x] **CAMP-04**: Admin can edit a camper's name or code
+- [x] **CAMP-05**: Admin can remove a camper from the roster
+- [x] **CAMP-06**: Admin can search and filter the camper list by name or code
 
 ### Pool Configuration (POOL)
 
-- [ ] **POOL-01**: Admin can add, rename, and remove pools without a code change
-- [ ] **POOL-02**: System ships with 3 pools configured by default
+- [x] **POOL-01**: Admin can add, rename, and remove pools without a code change
+- [x] **POOL-02**: System ships with 3 pools configured by default
 
 ### Sessions (SESS)
 
@@ -86,14 +86,14 @@
 | AUTH-03 | Phase 2 | Complete |
 | AUTH-04 | Phase 2 | Complete |
 | AUTH-05 | Phase 2 | Complete |
-| CAMP-01 | Phase 3 | Pending |
-| CAMP-02 | Phase 3 | Pending |
-| CAMP-03 | Phase 3 | Pending |
-| CAMP-04 | Phase 3 | Pending |
-| CAMP-05 | Phase 3 | Pending |
-| CAMP-06 | Phase 3 | Pending |
-| POOL-01 | Phase 3 | Pending |
-| POOL-02 | Phase 3 | Pending |
+| CAMP-01 | Phase 3 | Complete |
+| CAMP-02 | Phase 3 | Complete |
+| CAMP-03 | Phase 3 | Complete |
+| CAMP-04 | Phase 3 | Complete |
+| CAMP-05 | Phase 3 | Complete |
+| CAMP-06 | Phase 3 | Complete |
+| POOL-01 | Phase 3 | Complete |
+| POOL-02 | Phase 3 | Complete |
 | SESS-01 | Phase 4 | Pending |
 | SESS-02 | Phase 4 | Pending |
 | SESS-03 | Phase 4 | Pending |
