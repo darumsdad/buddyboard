@@ -138,7 +138,27 @@ Plans:
   3. The system rejects an attempt to add a camper who is already in an active pair in the same session — enforced at the database level
   4. Counselor can remove a buddy pair; the pair disappears from the screen only after the server confirms the deletion
   5. Closing a session with active pairs requires an explicit confirmation; closed sessions no longer appear in the active pool view, and all pair data is retained in the archive
-**Plans**: TBD
+**Plans**: 5 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — Schema additions (poolSession + pair + pairMember tables, relations), drizzle-kit push [BLOCKING] (Wave 1)
+- [ ] 04-02-PLAN.md — Server Actions (requireAuth, searchCampersAction, addPairAction, addPairMemberAction, removePairAction, closeSessionAction), unit test files (Wave 2)
+- [ ] 04-03-PLAN.md — Leaf UI components: JoinSessionModal, CloseSessionDialog, TrioPicker, CamperField, PairRow (Wave 3)
+- [ ] 04-04-PLAN.md — Composite components: LogoutButton, AddPairForm, PairList, SessionHeader, SessionBoard (Wave 4)
+- [ ] 04-05-PLAN.md — Page wiring: pools/page.tsx (DB-driven + logout), pools/[poolId]/page.tsx (get-or-create session, full board), end-to-end verification (Wave 5)
+
+**Wave dependencies:** Wave 2 *(blocked on Wave 1 / 04-01 push)* | Wave 3 *(blocked on Wave 2 / 04-02 actions)* | Wave 4 *(blocked on Wave 3 / 04-03 leaf components)* | Wave 5 *(blocked on Wave 4 / 04-04 composite components)*
+
+**Cross-cutting constraints:**
+- `npx drizzle-kit push` in Plan 04-01 must complete before any Wave 2+ code that references poolSession, pair, or pairMember tables
+- Table name MUST be `poolSession` (Drizzle) / `pool_session` (DB) — the `session` table is owned by Better Auth and must not be modified
+- `requireAuth()` (not requireAdmin) in every Server Action — any authenticated counselor can manage pairs
+- `redirect()` in closeSessionAction must be called OUTSIDE any try/catch block (Next.js 16 behavior)
+- `params` and `searchParams` must be awaited before property access (Next.js 16 — both are Promises)
+- PAIR-04 enforced at DB level via `uniqueIndex("unique_camper_per_session").on(camperId, sessionId)` on pair_member
+- D-01 enforced at DB level via partial unique index on pool_session WHERE status = 'active'
+- Trios use INSERT into pairMember (not UPDATE) to preserve Supabase Realtime INSERT event compatibility for Phase 5
+
 **UI hint**: yes
 
 ### Phase 5: Real-time & Live Board
@@ -179,6 +199,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 2.1. User Name Fields | 0/? | Not started | - |
 | 2.2. Admin Nav & UI Polish | 0/2 | Not started | - |
 | 3. Admin Data Setup | 4/4 | Complete   | 2026-06-28 |
-| 4. Sessions & Buddy Pairs | 0/? | Not started | - |
+| 4. Sessions & Buddy Pairs | 0/5 | Not started | - |
 | 5. Real-time & Live Board | 0/? | Not started | - |
 | 6. Buddy Call Screen & Polish | 0/? | Not started | - |
