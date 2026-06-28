@@ -55,27 +55,32 @@ export function LiveBoard({ initialPairs, sessionId, poolId, poolName }: LiveBoa
     refreshTimer.current = setTimeout(refreshPairs, 150);
   }, [refreshPairs]);
 
-  // Socket-level disconnect detection — fires immediately when the WebSocket closes
-  // (channel subscribe callbacks only fire after the 30s heartbeat timeout)
+  // Disconnect detection via two complementary signals:
+  // 1. window offline/online — fires immediately with DevTools "Offline" and real network drops
+  // 2. socket stateChangeCallbacks — fires when the WebSocket itself closes (server down, proxy failure)
   useEffect(() => {
+    const handleOffline = () => setConnectionStatus("disconnected");
+    const handleOnline = () => {
+      setConnectionStatus("connected");
+      refreshPairs();
+    };
+
+    window.addEventListener("offline", handleOffline);
+    window.addEventListener("online", handleOnline);
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const callbacks = (supabase.realtime as any).stateChangeCallbacks as {
       open: (() => void)[];
       close: (() => void)[];
     };
-
-    const handleClose = () => setConnectionStatus("disconnected");
-    const handleOpen = () => {
-      setConnectionStatus("connected");
-      refreshPairs();
-    };
-
-    callbacks.close.push(handleClose);
-    callbacks.open.push(handleOpen);
+    callbacks.close.push(handleOffline);
+    callbacks.open.push(handleOnline);
 
     return () => {
-      callbacks.close = callbacks.close.filter((cb) => cb !== handleClose);
-      callbacks.open = callbacks.open.filter((cb) => cb !== handleOpen);
+      window.removeEventListener("offline", handleOffline);
+      window.removeEventListener("online", handleOnline);
+      callbacks.close = callbacks.close.filter((cb) => cb !== handleOffline);
+      callbacks.open = callbacks.open.filter((cb) => cb !== handleOnline);
     };
   }, [refreshPairs]);
 
