@@ -36,7 +36,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 Plans:
 - [x] 01-01-scaffold-PLAN.md — Next.js scaffold, packages, Better Auth wiring, schema generation (Wave 1)
 - [ ] 01-02-db-PLAN.md — Supabase creation, DB migration, admin seed (Wave 2, blocking human action)
-- [ ] 01-03-ui-PLAN.md — Login page, pools placeholder, middleware (Wave 2, parallel)
+- [x] 01-03-ui-PLAN.md — Login page, pools placeholder, middleware (Wave 2, parallel)
 - [ ] 01-04-deploy-PLAN.md — Vercel deployment and end-to-end verification (Wave 3)
 
 **UI hint**: yes
@@ -114,7 +114,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Auth | 1/4 | In Progress|  |
+| 1. Foundation & Auth | 2/4 | In Progress|  |
 | 2. Admin User Management | 0/? | Not started | - |
 | 3. Admin Data Setup | 0/? | Not started | - |
 | 4. Sessions & Buddy Pairs | 0/? | Not started | - |
