@@ -6,9 +6,9 @@
 
 - [ ] **AUTH-01**: User can log in with username and password
 - [ ] **AUTH-02**: Authenticated session persists across browser restarts (remember me)
-- [ ] **AUTH-03**: Admin can add a new user account (username + password + role)
-- [ ] **AUTH-04**: Admin can remove a user account
-- [ ] **AUTH-05**: Admin can reset any user's password from the admin screen (no email flow)
+- [x] **AUTH-03**: Admin can add a new user account (username + password + role)
+- [x] **AUTH-04**: Admin can remove a user account
+- [x] **AUTH-05**: Admin can reset any user's password from the admin screen (no email flow)
 
 ### Camper Roster (CAMP)
 
@@ -83,9 +83,9 @@
 |--------|-------|--------|
 | AUTH-01 | Phase 1 | Pending |
 | AUTH-02 | Phase 1 | Pending |
-| AUTH-03 | Phase 2 | Pending |
-| AUTH-04 | Phase 2 | Pending |
-| AUTH-05 | Phase 2 | Pending |
+| AUTH-03 | Phase 2 | Complete |
+| AUTH-04 | Phase 2 | Complete |
+| AUTH-05 | Phase 2 | Complete |
 | CAMP-01 | Phase 3 | Pending |
 | CAMP-02 | Phase 3 | Pending |
 | CAMP-03 | Phase 3 | Pending |
