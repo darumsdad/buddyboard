@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { importCampersAction } from "../actions";
 import type { ImportResult } from "../actions";
 
-export function ImportModal() {
+export function ImportModal({ size = 20 }: { size?: number }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -17,7 +17,7 @@ export function ImportModal() {
         title="Import roster"
         aria-label="Import roster"
       >
-        <Upload size={20} />
+        <Upload size={size} />
       </button>
 
       {open && <ImportForm onClose={() => setOpen(false)} />}

@@ -54,19 +54,21 @@ export default async function CampersPage({
       <div className="max-w-4xl mx-auto p-6">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-semibold text-slate-900">Campers</h1>
-          <div className="flex items-center gap-1">
-            <ClearAllCampersDialog />
-            <a
-              href="/sample-roster.csv"
-              download
-              className="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded transition-colors"
-              title="Download CSV template"
-              aria-label="Download CSV template"
-            >
-              <Download size={20} />
-            </a>
-            <ImportModal />
-            <AddCamperModal />
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1">
+              <ClearAllCampersDialog />
+              <a
+                href="/sample-roster.csv"
+                download
+                className="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded transition-colors"
+                title="Download CSV template"
+                aria-label="Download CSV template"
+              >
+                <Download size={20} />
+              </a>
+              <AddCamperModal />
+            </div>
+            <ImportModal size={24} />
           </div>
         </div>
 
