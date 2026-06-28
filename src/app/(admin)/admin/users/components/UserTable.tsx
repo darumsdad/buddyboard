@@ -10,6 +10,8 @@ type User = {
   name: string;
   role: string | null;
   createdAt: Date;
+  firstName: string | null;
+  lastName: string | null;
 };
 
 export function UserTable({ users }: { users: User[] }) {
@@ -18,6 +20,9 @@ export function UserTable({ users }: { users: User[] }) {
       <table className="w-full">
         <thead>
           <tr className="bg-slate-50">
+            <th className="text-sm font-semibold text-slate-900 px-4 py-3 text-left">
+              Name
+            </th>
             <th className="text-sm font-semibold text-slate-900 px-4 py-3 text-left">
               Username
             </th>
@@ -35,7 +40,7 @@ export function UserTable({ users }: { users: User[] }) {
         <tbody className="divide-y divide-slate-200">
           {users.length === 0 ? (
             <tr>
-              <td colSpan={4}>
+              <td colSpan={5}>
                 <p className="text-base text-slate-500 px-4 py-8 text-center">
                   No users yet. Create the first account to allow staff to log
                   in.
@@ -45,6 +50,9 @@ export function UserTable({ users }: { users: User[] }) {
           ) : (
             users.map((user) => (
               <tr key={user.id}>
+                <td className="text-base text-slate-900 px-4 py-3">
+                  {user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : "—"}
+                </td>
                 <td className="text-base text-slate-900 px-4 py-3">
                   {user.username ?? user.name}
                 </td>

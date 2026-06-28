@@ -19,6 +19,8 @@ export default async function UsersPage() {
     name: string;
     role: string | null;
     createdAt: Date;
+    firstName: string | null;
+    lastName: string | null;
   }>;
 
   return (

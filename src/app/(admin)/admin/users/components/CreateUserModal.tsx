@@ -47,6 +47,40 @@ export function CreateUserModal() {
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <div>
                 <label
+                  htmlFor="first-name"
+                  className="text-base font-semibold text-slate-900"
+                >
+                  First Name
+                </label>
+                <input
+                  id="first-name"
+                  name="first-name"
+                  type="text"
+                  required
+                  autoComplete="given-name"
+                  placeholder="Enter first name"
+                  className="min-h-[44px] w-full border border-slate-300 rounded-md px-3 text-base text-slate-900 placeholder:text-slate-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="last-name"
+                  className="text-base font-semibold text-slate-900"
+                >
+                  Last Name
+                </label>
+                <input
+                  id="last-name"
+                  name="last-name"
+                  type="text"
+                  required
+                  autoComplete="family-name"
+                  placeholder="Enter last name"
+                  className="min-h-[44px] w-full border border-slate-300 rounded-md px-3 text-base text-slate-900 placeholder:text-slate-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                />
+              </div>
+              <div>
+                <label
                   htmlFor="username"
                   className="text-base font-semibold text-slate-900"
                 >
