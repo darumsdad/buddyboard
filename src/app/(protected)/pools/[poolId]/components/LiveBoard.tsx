@@ -55,9 +55,9 @@ export function LiveBoard({ initialPairs, sessionId, poolId, poolName }: LiveBoa
     refreshTimer.current = setTimeout(refreshPairs, 150);
   }, [refreshPairs]);
 
-  // Disconnect detection via two complementary signals:
-  // 1. window offline/online — fires immediately with DevTools "Offline" and real network drops
-  // 2. socket stateChangeCallbacks — fires when the WebSocket itself closes (server down, proxy failure)
+  // Disconnect detection via window offline/online — fires immediately on network drop.
+  // WebSocket-level disconnects are covered by the subscribe status callback below
+  // (CHANNEL_ERROR / TIMED_OUT → disconnected).
   useEffect(() => {
     const handleOffline = () => setConnectionStatus("disconnected");
     const handleOnline = () => {
@@ -68,19 +68,9 @@ export function LiveBoard({ initialPairs, sessionId, poolId, poolName }: LiveBoa
     window.addEventListener("offline", handleOffline);
     window.addEventListener("online", handleOnline);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const callbacks = (supabase.realtime as any).stateChangeCallbacks as {
-      open: (() => void)[];
-      close: (() => void)[];
-    };
-    callbacks.close.push(handleOffline);
-    callbacks.open.push(handleOnline);
-
     return () => {
       window.removeEventListener("offline", handleOffline);
       window.removeEventListener("online", handleOnline);
-      callbacks.close = callbacks.close.filter((cb) => cb !== handleOffline);
-      callbacks.open = callbacks.open.filter((cb) => cb !== handleOnline);
     };
   }, [refreshPairs]);
 
@@ -110,6 +100,7 @@ export function LiveBoard({ initialPairs, sessionId, poolId, poolName }: LiveBoa
 
     // MUST use removeChannel (not the bare channel teardown method) to prevent TooManyChannels / Strict-Mode channel leak
     return () => {
+      if (refreshTimer.current) clearTimeout(refreshTimer.current);
       supabase.removeChannel(channel);
     };
   }, [sessionId, debouncedRefresh]);
