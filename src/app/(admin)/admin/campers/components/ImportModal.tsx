@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useRef, useState } from "react";
+import { Upload } from "lucide-react";
 import { toast } from "sonner";
 import { importCampersAction } from "../actions";
 import type { ImportResult } from "../actions";
@@ -42,9 +43,11 @@ export function ImportModal() {
     <>
       <button
         onClick={handleOpen}
-        className="min-h-[44px] px-4 border border-slate-300 rounded-md text-base text-slate-700 font-semibold hover:bg-slate-50 transition-colors"
+        className="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded transition-colors"
+        title="Import roster"
+        aria-label="Import roster"
       >
-        Import roster
+        <Upload size={20} />
       </button>
 
       {open && (

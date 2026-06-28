@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Eraser } from "lucide-react";
 import { clearAllCampersAction } from "../actions";
 
 export function ClearAllCampersDialog() {
@@ -25,9 +26,11 @@ export function ClearAllCampersDialog() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="min-h-[44px] px-4 border border-red-200 rounded-md text-base text-red-600 font-medium hover:bg-red-50 transition-colors"
+        className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+        title="Clear all campers"
+        aria-label="Clear all campers"
       >
-        Clear all campers
+        <Eraser size={20} />
       </button>
       {open && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { UserPlus } from "lucide-react";
 import { addCamperAction } from "../actions";
 
 export function AddCamperModal() {
@@ -35,9 +36,11 @@ export function AddCamperModal() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="min-h-[44px] px-4 bg-blue-600 hover:bg-blue-700 text-white text-base font-semibold rounded-md transition-colors duration-150"
+        className="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded transition-colors"
+        title="Add camper"
+        aria-label="Add camper"
       >
-        Add camper
+        <UserPlus size={20} />
       </button>
       {open && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
