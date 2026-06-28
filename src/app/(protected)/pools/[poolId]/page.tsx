@@ -70,6 +70,7 @@ async function getPairsForSession(sessionId: string) {
       firstName: camper.firstName,
       lastName: camper.lastName,
       bunk: camper.bunk,
+      code: camper.code,
     })
     .from(pairMember)
     .innerJoin(camper, eq(pairMember.camperId, camper.id))
@@ -78,7 +79,7 @@ async function getPairsForSession(sessionId: string) {
   // Group by pairId in application code.
   const pairMap = new Map<
     string,
-    { id: string; members: Array<{ camperId: string; firstName: string; lastName: string; bunk: string }> }
+    { id: string; members: Array<{ camperId: string; firstName: string; lastName: string; bunk: string; code: string }> }
   >();
 
   for (const row of rows) {
@@ -88,6 +89,7 @@ async function getPairsForSession(sessionId: string) {
       firstName: row.firstName,
       lastName: row.lastName,
       bunk: row.bunk,
+      code: row.code,
     });
     pairMap.set(row.pairId, entry);
   }

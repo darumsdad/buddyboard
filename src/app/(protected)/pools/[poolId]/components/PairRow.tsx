@@ -10,6 +10,7 @@ type PairMember = {
   firstName: string;
   lastName: string;
   bunk: string;
+  code: string;
 };
 
 type Props = {
@@ -44,8 +45,8 @@ export function PairRow({ pair, sessionId, poolId }: Props) {
       <div className="flex items-center justify-between px-4 py-3">
         <span className="text-base text-slate-900">
           {pair.members
-            .map((m) => `${m.firstName} ${m.lastName} · ${m.bunk}`)
-            .join(" — ")}
+            .map((m) => `${m.code} — ${m.firstName} ${m.lastName}`)
+            .join("  ·  ")}
         </span>
         <div className="flex items-center gap-2">
           {pair.members.length < 3 && (

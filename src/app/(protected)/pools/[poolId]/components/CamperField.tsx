@@ -111,7 +111,7 @@ export function CamperField({ sessionId, label, onResolved, error, inputRef }: P
             }`}
           >
             <span className="inline-flex items-center gap-1 bg-blue-100 border border-blue-300 rounded-full px-3 py-1 text-sm font-semibold text-blue-700">
-              {resolved.firstName} {resolved.lastName} · {resolved.bunk}
+              {resolved.code} — {resolved.firstName} {resolved.lastName}
               <button
                 type="button"
                 onClick={clearResolved}
@@ -163,7 +163,7 @@ export function CamperField({ sessionId, label, onResolved, error, inputRef }: P
                     i === activeIndex ? "bg-slate-100" : "hover:bg-slate-50"
                   }`}
                 >
-                  {s.firstName} {s.lastName} · {s.bunk}
+                  {s.code} — {s.firstName} {s.lastName} · {s.bunk}
                 </div>
               ))
             )}

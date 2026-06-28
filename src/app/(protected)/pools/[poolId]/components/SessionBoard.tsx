@@ -7,6 +7,7 @@ type PairMember = {
   firstName: string;
   lastName: string;
   bunk: string;
+  code: string;
 };
 
 type Pair = {
