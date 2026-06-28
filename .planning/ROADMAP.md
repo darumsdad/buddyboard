@@ -90,7 +90,23 @@ Plans:
   3. Admin can search and filter the camper list by name or code and see results update immediately
   4. Admin can add, rename, and remove pools from the admin screen without touching any code or config files
   5. On a fresh install, three pools exist in the system by default
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] 03-01-foundation-PLAN.md — Schema additions (camper + pool tables), drizzle-kit push [BLOCKING], next.config.ts bodySizeLimit, AdminSidebar + layout modification (Wave 1)
+- [ ] 03-02-pools-PLAN.md — Pool Server Actions (create/rename/remove + requireAdmin), action tests, seed-pools script, pools page + PoolList + AddPoolForm + EditPoolModal (Wave 2)
+- [ ] 03-03-camper-crud-PLAN.md — Camper Server Actions (add/edit/remove/clearAll + requireAdmin), action tests, campers page + CamperTable + AddCamperModal + EditCamperModal + delete dialogs + page test (Wave 2, parallel with 03-02)
+- [ ] 03-04-search-import-PLAN.md — importCampersAction (SheetJS, all-or-nothing transaction), SearchBar, PaginationControls, ImportModal, campers page search+pagination wiring, sample template (Wave 3)
+
+**Wave dependencies:** Wave 2 *(Plans 03-02 and 03-03 run in parallel, both blocked on Wave 1 / 03-01)* | Wave 3 *(03-04 blocked on 03-03)*
+
+**Cross-cutting constraints:**
+- `npx drizzle-kit push` in Plan 03-01 must complete before any Wave 2 code that queries camper or pool tables
+- `requireAdmin()` enforced in every Server Action — copied verbatim from Phase 2 pattern
+- camper.code must remain a text column throughout — never cast to number in any layer
+- xlsx `raw: false` option mandatory in importCampersAction to prevent leading-zero loss
+- searchParams in CampersPage must be awaited (Promise in Next.js 16)
+
 **UI hint**: yes
 
 ### Phase 4: Sessions & Buddy Pairs
@@ -143,7 +159,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 1. Foundation & Auth | 4/4 | Complete   | 2026-06-28 |
 | 2. Admin User Management | 3/3 | Complete   | 2026-06-28 |
 | 2.1. User Name Fields | 0/? | Not started | - |
-| 3. Admin Data Setup | 0/? | Not started | - |
+| 3. Admin Data Setup | 0/4 | Not started | - |
 | 4. Sessions & Buddy Pairs | 0/? | Not started | - |
 | 5. Real-time & Live Board | 0/? | Not started | - |
 | 6. Buddy Call Screen & Polish | 0/? | Not started | - |
