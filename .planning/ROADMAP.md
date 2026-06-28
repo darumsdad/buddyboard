@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Admin User Management** - Admin can create, remove, and reset passwords for counselor accounts (completed 2026-06-28)
 - [ ] **Phase 2.1: User Name Fields** *(INSERTED)* - Admin can store and see first/last name on each user account (schema migration + form + table column)
 - [x] **Phase 2.2: Admin Nav & UI Polish** *(INSERTED)* - Role-based post-login redirect, bidirectional admin/buddy-board nav links (admin-only on buddy board), round icon buttons in user table actions (completed 2026-06-28)
-- [ ] **Phase 3: Admin Data Setup** - Admin can configure pools and load the full camper roster (Excel import + CRUD)
+- [x] **Phase 3: Admin Data Setup** - Admin can configure pools and load the full camper roster (Excel import + CRUD) (completed 2026-06-28)
 - [ ] **Phase 4: Sessions & Buddy Pairs** - Counselors can run a complete pool session and manage buddy pairs over HTTP
 - [ ] **Phase 5: Real-time & Live Board** - All devices at a pool see live buddy board updates with connection status
 - [ ] **Phase 6: Buddy Call Screen & Polish** - High-contrast buddy call screen and responsive pass for iPad, laptop, and iPhone
@@ -114,7 +114,7 @@ Plans:
 - [x] 03-01-foundation-PLAN.md — Schema additions (camper + pool tables), drizzle-kit push [BLOCKING], next.config.ts bodySizeLimit, AdminSidebar + layout modification (Wave 1)
 - [x] 03-02-pools-PLAN.md — Pool Server Actions (create/rename/remove + requireAdmin), action tests, seed-pools script, pools page + PoolList + AddPoolForm + EditPoolModal (Wave 2)
 - [x] 03-03-camper-crud-PLAN.md — Camper Server Actions (add/edit/remove/clearAll + requireAdmin), action tests, campers page + CamperTable + AddCamperModal + EditCamperModal + delete dialogs + page test (Wave 2, parallel with 03-02)
-- [ ] 03-04-search-import-PLAN.md — importCampersAction (SheetJS, all-or-nothing transaction), SearchBar, PaginationControls, ImportModal, campers page search+pagination wiring, sample template (Wave 3)
+- [x] 03-04-search-import-PLAN.md — importCampersAction (SheetJS, all-or-nothing transaction), SearchBar, PaginationControls, ImportModal, campers page search+pagination wiring, sample template (Wave 3)
 
 **Wave dependencies:** Wave 2 *(Plans 03-02 and 03-03 run in parallel, both blocked on Wave 1 / 03-01)* | Wave 3 *(03-04 blocked on 03-03)*
 
@@ -178,7 +178,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 2. Admin User Management | 3/3 | Complete   | 2026-06-28 |
 | 2.1. User Name Fields | 0/? | Not started | - |
 | 2.2. Admin Nav & UI Polish | 0/2 | Not started | - |
-| 3. Admin Data Setup | 3/4 | In Progress|  |
+| 3. Admin Data Setup | 4/4 | Complete   | 2026-06-28 |
 | 4. Sessions & Buddy Pairs | 0/? | Not started | - |
 | 5. Real-time & Live Board | 0/? | Not started | - |
 | 6. Buddy Call Screen & Polish | 0/? | Not started | - |
