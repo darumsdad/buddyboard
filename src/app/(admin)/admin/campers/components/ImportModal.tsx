@@ -27,7 +27,11 @@ export function ImportModal() {
   }, [state, modalKey]);
 
   function handleOpen() {
-    setModalKey((k) => k + 1);
+    setModalKey((k) => {
+      const next = k + 1;
+      handledKey.current = next; // pre-mark so stale success state doesn't auto-close
+      return next;
+    });
     setErrorsDismissed(false);
     setOpen(true);
   }
