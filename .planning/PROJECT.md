@@ -12,7 +12,7 @@ Every counselor at every pool can always see — in real time — exactly which 
 
 ### Validated
 
-(None yet — ship to validate)
+- [x] Counselor can log in with username and password — Validated in Phase 1: Foundation & Auth
 
 ### Active
 
