@@ -2,194 +2,253 @@
 phase: 03-admin-data-setup
 reviewed: 2026-06-28T00:00:00Z
 depth: standard
-files_reviewed: 25
+files_reviewed: 12
 files_reviewed_list:
-  - src/db/schema.ts
-  - next.config.ts
-  - drizzle.config.ts
-  - src/components/AdminSidebar.tsx
-  - src/app/(admin)/layout.tsx
-  - src/app/(admin)/admin/pools/actions.ts
-  - src/app/(admin)/admin/pools/actions.test.ts
-  - src/app/(admin)/admin/pools/page.tsx
-  - src/app/(admin)/admin/pools/components/PoolList.tsx
-  - src/app/(admin)/admin/pools/components/AddPoolForm.tsx
-  - src/app/(admin)/admin/pools/components/EditPoolModal.tsx
-  - scripts/seed-pools.ts
-  - src/app/(admin)/admin/campers/actions.ts
-  - src/app/(admin)/admin/campers/actions.test.ts
-  - src/app/(admin)/admin/campers/page.tsx
-  - src/app/(admin)/admin/campers/page.test.tsx
-  - src/app/(admin)/admin/campers/components/CamperTable.tsx
-  - src/app/(admin)/admin/campers/components/AddCamperModal.tsx
-  - src/app/(admin)/admin/campers/components/EditCamperModal.tsx
-  - src/app/(admin)/admin/campers/components/CamperDeleteDialog.tsx
-  - src/app/(admin)/admin/campers/components/ClearAllCampersDialog.tsx
-  - src/app/(admin)/admin/campers/components/SearchBar.tsx
-  - src/app/(admin)/admin/campers/components/PaginationControls.tsx
-  - src/app/(admin)/admin/campers/components/ImportModal.tsx
+  - public/sample-roster.xlsx
   - scripts/generate-sample-template.ts
+  - src/app/(admin)/admin/campers/actions.test.ts
+  - src/app/(admin)/admin/campers/actions.ts
+  - src/app/(admin)/admin/campers/components/CamperTable.tsx
+  - src/app/(admin)/admin/campers/components/ImportModal.tsx
+  - src/app/(admin)/admin/campers/components/PaginationControls.tsx
+  - src/app/(admin)/admin/campers/components/SearchBar.tsx
+  - src/app/(admin)/admin/campers/page.test.tsx
+  - src/app/(admin)/admin/campers/page.tsx
+  - src/app/(admin)/layout.tsx
+  - src/components/AdminSidebar.tsx
+  - src/db/schema.ts
 findings:
   critical: 2
   warning: 4
-  info: 3
-  total: 9
+  info: 1
+  total: 7
 status: issues_found
 ---
 
-# Phase 03: Code Review Report
+# Code Review: Phase 03 — admin-data-setup
 
 **Reviewed:** 2026-06-28
 **Depth:** standard
-**Files Reviewed:** 25
+**Files Reviewed:** 12
 **Status:** issues_found
 
 ## Summary
 
-This phase implements pool and camper management: schema definitions, server actions, paginated list/search pages, and an Excel import pipeline. The overall structure is sound — server actions enforce admin auth, Drizzle is used with parameterized queries, and import validation is all-or-nothing before any DB write. Two blockers require fixes before ship: a missing firstName validation hole in the import pipeline that allows empty first names into the database, and a silent no-op in `editCamperAction` when the hidden `id` field is absent. Four warnings cover LIKE wildcard semantics, stale modal state, redundant auth, and a wrong type annotation.
+Reviewed the DB schema, server actions, page component, all camper-related UI components,
+tests, and the sample template generation script. The overall structure is sound: server
+actions consistently enforce admin auth, Drizzle uses parameterized queries throughout (no SQL
+injection surface), and the import pipeline is all-or-nothing before any DB write. Test
+coverage for the actions is thorough.
+
+Two critical defects exist in `importCampersAction`. First, a missing validation gate for blank
+`Preferred Name` allows empty `firstName` values to reach the DB insert, which either silently
+stores empty-string first names (bypassing the intent of the NOT NULL constraint) or crashes
+on other constraints. Second, merge mode reads existing codes outside the transaction, creating
+a TOCTOU window where concurrent imports can cause an unhandled unique-constraint crash.
+
+Four warnings cover: a silent no-op in `editCamperAction` when the `id` field is empty, bunk
+rendered redundantly in both the Name cell and the Bunk column of `CamperTable`, stale action
+state persisting when `ImportModal` is closed and reopened, and `SearchBar` discarding all URL
+params on each keystroke (inconsistent with `PaginationControls`). One info item flags that the
+sample template script does not type SwimCode cells as text, so Excel auto-strips leading zeros
+when users open and re-save the file.
+
+---
+
+## Narrative Findings (AI reviewer)
 
 ## Critical Issues
 
-### CR-01: Import accepts campers with empty first name
+### CR-001 | Critical | actions.ts:170-197
 
-**File:** `src/app/(admin)/admin/campers/actions.ts:170-186`
+**File:** `src/app/(admin)/admin/campers/actions.ts:170`
 
-**Issue:** `importCampersAction` validates `lastNameNorm`, `swimCode`, and `bunkValue` but never checks whether `firstName` is blank. When a row has an empty "Preferred Name" cell, `preferredName` is `""`, `toTitleCase("")` returns `""`, and `firstName` becomes `""`. The code still calls `parsed.push({ firstName: "", ... })`. The DB schema declares `first_name` as `.notNull()`, but an empty string satisfies that constraint. The row passes validation and a camper with an empty first name is inserted.
+**Issue:** `importCampersAction` validates `lastNameNorm`, `swimCode`, and `bunkValue` but
+never checks whether `firstName` is blank. When a row has an empty "Preferred Name" cell,
+`preferredName` is `""`, `toTitleCase("")` returns `""` (the `.filter(Boolean)` inside drops
+every token), and `firstName` is `""`. The row still passes all validation checks and is
+appended to `parsed` (line 187). The `camper` schema declares `first_name` as `.notNull()`
+(schema.ts line 108), but an empty string satisfies a NOT NULL constraint in Postgres. A
+camper with `first_name = ''` is inserted — or, if other DB constraints exist on empty names
+in the future, the insert throws an unhandled exception and the action crashes instead of
+returning a clean `{ success: false, errors: [...] }`.
 
-```typescript
-// After line 170, add:
+The test suite has no case covering blank Preferred Name, so this gap is invisible in CI.
+
+**Fix:** Add a firstName guard alongside the other row checks (after line 172):
+```ts
 if (!firstName) errors.push(`Row ${rowNum}: Preferred Name is blank`);
 ```
 
 ---
 
-### CR-02: `editCamperAction` silently no-ops when `id` is empty or missing
+### CR-002 | Critical | actions.ts:219-237
 
-**File:** `src/app/(admin)/admin/campers/actions.ts:50-71`
+**File:** `src/app/(admin)/admin/campers/actions.ts:219`
 
-**Issue:** The `id` is read from `formData` with a default of `""` (line 50). If the hidden `<input type="hidden" name="id" />` is absent or tampered with, `id` is `""`. The query `db.update(camper).set(...).where(eq(camper.id, ""))` updates zero rows — no error is thrown, `revalidatePath` is called, and the caller receives a resolved promise indicating success. The edit is silently discarded. Additionally, an attacker who can craft a formData payload could supply any arbitrary `id` and edit any camper's data (because no check confirms the `id` actually exists before updating).
-
-```typescript
-// After trimming id on line 50:
-if (!id) throw new Error("Camper ID is required");
-
-// After the db.update call, check rows updated:
-const result = await db
-  .update(camper)
-  .set({ firstName, lastName, code, bunk, notes: notes || null })
-  .where(eq(camper.id, id))
-  .returning({ id: camper.id });
-if (result.length === 0) throw new Error("Camper not found");
+**Issue:** Merge mode has a TOCTOU race condition. The set of existing codes is fetched
+_outside_ the transaction on lines 220-221:
+```ts
+const existingCodes = new Set(
+  (await db.select({ code: camper.code }).from(camper)).map((r) => r.code),
+);
 ```
+The conditional insert then runs inside a separate transaction on lines 224-237. A concurrent
+import that runs between those two operations can insert the same SwimCode in the window
+between the select and the transaction open. When the inner `tx.insert` then tries to insert
+that code, Postgres throws a unique-constraint violation (the `code` column carries `.unique()`
+in the schema, line 110). This exception propagates uncaught from the server action as a 500
+instead of returning `{ success: false, errors: [...] }`.
+
+**Fix:** Move the existing-codes query inside the transaction so read and insert are atomic:
+```ts
+} else {
+  let insertedCount = 0;
+  await db.transaction(async (tx) => {
+    const existingRows = await tx.select({ code: camper.code }).from(camper);
+    const existingCodes = new Set(existingRows.map((r) => r.code));
+    const toInsert = parsed.filter((r) => !existingCodes.has(r.code));
+    if (toInsert.length > 0) {
+      await tx.insert(camper).values(
+        toInsert.map((r) => ({
+          id: crypto.randomUUID(),
+          firstName: r.firstName,
+          lastName: r.lastName,
+          code: r.code,
+          bunk: r.bunk,
+          notes: r.notes,
+        })),
+      );
+    }
+    insertedCount = toInsert.length;
+  });
+  revalidatePath("/admin/campers");
+  return { success: true, count: insertedCount };
+}
+```
+
+---
 
 ## Warnings
 
-### WR-01: LIKE wildcard injection in camper search
+### WR-001 | Warning | actions.ts:50-71
 
-**File:** `src/app/(admin)/admin/campers/page.tsx:31-36`
+**File:** `src/app/(admin)/admin/campers/actions.ts:50`
 
-**Issue:** The raw user search string `q` is embedded directly into the LIKE pattern with `%${q}%` before being passed to `ilike()`. Drizzle parameterizes the full pattern string (so this is not SQL injection), but PostgreSQL's LIKE treats `%` and `_` as wildcards. If a user types `%`, the pattern `%%` matches every row in every column. If a user types `_`, every single-character value matches. The search no longer filters meaningfully.
-
-```typescript
-// Escape LIKE special characters before interpolation:
-function escapeLike(s: string) {
-  return s.replace(/[%_\\]/g, (c) => `\\${c}`);
-}
-
-const escaped = escapeLike(q);
-const where = q
-  ? or(
-      ilike(camper.firstName, `%${escaped}%`),
-      ilike(camper.lastName, `%${escaped}%`),
-      ilike(camper.code, `%${escaped}%`),
-    )
-  : undefined;
+**Issue:** `editCamperAction` extracts `id` from FormData with a default of `""` but never
+validates that it is non-empty. If the hidden `id` field is missing or blank, line 70 executes:
+```ts
+db.update(camper).set({...}).where(eq(camper.id, ""))
 ```
+This matches zero rows. No error is thrown, `revalidatePath` fires, and the action resolves as
+if the edit succeeded — the camper data is silently discarded. The user has no indication the
+edit was a no-op.
 
-Note: when using a backslash escape, also set `{ escape: '\\' }` if the Drizzle `ilike` overload supports it; otherwise use a raw `sql` expression.
+**Fix:** Add an early guard after line 50:
+```ts
+if (!id) throw new Error("Camper ID is required");
+```
 
 ---
 
-### WR-02: ImportModal shows stale state when reopened
+### WR-002 | Warning | CamperTable.tsx:73-80
 
-**File:** `src/app/(admin)/admin/campers/components/ImportModal.tsx:119-125`
+**File:** `src/app/(admin)/admin/campers/components/CamperTable.tsx:74`
 
-**Issue:** The Close button calls `setOpen(false)` but does not reset the `useActionState` result. When the modal is closed after a failed or successful import and then reopened, the previous error list or success message is still rendered immediately — before any new action is taken. This is confusing: users see "Imported 47 campers successfully." on a freshly opened import dialog.
+**Issue:** The Name cell (line 74) renders `{c.firstName} {c.lastName} · {c.bunk}`, embedding
+bunk inline with the name. The Bunk cell (line 79) then also renders `{c.bunk}`. Bunk appears
+in two separate columns on every row. The table has a dedicated "Bunk" column header, making
+the inline annotation in the Name cell redundant and inconsistent.
 
-`useActionState` does not expose a reset function directly. The standard workaround is to key the form on a counter or use a separate piece of state to suppress displaying stale results:
+**Fix:** Remove ` · {c.bunk}` from the Name cell:
+```tsx
+<td className="text-base text-slate-900 px-4 py-3">
+  {c.firstName} {c.lastName}
+</td>
+```
 
-```typescript
-const [open, setOpen] = useState(false);
-const [submitCount, setSubmitCount] = useState(0);
+---
+
+### WR-003 | Warning | ImportModal.tsx:8-12
+
+**File:** `src/app/(admin)/admin/campers/components/ImportModal.tsx:8`
+
+**Issue:** `useActionState` result is never cleared when the modal is closed. Closing sets
+`open = false` via line 121 but does not reset `state`. When the user reopens the modal,
+the previous success message ("Imported N campers successfully.") or error list is immediately
+visible before any new action has been taken. This is confusing: the user sees stale feedback
+as if a new submission just occurred.
+
+**Fix:** Remount the form on each open by bumping a key counter in the close handler:
+```tsx
+const [modalKey, setModalKey] = useState(0);
+
+function handleOpen() {
+  setModalKey((k) => k + 1);
+  setOpen(true);
+}
+// Replace onClick={() => setOpen(true)} with onClick={handleOpen}
+
+// Pass key to the form so useActionState resets on remount:
+<form key={modalKey} action={formAction} className="flex flex-col gap-4">
+```
+
+---
+
+### WR-004 | Warning | SearchBar.tsx:16
+
+**File:** `src/app/(admin)/admin/campers/components/SearchBar.tsx:16`
+
+**Issue:** `SearchBar` constructs a brand-new `URLSearchParams()` with no seed, copying only
+`q` and `page`. Any other query parameters present in the current URL are silently dropped on
+every keystroke. This is inconsistent with `PaginationControls.tsx` line 14, which correctly
+seeds from the current URL via `new URLSearchParams(searchParams.toString())`. The component
+also does not import `useSearchParams`, which is the established pattern in this codebase.
+
+While the current page only uses `q` and `page`, the divergence from the codebase pattern is
+a latent bug — any future query parameter added to the admin campers route would vanish on
+search input.
+
+**Fix:**
+```tsx
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 // ...
-// Suppress stale state: only show result after the most recent submission
-// Track whether state belongs to the current open session
-const [sessionKey, setSessionKey] = useState(0);
-
-function handleClose() {
-  setOpen(false);
-  // bump key so next open gets a fresh form + cleared state display
-}
-// Re-mount the form with key={sessionKey} on open, increment on close
+const searchParams = useSearchParams();
+// Inside handleChange:
+const params = new URLSearchParams(searchParams.toString());
+if (q) params.set("q", q); else params.delete("q");
+params.set("page", "1");
+router.push(`${pathname}?${params.toString()}`);
 ```
 
-Alternatively, wrap the inner form in a component that re-mounts on open by passing `key={open ? sessionKey : 0}`.
-
 ---
-
-### WR-03: Redundant auth checks in page components already covered by layout
-
-**File:** `src/app/(admin)/admin/pools/page.tsx:11-12`, `src/app/(admin)/admin/campers/page.tsx:21-23`
-
-**Issue:** `AdminLayout` (`src/app/(admin)/layout.tsx:11-13`) already checks session and redirects non-admins before rendering any children. The per-page auth checks in both page components are unreachable dead code: the layout redirect fires first. This is a maintenance hazard — if the role name or redirect target ever changes, the developer must remember to update both the layout and each individual page. The per-page checks give a false sense of defense-in-depth but provide none in practice.
-
-**Fix:** Remove the duplicate auth checks from `pools/page.tsx` (lines 11–12) and `campers/page.tsx` (lines 21–23). Auth is fully delegated to the layout.
-
----
-
-### WR-04: `sql<number>` type annotation is wrong for PostgreSQL `count(*)`
-
-**File:** `src/app/(admin)/admin/campers/page.tsx:46`
-
-**Issue:** PostgreSQL returns `count(*)` as `bigint`, which the `pg` driver delivers to JavaScript as a `string` (to avoid 64-bit integer loss). The generic `sql<number>` annotation tells TypeScript this field is a `number`, which is incorrect. Line 49 uses `Number(totalResult[0]?.count ?? 0)` which happens to coerce the string correctly at runtime, but the type annotation is wrong and will mislead any future code that uses `.count` without the `Number()` wrapper.
-
-```typescript
-// Change the generic to string:
-db.select({ count: sql<string>`count(*)` }).from(camper).where(where),
-
-// Line 49 stays the same and is then correct:
-const total = Number(totalResult[0]?.count ?? 0);
-```
 
 ## Info
 
-### IN-01: `CamperTable` renders bunk in both the Name column and the dedicated Bunk column
+### IN-001 | Info | generate-sample-template.ts:5-9
 
-**File:** `src/app/(admin)/admin/campers/components/CamperTable.tsx:74,80`
+**File:** `scripts/generate-sample-template.ts:5`
 
-**Issue:** The Name column cell renders `{c.firstName} {c.lastName} · {c.bunk}` (line 74), embedding the bunk inline with the name. Line 80 also renders `{c.bunk}` in the dedicated Bunk column. The same value appears twice in every row. If this is intentional, the pattern is confusing; if accidental, the inline bunk in the Name column should be removed.
+**Issue:** The sample roster script writes SwimCode cells without explicitly marking them as
+text type (`t: "s"`). When a user opens the generated `public/sample-roster.xlsx` in Microsoft
+Excel, Excel auto-detects "042" as a number and displays/saves it as 42, stripping the leading
+zero. If the user then re-saves and uploads the file, `importCampersAction` receives "42"
+instead of "042", silently breaking any camper whose code has a leading zero.
 
-**Fix:** Remove `· {c.bunk}` from line 74 to keep name and bunk in their respective columns.
+The unit test at `actions.test.ts:432-433` works around this by explicitly setting
+`ws["C2"] = { v: "042", t: "s" }` — the same approach must be applied in the script.
 
----
-
-### IN-02: Error detection in camper modals relies on server error string parsing
-
-**File:** `src/app/(admin)/admin/campers/components/AddCamperModal.tsx:21-22`, `src/app/(admin)/admin/campers/components/EditCamperModal.tsx:33-34`
-
-**Issue:** Both modals detect a duplicate-code constraint violation by checking `msg.includes("duplicate") || msg.includes("unique")`. This couples client display logic to internal DB/ORM error message wording, which is not part of any stable API. A Drizzle or pg driver upgrade that changes error formatting would silently break this discrimination, causing all constraint violations to fall through to the generic "Could not add camper" message.
-
-**Fix:** Wrap the server action with a structured error type (e.g., throw a tagged object or return `{ success: false; code: "DUPLICATE_CODE" }`), then switch on the code in the component.
-
----
-
-### IN-03: Invalid rows are appended to `parsed` before the error gate
-
-**File:** `src/app/(admin)/admin/campers/actions.ts:186-194`
-
-**Issue:** The `parsed.push({ ... })` call at the end of the row loop runs for every row regardless of whether errors were collected for that row. Rows with blank codes, bunk, or names are still pushed (with their blank/empty field values) into `parsed`. The guard at line 197 prevents `parsed` from ever being used when errors exist, so there is no correctness bug, but the code implies that `parsed` contains validated data when it may not.
-
-**Fix:** Wrap the `parsed.push` in `else` logic (i.e., only push when the row has no errors), or collect errors and valid rows separately.
+**Fix:**
+```ts
+const ws = xlsx.utils.aoa_to_sheet([
+  ["Last Name", "Preferred Name", "SwimCode", "Bunk"],
+  ["Smith", "Jane", "042", "Cabin 3"],
+  ["Doe", "John", "101", "Cabin 7"],
+]);
+// Force SwimCode cells to text type so Excel does not convert to number
+ws["C2"] = { v: "042", t: "s" };
+ws["C3"] = { v: "101", t: "s" };
+```
 
 ---
 
