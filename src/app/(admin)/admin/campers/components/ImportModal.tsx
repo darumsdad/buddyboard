@@ -1,7 +1,7 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
-import { Upload } from "lucide-react";
+import { useActionState, useEffect, useRef, useState } from "react";
+import { Upload, Paperclip } from "lucide-react";
 import { toast } from "sonner";
 import { importCampersAction } from "../actions";
 import type { ImportResult } from "../actions";
@@ -27,6 +27,8 @@ export function ImportModal() {
 
 function ImportForm({ onClose }: { onClose: () => void }) {
   const [errorsDismissed, setErrorsDismissed] = useState(false);
+  const [fileName, setFileName] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [state, formAction, isPending] = useActionState<ImportResult | null, FormData>(
     importCampersAction,
     null,
@@ -43,7 +45,7 @@ function ImportForm({ onClose }: { onClose: () => void }) {
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg p-8 w-full max-w-sm shadow-sm max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-lg p-8 w-full max-w-sm shadow-sm">
         <h2 className="text-xl font-semibold text-slate-900 text-center mb-6">
           Import roster
         </h2>
@@ -51,39 +53,39 @@ function ImportForm({ onClose }: { onClose: () => void }) {
         <form action={formAction} className="flex flex-col gap-4">
           <fieldset>
             <legend className="text-base font-semibold text-slate-900 mb-2">
-              Import mode
+              Mode
             </legend>
-            <div className="flex items-start gap-2 mb-1">
-              <input type="radio" id="mode-merge" name="mode" value="merge" defaultChecked className="mt-1" />
-              <label htmlFor="mode-merge" className="text-base text-slate-700">
-                Merge &mdash; add new SwimCodes, skip existing
+            <div className="flex gap-6">
+              <label className="flex items-center gap-2 text-base text-slate-700 cursor-pointer">
+                <input type="radio" name="mode" value="merge" defaultChecked />
+                Merge
               </label>
-            </div>
-            <div className="flex items-start gap-2">
-              <input type="radio" id="mode-replace" name="mode" value="replace" className="mt-1" />
-              <label htmlFor="mode-replace" className="text-base text-slate-700">
-                Replace &mdash; clear all campers and re-import (cannot be undone)
+              <label className="flex items-center gap-2 text-base text-slate-700 cursor-pointer">
+                <input type="radio" name="mode" value="replace" />
+                Replace
               </label>
             </div>
           </fieldset>
 
           <div>
-            <label htmlFor="import-file" className="block text-base font-semibold text-slate-900 mb-1">
-              Roster file (.xlsx)
-            </label>
             <input
+              ref={fileInputRef}
               id="import-file"
               type="file"
               name="file"
-              className="min-h-[44px] w-full border border-slate-300 rounded-md px-3 text-base text-slate-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+              className="sr-only"
+              onChange={(e) => setFileName(e.target.files?.[0]?.name ?? null)}
             />
-            <a
-              href="/sample-roster.xlsx"
-              download
-              className="mt-1 block text-base text-blue-600 underline-offset-2 hover:underline"
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="min-h-[44px] w-full flex items-center gap-2 px-4 border border-slate-300 rounded-md text-base text-slate-700 hover:bg-slate-50 transition-colors"
             >
-              Download sample template
-            </a>
+              <Paperclip size={16} className="text-slate-400 shrink-0" />
+              <span className="truncate">
+                {fileName ?? "Choose file…"}
+              </span>
+            </button>
           </div>
 
           {showErrors && state.success === false && (
@@ -95,7 +97,7 @@ function ImportForm({ onClose }: { onClose: () => void }) {
                 <button
                   type="button"
                   onClick={() => setErrorsDismissed(true)}
-                  className="text-red-400 hover:text-red-600 text-xl leading-none flex-shrink-0"
+                  className="text-red-400 hover:text-red-600 text-xl leading-none shrink-0"
                   aria-label="Dismiss errors"
                 >
                   &times;
@@ -118,7 +120,7 @@ function ImportForm({ onClose }: { onClose: () => void }) {
             onClick={() => setErrorsDismissed(false)}
             className="min-h-[44px] w-full bg-blue-600 hover:bg-blue-700 text-white text-base font-semibold rounded-md transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isPending ? "Uploading..." : "Upload roster"}
+            {isPending ? "Uploading…" : "Upload"}
           </button>
 
           <button
@@ -126,7 +128,7 @@ function ImportForm({ onClose }: { onClose: () => void }) {
             onClick={onClose}
             className="min-h-[44px] w-full border border-slate-300 rounded-md text-base text-slate-700 font-medium hover:bg-slate-50 transition-colors"
           >
-            Close
+            Cancel
           </button>
         </form>
       </div>

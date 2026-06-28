@@ -6,7 +6,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@/db";
 import { camper } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import * as xlsx from "xlsx";
+import Papa from "papaparse";
 
 async function requireAdmin() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -114,21 +114,19 @@ export async function importCampersAction(
 
   let rows: Record<string, string>[];
   try {
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const workbook = xlsx.read(buffer, {
-      type: "buffer",
-      cellText: true,
-      cellDates: false,
+    const text = await file.text();
+    const result = Papa.parse<Record<string, string>>(text, {
+      header: true,
+      skipEmptyLines: true,
     });
-    const sheet = workbook.Sheets[workbook.SheetNames[0]];
-    rows = xlsx.utils.sheet_to_json<Record<string, string>>(sheet, {
-      defval: "",
-      raw: false,
-    });
+    if (result.errors.length > 0 && result.data.length === 0) {
+      throw new Error("parse failed");
+    }
+    rows = result.data;
   } catch {
     return {
       success: false,
-      errors: ["Could not parse file. Please upload an Excel file (.xlsx or .xls)."],
+      errors: ["Could not parse file. Please upload a CSV file."],
     };
   }
 
