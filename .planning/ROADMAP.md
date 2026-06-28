@@ -203,7 +203,13 @@ Plans:
   1. Counselor can open a buddy call screen showing all active pairs in a high-contrast, large-text, scrollable list with large touch targets suitable for outdoor use
   2. App is fully usable on iPad and laptop — no broken layouts, no horizontal scroll, all controls reachable
   3. All app features remain accessible on iPhone — layout may be compact but nothing is hidden or broken
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 06-01-PLAN.md — Buddy call screen: extract getPairsForSession to src/lib/pairs.ts, new buddy-call route + BuddyCallClient with live Realtime count (Wave 1)
+- [ ] 06-02-PLAN.md — Responsive polish: SessionHeader two-row mobile layout + View all pairs link, AddPairForm full-width submit (Wave 1)
+- [ ] 06-03-PLAN.md — Human-verify checkpoint: buddy call readability + disconnect banner + responsive board at 375/768/1024px (Wave 2)
+
 **UI hint**: yes
 
 ## Progress

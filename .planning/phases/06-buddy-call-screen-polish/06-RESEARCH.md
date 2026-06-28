@@ -535,22 +535,25 @@ Phase 6 should NOT fix these. They are Phase 5 pre-existing issues noted as out 
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Auth check in buddy-call/page.tsx**
    - What we know: `middleware.ts` protects all non-login routes. `page.tsx` does an explicit `auth.api.getSession()` for user ID (needed by `getOrCreateActiveSession`). Buddy-call page doesn't need user ID.
    - What's unclear: Whether defense-in-depth requires the explicit auth check or if middleware is sufficient.
    - Recommendation: Omit the explicit auth check for simplicity (buddy call is read-only, middleware is the established first gate). If the codebase standard requires explicit checks in all Server Components, add it as a one-liner.
+   - RESOLVED: Omit explicit auth check. `middleware.ts` is sufficient for this read-only Server Component. No `auth.api.getSession()` call in buddy-call/page.tsx.
 
 2. **"View all pairs" link visual placement in SessionHeader**
    - What we know: SessionHeader needs the link; it has `poolId`. The UI-SPEC responsive layout diagram does not show where to put it.
    - What's unclear: Should it appear as text link beside the count, or as an icon-button in the action cluster?
    - Recommendation: Small text link below the count (mobile: in the `md:hidden` count row; md+: beside the count in the `hidden md:block` div). Keeps the top row uncluttered.
+   - RESOLVED: Place as small text link (`text-sm text-slate-500 hover:text-slate-700`) below the count on mobile (inside the `md:hidden` row) and beside the count on md+ (inside the `hidden md:block` section). Uses `next/link` with `ChevronRight` icon from lucide-react.
 
 3. **Handling sessionId="" when no active session exists in BuddyCallClient**
    - What we know: If buddy-call/page.tsx finds no active session, it passes `sessionId=""` and `initialPairs=[]`. BuddyCallClient will attempt to subscribe to `buddy-call::pairs` (empty sessionId).
    - What's unclear: Whether Supabase silently ignores a channel with an empty filter.
    - Recommendation: Guard in BuddyCallClient — if `!sessionId`, skip the Realtime subscription and render zeros without ConnectionBanner. Or redirect to `/pools/[poolId]` from the Server Component when no active session exists.
+   - RESOLVED: Redirect from the Server Component. `buddy-call/page.tsx` redirects to `/pools/${poolId}` when no active session is found — no session means no buddy call to display. `BuddyCallClient` always receives a valid non-empty `sessionId` prop. Pattern 2 code example (passing `sessionId=""`) is NOT the chosen approach; redirect is preferred.
 
 ---
 
