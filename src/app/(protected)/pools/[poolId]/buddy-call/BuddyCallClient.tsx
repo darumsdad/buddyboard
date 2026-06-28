@@ -93,6 +93,15 @@ export function BuddyCallClient({
     };
   }, [sessionId, debouncedRefresh]);
 
+  // Checked pair IDs — local only, resets on navigation
+  const [checkedIds, setCheckedIds] = useState<Set<string>>(new Set());
+  const toggleChecked = (id: string) =>
+    setCheckedIds((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+
   // Derived counts — updated on every pairs state change
   const swimmerCount = pairs.reduce((sum, p) => sum + p.members.length, 0);
   const pairCount = pairs.length;
@@ -148,17 +157,37 @@ export function BuddyCallClient({
           </div>
         </div>
 
-        {/* Optional pair list — names only, secondary info */}
+        {/* Pair list with check-off — counselors mark each pair as reported present */}
         {pairs.length > 0 && (
           <ul
             aria-label="Active pairs"
             className="mt-12 w-full max-w-sm divide-y divide-slate-200 text-left"
           >
-            {pairs.map((pair) => (
-              <li key={pair.id} className="py-3 text-base text-slate-700">
-                {pair.members.map((m) => `${m.firstName} ${m.lastName}`).join(" / ")}
-              </li>
-            ))}
+            {pairs.map((pair) => {
+              const checked = checkedIds.has(pair.id);
+              return (
+                <li key={pair.id}>
+                  <label className="flex items-center gap-3 py-3 cursor-pointer select-none min-h-[44px]">
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={() => toggleChecked(pair.id)}
+                      className="h-6 w-6 rounded border-slate-300 text-blue-600 accent-blue-600 flex-shrink-0"
+                      aria-label={`Mark present: ${pair.members.map((m) => `${m.firstName} ${m.lastName}`).join(" / ")}`}
+                    />
+                    <span
+                      className={
+                        checked
+                          ? "text-base text-slate-400 line-through"
+                          : "text-base text-slate-700"
+                      }
+                    >
+                      {pair.members.map((m) => `${m.firstName} ${m.lastName}`).join(" / ")}
+                    </span>
+                  </label>
+                </li>
+              );
+            })}
           </ul>
         )}
       </main>
