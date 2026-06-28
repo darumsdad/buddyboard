@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Pencil } from "lucide-react";
 import { editCamperAction } from "../actions";
 
 type Camper = {
@@ -46,9 +47,11 @@ export function EditCamperModal({ camper }: Props) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="min-h-[44px] px-3 border border-slate-300 rounded-md text-base text-slate-700 font-medium hover:bg-slate-50 transition-colors"
+        className="p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded transition-colors"
+        title="Edit camper"
+        aria-label="Edit camper"
       >
-        Edit
+        <Pencil size={16} />
       </button>
       {open && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">

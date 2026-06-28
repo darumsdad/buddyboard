@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Plus } from "lucide-react";
 import { createPoolAction } from "../actions";
 
 export function AddPoolForm() {
@@ -47,8 +48,9 @@ export function AddPoolForm() {
         <button
           type="submit"
           disabled={loading}
-          className="min-h-[44px] px-4 bg-blue-600 hover:bg-blue-700 text-white text-base font-semibold rounded-md transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="min-h-[44px] px-4 bg-blue-600 hover:bg-blue-700 text-white text-base font-semibold rounded-md transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
         >
+          <Plus size={18} />
           Add pool
         </button>
       </form>

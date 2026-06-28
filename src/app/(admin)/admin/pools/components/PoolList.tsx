@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Trash2 } from "lucide-react";
 import { EditPoolModal } from "./EditPoolModal";
 import { removePoolAction } from "../actions";
 
@@ -37,9 +38,11 @@ function PoolDeleteDialog({ poolId, poolName }: PoolDeleteDialogProps) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="min-h-[44px] px-3 border border-red-200 rounded-md text-base text-red-600 font-medium hover:bg-red-50 transition-colors"
+        className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+        title="Remove pool"
+        aria-label="Remove pool"
       >
-        Remove
+        <Trash2 size={16} />
       </button>
       {open && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">

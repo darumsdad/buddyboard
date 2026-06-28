@@ -1,6 +1,7 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import { importCampersAction } from "../actions";
 import type { ImportResult } from "../actions";
 
@@ -12,6 +13,17 @@ export function ImportModal() {
     importCampersAction,
     null,
   );
+  const handledKey = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (state?.success === true && handledKey.current !== modalKey) {
+      handledKey.current = modalKey;
+      setOpen(false);
+      toast.success(
+        `${state.count} camper${state.count !== 1 ? "s" : ""} imported`,
+      );
+    }
+  }, [state, modalKey]);
 
   function handleOpen() {
     setModalKey((k) => k + 1);
@@ -43,7 +55,6 @@ export function ImportModal() {
             </h2>
 
             <form key={modalKey} action={formAction} className="flex flex-col gap-4">
-              {/* D-04: Merge / Replace radio toggle */}
               <fieldset>
                 <legend className="text-base font-semibold text-slate-900 mb-2">
                   Import mode
@@ -75,7 +86,6 @@ export function ImportModal() {
                 </div>
               </fieldset>
 
-              {/* File input — no accept filter so picker shows all files */}
               <div>
                 <label
                   htmlFor="import-file"
@@ -98,7 +108,6 @@ export function ImportModal() {
                 </a>
               </div>
 
-              {/* Error state */}
               {showErrors && state.success === false && (
                 <div className="border border-red-200 rounded-md bg-red-50 p-3">
                   <div className="flex items-start justify-between gap-2 mb-2">
@@ -123,13 +132,6 @@ export function ImportModal() {
                     ))}
                   </ul>
                 </div>
-              )}
-
-              {/* Success state */}
-              {state?.success === true && (
-                <p className="text-sm text-green-700 bg-green-50 border border-green-200 rounded-md px-3 py-2">
-                  Imported {state.count} camper{state.count !== 1 ? "s" : ""} successfully.
-                </p>
               )}
 
               <button
