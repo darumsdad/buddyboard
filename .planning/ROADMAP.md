@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Foundation & Auth** - Project scaffolding, Supabase schema, Drizzle migrations, Better Auth setup, and login flow (completed 2026-06-28)
 - [x] **Phase 2: Admin User Management** - Admin can create, remove, and reset passwords for counselor accounts (completed 2026-06-28)
 - [ ] **Phase 2.1: User Name Fields** *(INSERTED)* - Admin can store and see first/last name on each user account (schema migration + form + table column)
-- [ ] **Phase 2.2: Admin Nav & UI Polish** *(INSERTED)* - Role-based post-login redirect, bidirectional admin/buddy-board nav links (admin-only on buddy board), round icon buttons in user table actions
+- [x] **Phase 2.2: Admin Nav & UI Polish** *(INSERTED)* - Role-based post-login redirect, bidirectional admin/buddy-board nav links (admin-only on buddy board), round icon buttons in user table actions (completed 2026-06-28)
 - [ ] **Phase 3: Admin Data Setup** - Admin can configure pools and load the full camper roster (Excel import + CRUD)
 - [ ] **Phase 4: Sessions & Buddy Pairs** - Counselors can run a complete pool session and manage buddy pairs over HTTP
 - [ ] **Phase 5: Real-time & Live Board** - All devices at a pool see live buddy board updates with connection status
@@ -93,8 +93,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 02.2-01-PLAN.md — Role-based redirect + nav links (Wave 1)
-- [ ] 02.2-02-PLAN.md — lucide-react install + round icon buttons (Wave 1, has slopcheck checkpoint)
+- [x] 02.2-01-PLAN.md — Role-based redirect + nav links (Wave 1)
+- [x] 02.2-02-PLAN.md — lucide-react install + round icon buttons (Wave 1, has slopcheck checkpoint)
 **UI hint**: yes
 
 ### Phase 3: Admin Data Setup
