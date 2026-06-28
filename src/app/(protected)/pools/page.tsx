@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { db } from "@/db";
 import { pool } from "@/db/schema";
+import { LogoutButton } from "./[poolId]/components/LogoutButton";
 
 export default async function PoolsPage() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -13,9 +14,12 @@ export default async function PoolsPage() {
 
   return (
     <div className="bg-white min-h-screen flex items-center justify-center relative">
-      {session.user.role === "admin" && (
-        <Link href="/admin/users" className="absolute top-4 right-4 text-sm text-slate-600 hover:text-slate-900">Admin</Link>
-      )}
+      <div className="absolute top-4 right-4 flex items-center gap-4">
+        {session.user.role === "admin" && (
+          <Link href="/admin/users" className="text-sm text-slate-600 hover:text-slate-900">Admin</Link>
+        )}
+        <LogoutButton />
+      </div>
       <div className="bg-slate-50 rounded-lg p-8 w-full max-w-sm shadow-sm">
         <h1 className="text-xl font-semibold text-slate-900 text-center mb-6">
           Select a Pool
