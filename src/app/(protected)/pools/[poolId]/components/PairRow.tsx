@@ -19,9 +19,10 @@ type Props = {
   };
   sessionId: string;
   poolId: string;
+  onRemoved: () => void;
 };
 
-export function PairRow({ pair, poolId }: Props) {
+export function PairRow({ pair, poolId, onRemoved }: Props) {
   const [removing, setRemoving] = useState(false);
   const [removeError, setRemoveError] = useState<string | null>(null);
 
@@ -30,6 +31,7 @@ export function PairRow({ pair, poolId }: Props) {
     setRemoveError(null);
     try {
       await removePairAction(pair.id, poolId);
+      onRemoved();
     } catch {
       setRemoveError("Could not remove pair. Please try again.");
     } finally {

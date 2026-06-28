@@ -8,9 +8,10 @@ import { CamperField } from "./CamperField";
 type AddPairFormProps = {
   sessionId: string;
   poolId: string;
+  onSuccess: () => void;
 };
 
-export function AddPairForm({ sessionId, poolId }: AddPairFormProps) {
+export function AddPairForm({ sessionId, poolId, onSuccess }: AddPairFormProps) {
   const [camper1, setCamper1] = useState<CamperSuggestion | null>(null);
   const [camper2, setCamper2] = useState<CamperSuggestion | null>(null);
   const [camper3, setCamper3] = useState<CamperSuggestion | null>(null);
@@ -43,6 +44,7 @@ export function AddPairForm({ sessionId, poolId }: AddPairFormProps) {
         camper3?.id,
       );
       if (result.success) {
+        onSuccess();
         setCamper1(null);
         setCamper2(null);
         setCamper3(null);

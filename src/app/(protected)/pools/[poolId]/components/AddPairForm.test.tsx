@@ -55,7 +55,7 @@ describe("AddPairForm — onSuccess callback", () => {
     fireEvent.click(screen.getByTestId("resolve-camper-2"));
 
     // Submit the form
-    fireEvent.submit(screen.getByRole("form") ?? document.querySelector("form")!);
+    fireEvent.submit(document.querySelector("form")!);
 
     await waitFor(() => {
       expect(onSuccess).toHaveBeenCalledTimes(1);
