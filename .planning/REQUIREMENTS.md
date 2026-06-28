@@ -27,15 +27,15 @@
 ### Sessions (SESS)
 
 - [x] **SESS-01**: Counselor can start a new pool session by selecting a pool from the configured list
-- [ ] **SESS-02**: System prompts for confirmation before closing a session that has active pairs
+- [x] **SESS-02**: System prompts for confirmation before closing a session that has active pairs
 - [x] **SESS-03**: Session data (buddy pairs, timestamps) is archived when a session is closed — not deleted
-- [ ] **SESS-04**: Closed sessions are not shown in the active pool view
+- [x] **SESS-04**: Closed sessions are not shown in the active pool view
 
 ### Buddy Pairs (PAIR)
 
-- [ ] **PAIR-01**: Counselor can register a buddy pair by entering two camper codes
-- [ ] **PAIR-02**: Counselor can register a buddy pair by typing a name with live typeahead search (first/last name)
-- [ ] **PAIR-03**: Counselor can remove a buddy pair; removal is confirmed by server before the UI updates
+- [x] **PAIR-01**: Counselor can register a buddy pair by entering two camper codes
+- [x] **PAIR-02**: Counselor can register a buddy pair by typing a name with live typeahead search (first/last name)
+- [x] **PAIR-03**: Counselor can remove a buddy pair; removal is confirmed by server before the UI updates
 - [x] **PAIR-04**: System prevents the same camper from appearing in two active pairs simultaneously (enforced at the database level)
 - [ ] **PAIR-05**: All buddy pair changes (add, remove) appear in real time on all devices connected to the same pool
 
@@ -95,12 +95,12 @@
 | POOL-01 | Phase 3 | Complete |
 | POOL-02 | Phase 3 | Complete |
 | SESS-01 | Phase 4 | Complete |
-| SESS-02 | Phase 4 | Pending |
+| SESS-02 | Phase 4 | Complete |
 | SESS-03 | Phase 4 | Complete |
-| SESS-04 | Phase 4 | Pending |
-| PAIR-01 | Phase 4 | Pending |
-| PAIR-02 | Phase 4 | Pending |
-| PAIR-03 | Phase 4 | Pending |
+| SESS-04 | Phase 4 | Complete |
+| PAIR-01 | Phase 4 | Complete |
+| PAIR-02 | Phase 4 | Complete |
+| PAIR-03 | Phase 4 | Complete |
 | PAIR-04 | Phase 4 | Complete |
 | PAIR-05 | Phase 5 | Pending |
 | BOARD-01 | Phase 5 | Pending |
