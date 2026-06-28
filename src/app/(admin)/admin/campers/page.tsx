@@ -1,22 +1,52 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { desc } from "drizzle-orm";
+import { ilike, or, sql, desc } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { db } from "@/db";
 import { camper } from "@/db/schema";
 import { CamperTable } from "./components/CamperTable";
 import { AddCamperModal } from "./components/AddCamperModal";
 import { ClearAllCampersDialog } from "./components/ClearAllCampersDialog";
+import { SearchBar } from "./components/SearchBar";
+import { PaginationControls } from "./components/PaginationControls";
+import { ImportModal } from "./components/ImportModal";
 
-export default async function CampersPage() {
+const PAGE_SIZE = 50;
+
+export default async function CampersPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string; page?: string }>;
+}) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) redirect("/login");
   if (session.user.role !== "admin") redirect("/pools");
 
-  const campers = await db
-    .select()
-    .from(camper)
-    .orderBy(desc(camper.createdAt));
+  // searchParams is a Promise in Next.js 16 — must be awaited (RESEARCH.md Pitfall 3)
+  const { q = "", page = "1" } = await searchParams;
+  const pageNum = Math.max(1, parseInt(page, 10) || 1);
+  const offset = (pageNum - 1) * PAGE_SIZE;
+
+  const where = q
+    ? or(
+        ilike(camper.firstName, `%${q}%`),
+        ilike(camper.lastName, `%${q}%`),
+        ilike(camper.code, `%${q}%`),
+      )
+    : undefined;
+
+  const [campers, totalResult] = await Promise.all([
+    db
+      .select()
+      .from(camper)
+      .where(where)
+      .orderBy(desc(camper.createdAt))
+      .limit(PAGE_SIZE)
+      .offset(offset),
+    db.select({ count: sql<number>`count(*)` }).from(camper).where(where),
+  ]);
+
+  const total = Number(totalResult[0]?.count ?? 0);
 
   return (
     <main className="bg-white min-h-screen">
@@ -28,7 +58,21 @@ export default async function CampersPage() {
             <AddCamperModal />
           </div>
         </div>
-        <CamperTable campers={campers} />
+
+        <div className="flex gap-3 mt-6 items-center">
+          <div className="flex-1">
+            <SearchBar defaultValue={q} />
+          </div>
+          <ImportModal />
+        </div>
+
+        <CamperTable campers={campers} searchQuery={q || undefined} />
+
+        <PaginationControls
+          page={pageNum}
+          total={total}
+          pageSize={PAGE_SIZE}
+        />
       </div>
     </main>
   );

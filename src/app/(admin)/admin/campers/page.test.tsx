@@ -16,6 +16,22 @@ vi.mock("./components/ClearAllCampersDialog", () => ({
   ClearAllCampersDialog: () => <button>Clear all campers</button>,
 }));
 
+vi.mock("./components/SearchBar", () => ({
+  SearchBar: ({ defaultValue }: { defaultValue?: string }) => (
+    <input type="search" defaultValue={defaultValue} placeholder="Search by name or code..." />
+  ),
+}));
+
+vi.mock("./components/PaginationControls", () => ({
+  PaginationControls: ({ total }: { total: number }) => (
+    <div>Pagination: {total} total</div>
+  ),
+}));
+
+vi.mock("./components/ImportModal", () => ({
+  ImportModal: () => <button>Import roster</button>,
+}));
+
 vi.mock("next/headers", () => ({
   headers: vi.fn().mockResolvedValue(new Headers()),
 }));
@@ -36,7 +52,18 @@ vi.mock("@/db", () => ({
   db: {
     select: vi.fn().mockReturnValue({
       from: vi.fn().mockReturnValue({
-        orderBy: vi.fn().mockResolvedValue([]),
+        where: vi.fn().mockReturnValue({
+          // Camper list query chain: .where().orderBy().limit().offset()
+          orderBy: vi.fn().mockReturnValue({
+            limit: vi.fn().mockReturnValue({
+              offset: vi.fn().mockResolvedValue([]),
+            }),
+          }),
+          // Count query resolves directly from .where()
+          then: (resolve: (v: unknown) => unknown) =>
+            Promise.resolve([{ count: 0 }]).then(resolve),
+          catch: () => Promise.resolve([{ count: 0 }]),
+        }),
       }),
     }),
   },
@@ -48,7 +75,9 @@ describe("CampersPage", () => {
   });
 
   it("renders h1 with text 'Campers'", async () => {
-    const jsx = await CampersPage();
+    const jsx = await CampersPage({
+      searchParams: Promise.resolve({}),
+    });
     render(jsx);
     expect(
       screen.getByRole("heading", { name: /Campers/i }),
@@ -56,7 +85,9 @@ describe("CampersPage", () => {
   });
 
   it("renders empty state text when no campers", async () => {
-    const jsx = await CampersPage();
+    const jsx = await CampersPage({
+      searchParams: Promise.resolve({}),
+    });
     render(jsx);
     expect(screen.getByText("No campers yet")).toBeInTheDocument();
   });

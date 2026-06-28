@@ -14,9 +14,10 @@ type Camper = {
 
 type Props = {
   campers: Camper[];
+  searchQuery?: string;
 };
 
-export function CamperTable({ campers }: Props) {
+export function CamperTable({ campers, searchQuery }: Props) {
   return (
     <div className="bg-white border border-slate-200 rounded-md overflow-hidden mt-8">
       <table className="w-full">
@@ -44,12 +45,25 @@ export function CamperTable({ campers }: Props) {
             <tr>
               <td colSpan={5}>
                 <div className="px-4 py-12 text-center">
-                  <p className="text-base font-semibold text-slate-900 mb-1">
-                    No campers yet
-                  </p>
-                  <p className="text-base text-slate-500">
-                    Upload a spreadsheet or add campers one at a time.
-                  </p>
+                  {searchQuery ? (
+                    <>
+                      <p className="text-base font-semibold text-slate-900 mb-1">
+                        No results for &ldquo;{searchQuery}&rdquo;
+                      </p>
+                      <p className="text-base text-slate-500">
+                        Try a different name or code.
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-base font-semibold text-slate-900 mb-1">
+                        No campers yet
+                      </p>
+                      <p className="text-base text-slate-500">
+                        Upload a spreadsheet or add campers one at a time.
+                      </p>
+                    </>
+                  )}
                 </div>
               </td>
             </tr>
