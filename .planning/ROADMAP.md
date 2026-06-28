@@ -18,7 +18,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2.2: Admin Nav & UI Polish** *(INSERTED)* - Role-based post-login redirect, bidirectional admin/buddy-board nav links (admin-only on buddy board), round icon buttons in user table actions (completed 2026-06-28)
 - [x] **Phase 3: Admin Data Setup** - Admin can configure pools and load the full camper roster (Excel import + CRUD) (completed 2026-06-28)
 - [x] **Phase 4: Sessions & Buddy Pairs** - Counselors can run a complete pool session and manage buddy pairs over HTTP (completed 2026-06-28)
-- [ ] **Phase 5: Real-time & Live Board** - All devices at a pool see live buddy board updates with connection status
+- [x] **Phase 5: Real-time & Live Board** - All devices at a pool see live buddy board updates with connection status (completed 2026-06-28)
 - [ ] **Phase 6: Buddy Call Screen & Polish** - High-contrast buddy call screen and responsive pass for iPad, laptop, and iPhone
 
 ## Phase Details
@@ -180,7 +180,7 @@ Plans:
 - [x] 05-03-PLAN.md — GET /api/sessions/[sessionId]/pairs Route Handler with Better Auth gate (Wave 2)
 - [x] 05-04-PLAN.md — ConnectionBanner + PairSkeleton + SessionBoard/PairList live-prop threading (Wave 2)
 - [x] 05-05-PLAN.md — LiveBoard client component: dual-table Realtime subscription, debounced refetch, derived counts (Wave 3)
-- [ ] 05-06-PLAN.md — page.tsx wiring (LiveBoard replaces SessionBoard) + multi-device verification (Wave 4)
+- [x] 05-06-PLAN.md — page.tsx wiring (LiveBoard replaces SessionBoard) + multi-device verification (Wave 4)
 
 **Wave dependencies:** Wave 2 *(05-03 blocked on 05-01; 05-04 blocked on 05-01 + 05-02)* | Wave 3 *(05-05 blocked on 05-01 + 05-03 + 05-04)* | Wave 4 *(05-06 blocked on 05-05)*
 
@@ -219,5 +219,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 2.2. Admin Nav & UI Polish | 0/2 | Not started | - |
 | 3. Admin Data Setup | 4/4 | Complete   | 2026-06-28 |
 | 4. Sessions & Buddy Pairs | 5/5 | Complete   | 2026-06-28 |
-| 5. Real-time & Live Board | 5/6 | In Progress|  |
+| 5. Real-time & Live Board | 6/6 | Complete   | 2026-06-28 |
 | 6. Buddy Call Screen & Polish | 0/? | Not started | - |

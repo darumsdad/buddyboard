@@ -2,7 +2,7 @@
 phase: 05-real-time-live-board
 plan: 06
 subsystem: session-page
-status: partial — Task 2 (multi-device verification) pending human checkpoint
+status: complete
 tags: [realtime, liveboard, page, ssr, count-removal]
 depends_on:
   requires: [05-05]
@@ -22,16 +22,16 @@ decisions:
 metrics:
   duration_seconds: 0
   completed_date: "2026-06-28"
-  tasks_completed: 1
+  tasks_completed: 2
   files_changed: 1
 requirements: [PAIR-05, BOARD-01]
 ---
 
-# Phase 05 Plan 06: LiveBoard Page Wiring Summary (Partial)
+# Phase 05 Plan 06: LiveBoard Page Wiring Summary
 
 **One-liner:** page.tsx now imports and renders LiveBoard with the SSR pair snapshot, removing the two redundant server-side count queries whose counts are now derived client-side.
 
-**Status:** Task 1 complete and committed. Task 2 (multi-device real-time verification) is a blocking human checkpoint — execution paused awaiting approval.
+**Status:** Complete. Task 1 (automated) and Task 2 (multi-device verification) both confirmed.
 
 ## What Was Built
 
@@ -47,7 +47,7 @@ Modified `src/app/(protected)/pools/[poolId]/page.tsx`:
 - `JoinSessionModal` conditional and surrounding fragment are unchanged
 - Auth gate (`auth.api.getSession` + `redirect("/login")`) is unchanged (T-05-01 mitigation intact)
 
-## Task 2 — Multi-Device Verification (PENDING HUMAN CHECKPOINT)
+## Task 2 — Multi-Device Verification (APPROVED)
 
 This task requires two live browser sessions and a real network disruption — it cannot be automated. See checkpoint details below.
 
