@@ -1,10 +1,11 @@
 ---
 phase: 4
 slug: sessions-and-buddy-pairs
-status: draft
+status: approved
 shadcn_initialized: false
 preset: none
 created: 2026-06-28
+reviewed_at: 2026-06-28
 ---
 
 # Phase 4 — UI Design Contract
