@@ -1,11 +1,14 @@
 ---
 phase: 3
 slug: admin-data-setup
-status: draft
+status: updated-post-execution
 shadcn_initialized: false
 preset: none
 created: 2026-06-28
+updated: 2026-06-28
 ---
+
+> **Post-execution update (2026-06-28):** Several UI patterns changed during manual testing and review. Sections marked ⚠️ reflect the actual shipped implementation, which differs from the original spec.
 
 # Phase 3 — UI Design Contract
 
@@ -25,7 +28,7 @@ RESEARCH.md. No user questions were required.
 | Tool | none |
 | Preset | not applicable |
 | Component library | none (raw Tailwind CSS) |
-| Icon library | none |
+| Icon library | lucide-react (already in package.json) |
 | Font | Geist Sans (CSS variable --font-geist-sans, set in globals.css) |
 
 Source: `components.json` not found. `src/app/globals.css` confirms `--font-sans: var(--font-geist-sans)`.
@@ -112,9 +115,9 @@ Source: All values read directly from class names in `login/page.tsx`, `CreateUs
 
 ## Layout Contract
 
-### Admin Shell (applies to all admin pages in Phase 3)
+### Admin Shell (applies to all admin pages in Phase 3) ⚠️
 
-The `(admin)/layout.tsx` is modified to wrap children in a flex row with the new sidebar.
+The `(admin)/layout.tsx` wraps children in a flex row with the sidebar and a `<Toaster>` (sonner).
 
 ```
 ┌──────────────────────────────────────────────────────────┐
@@ -126,8 +129,13 @@ The `(admin)/layout.tsx` is modified to wrap children in a flex row with the new
 │ [Users]                        │  <page content>         │
 │ [Campers]  ← active            │                         │
 │ [Pools]                        │                         │
+│                                │                         │
+│ ── divider ──                  │                         │
+│ [↗ View Buddy Board]           │                         │
 └──────────────────────────────────────────────────────────┘
 ```
+
+"View Buddy Board" sits below a `border-t` divider at the bottom of the sidebar. Uses `ExternalLink` icon (14px), smaller text (`text-sm`), slate-500 colour. Links to `/pools`.
 
 - Sidebar: `w-48 shrink-0 bg-slate-50 border-r border-slate-200 min-h-screen p-4`
 - Active link: `block px-3 py-2 rounded-md text-base font-semibold bg-blue-600 text-white transition-colors`
@@ -141,22 +149,23 @@ background color: active uses `bg-blue-600 text-white`, inactive uses no backgro
 
 Source: RESEARCH.md Pattern 4 (AdminSidebar).
 
-### Campers Page Layout
+### Campers Page Layout ⚠️
 
 ```
-Page heading row:   [h1 "Campers"]  ·  [Clear all campers ← red text link]  ·  [Add camper ← blue button]
-Search row:         [Search input — full width]                               [Import roster ← secondary button]
+Page heading row:   [h1 "Campers"]  ·  [Eraser icon]  [Download icon]  [Upload icon ← larger, separated]  [UserPlus icon]
+Search row:         [🔍 Search input — full width]
 Table:              [CamperTable — see below]
 Pagination:         [← Previous]  Page X of Y  [Next →]
 ```
 
-Primary visual anchor: the blue "Add camper" button (blue-600, top-right of heading row).
+All header actions are **icon-only buttons** (lucide-react). Text labels were removed in favour of `title` / `aria-label` tooltip attributes.
 
-- "Clear all campers" is a text link (`text-red-600`), not a filled button, to reduce destructive salience.
-  It lives top-right next to "Add camper" to make the flow clear: both are roster-level actions.
-- "Import roster" sits inline with the search bar (right-aligned) — it is a secondary action, not primary.
-  Style: `min-h-[44px] px-4 border border-slate-300 rounded-md text-base text-slate-700 font-semibold hover:bg-slate-50`
-- Search input: full width minus the import button. Uses the exact SearchBar pattern from RESEARCH.md Pattern 2.
+- **Eraser** (`Eraser` icon, 20px) — Clear all campers. Slate colour, turns red on hover.
+- **Download** (`Download` icon, 20px) — Downloads `public/sample-roster.csv` (CSV template). Direct `<a download>` link.
+- **Upload** (`Upload` icon, 24px) — Import roster modal trigger. **Separated right** with `gap-4` from the other icons; rendered larger (24px vs 20px) to signal it as the primary action.
+- **UserPlus** (`UserPlus` icon, 20px) — Add camper modal trigger.
+
+SearchBar is now **full-width** with an inline `Search` icon on the left (`pl-9` offset). The import button no longer shares the search row.
 
 ### Camper Table Columns
 
@@ -173,20 +182,17 @@ Table container: `bg-white border border-slate-200 rounded-md overflow-hidden mt
 Table header row: `bg-slate-50`, cells `text-sm font-semibold text-slate-900 px-4 py-3 text-left`
 Table body rows: `divide-y divide-slate-200`, cells `text-base text-slate-900 px-4 py-3`
 
-### Pools Page Layout
+### Pools Page Layout ⚠️
 
 ```
-Page heading row:   [h1 "Pools"]
-Pool list:          [Pool Name]  [Rename]  [Remove ← red]   (one row per pool)
-Add pool form:      [Pool name input]  [Add pool ← blue button]   (inline, below list)
+Page heading row:   [h1 "Pools"]  ·  [Plus icon]
+Pool list:          [Pool Name]  [Pencil icon]  [Trash2 icon]   (one row per pool)
 ```
 
-Primary visual anchor: the blue "Add pool" inline form submit button (blue-600, below the pool list).
-
-- Pool list is a simple `<ul>` — no table needed (no extra columns beyond name and actions).
-- Rename action: opens an EditPoolModal (same max-w-sm modal pattern). Not inline editing.
-- "Remove" is a text link (`text-red-600`) that opens DeleteConfirmDialog.
-- Add pool form is inline at the bottom — no modal needed for a single text field.
+- **Plus** (`Plus` icon, 20px) in the page header — opens "Add pool" modal. **No inline form below the list.**
+- **Pencil** (`Pencil` icon, 16px) per row — opens Rename modal (same max-w-sm pattern).
+- **Trash2** (`Trash2` icon, 16px) per row — opens remove confirmation dialog. Slate colour, turns red on hover.
+- Add pool is now a **modal dialog** (same pattern as AddCamperModal) — single name field, submit closes on success. Inline form was removed for consistency.
 
 ---
 
@@ -221,13 +227,18 @@ Primary visual anchor: the blue "Add pool" inline form submit button (blue-600, 
 - Cancel label pattern: "Keep camper" / "Keep pool" (positive framing for cancel)
 - Confirm label pattern: "Remove camper" / "Clear all campers" / "Remove pool"
 
-### Import Modal States
-1. **Default:** File input (`accept=".xlsx,.xls"`), "Download sample template" link, "Upload roster" button
-2. **Pending:** "Uploading..." button text, disabled, no spinner (consistent with existing loading states)
-3. **Error:** Unordered list of row-level errors below the file input, styled `text-sm text-red-600`, wrapped in `role="alert"`
-4. **Success:** "Imported N campers successfully." in `text-sm text-green-700`, modal offers "Close" link
+### Import Modal States ⚠️
 
-Sample template link: `<a href="/sample-roster.xlsx" download>` — styled as `text-base text-blue-600 underline-offset-2 hover:underline`
+File format: **CSV** (not xlsx). Parsed server-side with `papaparse`. Same CampMinder column mapping.
+
+1. **Default:** Merge / Replace radio buttons (labels only, no descriptions). Custom "Choose file…" button (hidden `<input type="file">` + styled `<button>` with `Paperclip` icon; shows selected filename). No template download link in dialog (moved to page header as `Download` icon).
+2. **Pending:** "Uploading…" button text, disabled.
+3. **Error:** Bordered `bg-red-50` box with count summary ("N issues found") + × dismiss button + scrollable list (`max-h-40 overflow-y-auto`). Modal capped at `max-h-[90vh]`.
+4. **Success:** Modal auto-closes; sonner toast fires bottom-right: "N campers imported". No in-dialog success state shown.
+
+**useActionState lifecycle fix:** `useActionState` is inside an inner `ImportForm` component that only mounts when the modal is open. This guarantees state resets to `null` on every open — no stale errors or success from prior sessions leak through.
+
+**New dependencies:** `sonner@2.0.7` (toasts, `<Toaster>` in admin layout), `papaparse@5.5.4` (CSV parsing).
 
 ### Form Validation (Add/Edit Camper, Add Pool)
 - Required fields: validated server-side via Server Action. No client-side custom validation beyond `required` attribute.
