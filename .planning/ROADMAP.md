@@ -17,7 +17,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 2.1: User Name Fields** *(INSERTED)* - Admin can store and see first/last name on each user account (schema migration + form + table column)
 - [x] **Phase 2.2: Admin Nav & UI Polish** *(INSERTED)* - Role-based post-login redirect, bidirectional admin/buddy-board nav links (admin-only on buddy board), round icon buttons in user table actions (completed 2026-06-28)
 - [x] **Phase 3: Admin Data Setup** - Admin can configure pools and load the full camper roster (Excel import + CRUD) (completed 2026-06-28)
-- [ ] **Phase 4: Sessions & Buddy Pairs** - Counselors can run a complete pool session and manage buddy pairs over HTTP
+- [x] **Phase 4: Sessions & Buddy Pairs** - Counselors can run a complete pool session and manage buddy pairs over HTTP (completed 2026-06-28)
 - [ ] **Phase 5: Real-time & Live Board** - All devices at a pool see live buddy board updates with connection status
 - [ ] **Phase 6: Buddy Call Screen & Polish** - High-contrast buddy call screen and responsive pass for iPad, laptop, and iPhone
 
@@ -145,7 +145,7 @@ Plans:
 - [x] 04-02-PLAN.md — Server Actions (requireAuth, searchCampersAction, addPairAction, addPairMemberAction, removePairAction, closeSessionAction), unit test files (Wave 2)
 - [x] 04-03-PLAN.md — Leaf UI components: JoinSessionModal, CloseSessionDialog, TrioPicker, CamperField, PairRow (Wave 3)
 - [x] 04-04-PLAN.md — Composite components: LogoutButton, AddPairForm, PairList, SessionHeader, SessionBoard (Wave 4)
-- [ ] 04-05-PLAN.md — Page wiring: pools/page.tsx (DB-driven + logout), pools/[poolId]/page.tsx (get-or-create session, full board), end-to-end verification (Wave 5)
+- [x] 04-05-PLAN.md — Page wiring: pools/page.tsx (DB-driven + logout), pools/[poolId]/page.tsx (get-or-create session, full board), end-to-end verification (Wave 5)
 
 **Wave dependencies:** Wave 2 *(blocked on Wave 1 / 04-01 push)* | Wave 3 *(blocked on Wave 2 / 04-02 actions)* | Wave 4 *(blocked on Wave 3 / 04-03 leaf components)* | Wave 5 *(blocked on Wave 4 / 04-04 composite components)*
 
@@ -199,6 +199,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 2.1. User Name Fields | 0/? | Not started | - |
 | 2.2. Admin Nav & UI Polish | 0/2 | Not started | - |
 | 3. Admin Data Setup | 4/4 | Complete   | 2026-06-28 |
-| 4. Sessions & Buddy Pairs | 4/5 | In Progress|  |
+| 4. Sessions & Buddy Pairs | 5/5 | Complete   | 2026-06-28 |
 | 5. Real-time & Live Board | 0/? | Not started | - |
 | 6. Buddy Call Screen & Polish | 0/? | Not started | - |
