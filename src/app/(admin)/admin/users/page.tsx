@@ -1,6 +1,9 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { asc } from "drizzle-orm";
 import { auth } from "@/lib/auth";
+import { db } from "@/db";
+import { user as userTable } from "@/db/schema";
 import { CreateUserModal } from "./components/CreateUserModal";
 import { UserTable } from "./components/UserTable";
 
@@ -8,20 +11,27 @@ export default async function UsersPage() {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session || session.user.role !== "admin") redirect("/pools");
 
-  const result = await auth.api.listUsers({
-    query: { limit: 100, sortBy: "createdAt", sortDirection: "asc" },
-    headers: await headers(),
-  });
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const users = (result?.users ?? []) as any as Array<{
-    id: string;
-    username: string | null;
-    name: string;
-    role: string | null;
-    createdAt: Date;
-    firstName: string | null;
-    lastName: string | null;
-  }>;
+  const rows = await db
+    .select({
+      id: userTable.id,
+      username: userTable.username,
+      name: userTable.name,
+      role: userTable.role,
+      createdAt: userTable.createdAt,
+      firstName: userTable.firstName,
+      lastName: userTable.lastName,
+    })
+    .from(userTable)
+    .orderBy(asc(userTable.createdAt));
+
+  const users = rows.map((u) => ({
+    ...u,
+    createdAt: u.createdAt.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    }),
+  }));
 
   return (
     <main className="bg-white min-h-screen">

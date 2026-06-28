@@ -9,7 +9,7 @@ type User = {
   username: string | null;
   name: string;
   role: string | null;
-  createdAt: Date;
+  createdAt: string;
   firstName: string | null;
   lastName: string | null;
 };
@@ -60,11 +60,7 @@ export function UserTable({ users }: { users: User[] }) {
                   {displayRole(user.role)}
                 </td>
                 <td className="text-base text-slate-900 px-4 py-3">
-                  {new Date(user.createdAt).toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                  })}
+                  {user.createdAt}
                 </td>
                 <td className="text-base text-slate-900 px-4 py-3">
                   <div className="flex items-center gap-2">
