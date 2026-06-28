@@ -95,6 +95,8 @@ Source: Carried from `src/app/(auth)/login/page.tsx` color tokens (D-CONTEXT: Cl
 
 ### 2. Page Header
 
+**Primary visual anchor:** The `<h1>` "User Management" heading (`text-3xl font-semibold text-slate-900`) and the blue-600 "Create user" button are the focal point of the `/admin/users` screen. All other elements are visually subordinate to this header row. No other element on the page competes for first visual attention.
+
 - `<h1>` "User Management" — `text-3xl font-semibold text-slate-900`
 - "Create user" button — right-aligned (`flex justify-between items-center`)
 - Button: `min-h-[44px] px-4 bg-blue-600 hover:bg-blue-700 text-white text-base font-semibold rounded-md transition-colors duration-150`
@@ -134,7 +136,7 @@ Two actions per row, in the Actions cell:
 - No confirmation step required (D-10)
 
 **Delete** (destructive action):
-- Trigger: text button — `text-base text-red-600 underline-offset-2 hover:underline ml-4`
+- Trigger: text button — `text-base text-red-600 underline-offset-2 hover:underline ml-4` — labeled "Delete user"
 - Behavior: opens confirmation dialog (D-10)
 
 ### 5. Inline Password Reset Form
@@ -145,7 +147,7 @@ Contents:
 - Password input: `min-h-[44px] w-full border border-slate-300 rounded-md px-3 text-base text-slate-900 placeholder:text-slate-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none`
 - Placeholder: "New password (min. 8 characters)"
 - "Save password" button: `min-h-[44px] px-4 bg-blue-600 hover:bg-blue-700 text-white text-base font-semibold rounded-md transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed`
-- "Cancel" button: `min-h-[44px] px-4 text-base text-slate-600 hover:text-slate-900`
+- "Discard" button: `min-h-[44px] px-4 text-base text-slate-600 hover:text-slate-900` — dismisses the inline form without saving
 - Inline error below input (if validation fails)
 
 ### 6. Create User Modal
@@ -178,11 +180,11 @@ Triggered by the "Create user" button. Implemented with local boolean state — 
 
 4. Submit button: "Create user" — `min-h-[44px] w-full bg-blue-600 hover:bg-blue-700 text-white text-base font-semibold rounded-md transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed`
 
-5. Cancel: text link below button — `text-base text-slate-600 hover:text-slate-900 text-center mt-2` — "Cancel"
+5. Dismiss: text link below button — `text-base text-slate-600 hover:text-slate-900 text-center mt-2` — "Close"
 
 ### 7. Delete Confirmation Dialog
 
-Triggered by the Delete row action. Same overlay/card pattern as the Create User modal.
+Triggered by the Delete user row action. Same overlay/card pattern as the Create User modal.
 
 **Modal card:** `bg-white rounded-lg p-6 w-full max-w-sm shadow-sm`
 
@@ -190,8 +192,8 @@ Triggered by the Delete row action. Same overlay/card pattern as the Create User
 - Title: `text-xl font-semibold text-slate-900` — "Remove [username]?"
 - Body: `text-base text-slate-700 mt-2` — "They will lose access immediately. This cannot be undone."
 - Button row: `flex gap-3 mt-6`
-  - "Cancel" — `min-h-[44px] flex-1 border border-slate-300 rounded-md text-base text-slate-700 font-semibold hover:bg-slate-50`
-  - "Remove" — `min-h-[44px] flex-1 bg-red-600 hover:bg-red-700 text-white text-base font-semibold rounded-md transition-colors duration-150 disabled:opacity-50`
+  - "Keep user" — `min-h-[44px] flex-1 border border-slate-300 rounded-md text-base text-slate-700 font-semibold hover:bg-slate-50`
+  - "Remove user" — `min-h-[44px] flex-1 bg-red-600 hover:bg-red-700 text-white text-base font-semibold rounded-md transition-colors duration-150 disabled:opacity-50`
 
 ---
 
@@ -203,13 +205,15 @@ Triggered by the Delete row action. Same overlay/card pattern as the Create User
 | Primary CTA | "Create user" |
 | Create modal title | "Create user" |
 | Create modal submit | "Create user" |
+| Create modal dismiss | "Close" |
 | Reset password trigger | "Reset password" |
 | Reset password submit | "Save password" |
-| Delete trigger | "Delete" |
+| Reset password form dismiss | "Discard" |
+| Delete trigger | "Delete user" |
 | Delete confirmation title | "Remove [username]?" |
 | Delete confirmation body | "They will lose access immediately. This cannot be undone." |
-| Delete confirmation CTA | "Remove" |
-| Cancel (all contexts) | "Cancel" |
+| Delete confirmation CTA | "Remove user" |
+| Delete confirmation dismiss | "Keep user" |
 | Empty state heading | "No users yet" |
 | Empty state body | "Create the first account to allow staff to log in." |
 | Error — duplicate username | "That username is already taken. Choose a different one." |
