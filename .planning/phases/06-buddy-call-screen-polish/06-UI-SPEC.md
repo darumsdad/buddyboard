@@ -47,24 +47,26 @@ Baseline sizes from Phase 5 (400 and 600 weights, unchanged):
 
 | Role | Size | Weight | Line Height | Example Usage |
 |------|------|--------|-------------|---------------|
-| Body | 16px (text-base) | 400 | 1.5 | Pair list names in BuddyCallClient |
+| Body | 16px (text-base) | 400 | 1.5 | Pair list names in BuddyCallClient; back link text |
 | Label | 16px (text-base) | 600 | 1.5 | Column headers, sublabels |
 | Heading | 20px (text-xl) | 600 | 1.2 | Pool name in buddy call compact header |
 | Display | 36px (text-4xl) | 600 | 1.0 | SessionHeader count (existing, mobile breakpoint fallback) |
 
 Phase 6 additions (Giant role — new for buddy call screen):
 
-| Role | Size (mobile) | Size (md+) | Weight | Line Height | Usage |
-|------|--------------|------------|--------|-------------|-------|
-| Giant Primary | 60px (text-6xl) | 96px (text-8xl) | 600 (semibold) | 1.0 (leading-none) | Swimmer count on buddy call screen |
-| Giant Secondary | 36px (text-4xl) | 60px (text-6xl) | 600 (semibold) | 1.0 (leading-none) | Pair count on buddy call screen |
+| Role | Size (all viewports) | Weight | Line Height | Usage |
+|------|----------------------|--------|-------------|-------|
+| Giant Primary | 60px (text-6xl) | 600 (semibold) | 1.0 (leading-none) | Swimmer count on buddy call screen |
+| Giant Secondary | 36px (text-4xl) mobile / 60px (text-6xl) md+ | 600 (semibold) | 1.0 (leading-none) | Pair count on buddy call screen |
 
-Tailwind classes for giant primary: `text-6xl md:text-8xl font-semibold text-slate-900 leading-none`
+Tailwind classes for giant primary: `text-6xl font-semibold text-slate-900 leading-none`
 Tailwind classes for giant secondary: `text-4xl md:text-6xl font-semibold text-slate-900 leading-none`
 
 Sublabel (the word "swimmers" or "pairs" below the number): `text-xl font-semibold text-slate-500` — identical to existing Heading weight/size but muted color to make the number pop.
 
-Back link text: `text-sm text-slate-600 hover:text-slate-900` (14px, weight 400 — consistent with Phase 5 LogoutButton).
+Back link text: `text-base text-slate-600 hover:text-slate-900` (16px, weight 400 — consistent with Body role).
+
+Active font-size inventory for Phase 6: **16px, 20px, 36px, 60px** (4 sizes — within the 4-size maximum).
 
 ---
 
@@ -102,7 +104,7 @@ Layout structure (full-screen):
   <header className="sticky top-0 z-10 bg-white border-b border-slate-200">
     <div className="flex items-center justify-between px-4 py-3">
       <a href={`/pools/${poolId}`}
-         className="flex items-center gap-1 text-sm text-slate-600 hover:text-slate-900 min-h-[44px]">
+         className="flex items-center gap-1 text-base text-slate-600 hover:text-slate-900 min-h-[44px]">
         <ChevronLeft size={18} />
         Back to board
       </a>
@@ -119,7 +121,7 @@ Layout structure (full-screen):
     <div className="flex flex-col items-center gap-y-6">
       {/* Swimmer count block */}
       <div className="flex flex-col items-center gap-y-1">
-        <p className="text-6xl md:text-8xl font-semibold text-slate-900 leading-none tabular-nums">
+        <p className="text-6xl font-semibold text-slate-900 leading-none tabular-nums">
           {swimmerCount}
         </p>
         <p className="text-xl font-semibold text-slate-500">swimmers</p>
@@ -176,7 +178,7 @@ Replace with responsive layout:
     <span className="text-xl font-semibold text-slate-900">{poolName}</span>
     <div className="flex items-center">
       <CloseSessionDialog ... />
-      <LogoutButton className="text-sm text-slate-600 hover:text-slate-900 ml-4" />
+      <LogoutButton className="text-base text-slate-600 hover:text-slate-900 ml-4" />
     </div>
   </div>
   {/* Count row — hidden on md+, shown on mobile */}
@@ -203,7 +205,7 @@ Precise implementation: on `md+`, the count `<div>` moves back into the top row 
   </div>
   <div className="flex items-center">
     <CloseSessionDialog ... />
-    <LogoutButton className="text-sm text-slate-600 hover:text-slate-900 ml-4" />
+    <LogoutButton className="text-base text-slate-600 hover:text-slate-900 ml-4" />
   </div>
 </div>
 {/* Count stacked below on mobile */}
