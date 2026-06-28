@@ -73,7 +73,7 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
-- Add logout button to BuddyBoard (/pools) and admin panel (/admin/users) → `.planning/todos/pending/2026-06-28-add-logout-button.md`
+None — logout button todo folded into Phase 4 scope.
 
 ### Blockers/Concerns
 
@@ -88,6 +88,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-06-28T16:36:32.152Z
-Stopped at: Phase 3 context gathered
-Resume file: None
+Last session: 2026-06-28T00:00:00Z
+Stopped at: Phase 4 context gathered
+Resume file: .planning/phases/04-sessions-and-buddy-pairs/04-CONTEXT.md
