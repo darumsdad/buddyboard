@@ -1,8 +1,11 @@
 "use server";
 
+import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { auth } from "@/lib/auth";
+import { db } from "@/db";
+import { user as userTable } from "@/db/schema";
 
 async function requireAdmin() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -26,12 +29,18 @@ export async function createUserAction(formData: FormData) {
       password,
       name: username,
       role,
-      data: { username, firstName, lastName },
+      data: { username },
     },
     headers: await headers(),
   });
 
   if (!result?.user) throw new Error("Failed to create user");
+
+  await db
+    .update(userTable)
+    .set({ firstName, lastName })
+    .where(eq(userTable.id, result.user.id));
+
   revalidatePath("/admin/users");
 }
 
