@@ -744,17 +744,17 @@ This is a 1-task addition that runs on every push and PR. Recommend including in
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Does `@better-auth/cli generate` preserve the Drizzle relations block?**
    - What we know: The CLI reads `auth.ts` and generates schema for Better Auth tables; it may not know about custom additions
    - What's unclear: Whether the CLI merges with existing content or overwrites
-   - Recommendation: Executor should inspect the output before committing; re-add relations block if dropped
+   - RESOLVED: Executor must read the relations block before running the CLI, then re-add it if dropped. Plan 01 Task 2 implements this explicitly (read+restore step).
 
 2. **Does the admin layout need to duplicate the role check that's also in Server Actions?**
    - What we know: The layout can redirect, but Server Actions are also called directly by client components
    - What's unclear: Whether a malicious actor could invoke Server Actions by bypassing the layout
-   - Recommendation: Yes — keep `requireAdmin()` in every Server Action. The layout gate is for UX redirect; Server Action check is for security. Both are needed.
+   - RESOLVED: Yes — keep `requireAdmin()` in every Server Action. Layout gate is for UX redirect; Server Action check is for security. Plan 02 Task 2 implements `requireAdmin()` in every action.
 
 ---
 

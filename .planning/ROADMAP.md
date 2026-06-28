@@ -57,6 +57,13 @@ Plans:
 - [ ] 02-02-admin-layout-PLAN.md — Admin route group, role-enforcing layout, server actions with requireAdmin guard, basic server-rendered users page (Wave 2)
 - [ ] 02-03-users-page-PLAN.md — Interactive UI components (UserTable, CreateUserModal, DeleteConfirmDialog, ResetPasswordForm), component tests, page wiring (Wave 3)
 
+**Wave dependencies:** Wave 2 *(blocked on Wave 1 completion)* | Wave 3 *(blocked on Wave 2 completion)*
+
+**Cross-cutting constraints:**
+- `npx drizzle-kit push` must complete before any admin UI code ships (schema drives types)
+- `requireAdmin()` enforced in every Server Action — layout gate handles UX redirect, actions handle security
+- `displayRole()` is the single source of truth — raw `"user"` string is never rendered in the UI
+
 **UI hint**: yes
 
 ### Phase 3: Admin Data Setup
@@ -121,7 +128,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation & Auth | 4/4 | Complete   | 2026-06-28 |
-| 2. Admin User Management | 0/3 | Not started | - |
+| 2. Admin User Management | 0/3 | Planned     | - |
 | 3. Admin Data Setup | 0/? | Not started | - |
 | 4. Sessions & Buddy Pairs | 0/? | Not started | - |
 | 5. Real-time & Live Board | 0/? | Not started | - |
