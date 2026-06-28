@@ -12,7 +12,7 @@ BuddyBoard ships in six phases that follow the hard dependency chain in the stac
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation & Auth** - Project scaffolding, Supabase schema, Drizzle migrations, Better Auth setup, and login flow
+- [x] **Phase 1: Foundation & Auth** - Project scaffolding, Supabase schema, Drizzle migrations, Better Auth setup, and login flow (completed 2026-06-28)
 - [ ] **Phase 2: Admin User Management** - Admin can create, remove, and reset passwords for counselor accounts
 - [ ] **Phase 3: Admin Data Setup** - Admin can configure pools and load the full camper roster (Excel import + CRUD)
 - [ ] **Phase 4: Sessions & Buddy Pairs** - Counselors can run a complete pool session and manage buddy pairs over HTTP
@@ -37,7 +37,7 @@ Plans:
 - [x] 01-01-scaffold-PLAN.md — Next.js scaffold, packages, Better Auth wiring, schema generation (Wave 1)
 - [x] 01-02-db-PLAN.md — Supabase creation, DB migration, admin seed (Wave 2, blocking human action)
 - [x] 01-03-ui-PLAN.md — Login page, pools placeholder, middleware (Wave 2, parallel)
-- [ ] 01-04-deploy-PLAN.md — Vercel deployment and end-to-end verification (Wave 3)
+- [x] 01-04-deploy-PLAN.md — Vercel deployment and end-to-end verification (Wave 3)
 
 **UI hint**: yes
 
@@ -114,7 +114,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Auth | 3/4 | In Progress|  |
+| 1. Foundation & Auth | 4/4 | Complete   | 2026-06-28 |
 | 2. Admin User Management | 0/? | Not started | - |
 | 3. Admin Data Setup | 0/? | Not started | - |
 | 4. Sessions & Buddy Pairs | 0/? | Not started | - |
