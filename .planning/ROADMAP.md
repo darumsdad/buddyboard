@@ -220,4 +220,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 3. Admin Data Setup | 4/4 | Complete   | 2026-06-28 |
 | 4. Sessions & Buddy Pairs | 5/5 | Complete   | 2026-06-28 |
 | 5. Real-time & Live Board | 6/6 | Complete   | 2026-06-28 |
-| 6. Buddy Call Screen & Polish | 0/? | Not started | - |
+| 6. Buddy Call Screen & Polish | 0/3 | Not started | - |
