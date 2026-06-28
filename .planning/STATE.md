@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Phase 3 context gathered
-last_updated: "2026-06-28T14:20:01.212Z"
+stopped_at: Phase 3 UI-SPEC approved
+last_updated: "2026-06-28T00:00:00.000Z"
 last_activity: 2026-06-28
 progress:
   total_phases: 7
@@ -71,7 +71,7 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
-None yet.
+- `2026-06-28-admin-login-redirect-and-nav-links.md` — Admin login redirect and cross-screen nav links (area: auth)
 
 ### Blockers/Concerns
 
@@ -88,4 +88,4 @@ None yet.
 
 Last session: 2026-06-28T14:20:01.194Z
 Stopped at: Phase 3 context gathered
-Resume file: .planning/phases/03-admin-data-setup/03-CONTEXT.md
+Resume file: .planning/phases/03-admin-data-setup/03-UI-SPEC.md
