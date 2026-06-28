@@ -175,8 +175,8 @@ Plans:
 **Plans**: 6 plans
 
 Plans:
-- [ ] 05-01-PLAN.md — Supabase client singleton, package install, Wave 0 test scaffolding, manual publication/env setup (Wave 1)
-- [ ] 05-02-PLAN.md — Mutation callback layer: remove revalidatePath, add onSuccess/onRemoved to AddPairForm/PairRow (Wave 1)
+- [x] 05-01-PLAN.md — Supabase client singleton, package install, Wave 0 test scaffolding, manual publication/env setup (Wave 1)
+- [x] 05-02-PLAN.md — Mutation callback layer: remove revalidatePath, add onSuccess/onRemoved to AddPairForm/PairRow (Wave 1)
 - [ ] 05-03-PLAN.md — GET /api/sessions/[sessionId]/pairs Route Handler with Better Auth gate (Wave 2)
 - [ ] 05-04-PLAN.md — ConnectionBanner + PairSkeleton + SessionBoard/PairList live-prop threading (Wave 2)
 - [ ] 05-05-PLAN.md — LiveBoard client component: dual-table Realtime subscription, debounced refetch, derived counts (Wave 3)
@@ -219,5 +219,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 2.2. Admin Nav & UI Polish | 0/2 | Not started | - |
 | 3. Admin Data Setup | 4/4 | Complete   | 2026-06-28 |
 | 4. Sessions & Buddy Pairs | 5/5 | Complete   | 2026-06-28 |
-| 5. Real-time & Live Board | 0/6 | Not started | - |
+| 5. Real-time & Live Board | 2/6 | In Progress|  |
 | 6. Buddy Call Screen & Polish | 0/? | Not started | - |
