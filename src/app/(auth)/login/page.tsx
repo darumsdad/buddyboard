@@ -17,7 +17,7 @@ export default function LoginPage() {
     const formData = new FormData(e.currentTarget);
 
     try {
-      const { error: signInError } = await authClient.signIn.username({
+      const { data, error: signInError } = await authClient.signIn.username({
         username: formData.get("username") as string,
         password: formData.get("password") as string,
       });
@@ -25,7 +25,11 @@ export default function LoginPage() {
       if (signInError) {
         setError("Invalid username or password");
       } else {
-        router.push("/pools");
+        if (data?.user?.role === "admin") {
+          router.push("/admin/users");
+        } else {
+          router.push("/pools");
+        }
       }
     } finally {
       setLoading(false);
