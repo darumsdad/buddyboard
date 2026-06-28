@@ -49,6 +49,11 @@ export async function setUserPasswordAction(
   newPassword: string,
 ) {
   await requireAdmin();
+
+  if (!newPassword || newPassword.length < 8) {
+    throw new Error("Password must be at least 8 characters.");
+  }
+
   await auth.api.setUserPassword({
     body: { userId, newPassword },
     headers: await headers(),

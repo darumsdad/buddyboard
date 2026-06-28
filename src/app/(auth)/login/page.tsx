@@ -22,15 +22,13 @@ export default function LoginPage() {
         password: formData.get("password") as string,
       });
 
-      if (signInError) {
+      if (signInError || !data?.user) {
         setError("Invalid username or password");
       } else {
-        if (data?.user?.role === "admin") {
-          router.push("/admin/users");
-        } else {
-          router.push("/pools");
-        }
+        router.push(data.user.role === "admin" ? "/admin/users" : "/pools");
       }
+    } catch {
+      setError("An unexpected error occurred. Please try again.");
     } finally {
       setLoading(false);
     }

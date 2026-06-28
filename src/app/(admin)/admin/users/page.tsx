@@ -10,7 +10,8 @@ import { UserTable } from "./components/UserTable";
 
 export default async function UsersPage() {
   const session = await auth.api.getSession({ headers: await headers() });
-  if (!session || session.user.role !== "admin") redirect("/pools");
+  if (!session) redirect("/login");
+  if (session.user.role !== "admin") redirect("/pools");
 
   const rows = await db
     .select({
