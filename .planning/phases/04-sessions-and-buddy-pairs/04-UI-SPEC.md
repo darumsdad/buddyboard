@@ -239,7 +239,7 @@ communication explicit and requires an affirmative action)
 - Heading (text-xl, semibold): "Add a third camper"
 - Single CamperField (same component as Add Pair Form)
 - Buttons below: "Add to pair" (blue-600, min-h-[44px], full width, disabled until resolved)
-  + "Cancel" (text link, text-slate-600)
+  + "Keep pair as-is" (text link, text-slate-600)
 
 ### 10. Close Session Confirmation Dialog
 
@@ -330,7 +330,7 @@ All interactive elements must declare all four states:
 | Remove pair button title | "Remove pair" |
 | Trio picker heading | "Add a third camper" |
 | Trio picker confirm | "Add to pair" |
-| Trio picker cancel | "Cancel" |
+| Trio picker cancel | "Keep pair as-is" |
 | Close session button | "Close session" |
 | Close session dialog heading | "Close session?" |
 | Close session dialog body (with pairs) | "[N] pairs are still in the water. Close anyway? All pair data will be archived." |
