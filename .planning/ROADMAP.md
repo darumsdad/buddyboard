@@ -111,7 +111,7 @@ Plans:
 **Plans**: 4 plans
 
 Plans:
-- [ ] 03-01-foundation-PLAN.md — Schema additions (camper + pool tables), drizzle-kit push [BLOCKING], next.config.ts bodySizeLimit, AdminSidebar + layout modification (Wave 1)
+- [x] 03-01-foundation-PLAN.md — Schema additions (camper + pool tables), drizzle-kit push [BLOCKING], next.config.ts bodySizeLimit, AdminSidebar + layout modification (Wave 1)
 - [ ] 03-02-pools-PLAN.md — Pool Server Actions (create/rename/remove + requireAdmin), action tests, seed-pools script, pools page + PoolList + AddPoolForm + EditPoolModal (Wave 2)
 - [ ] 03-03-camper-crud-PLAN.md — Camper Server Actions (add/edit/remove/clearAll + requireAdmin), action tests, campers page + CamperTable + AddCamperModal + EditCamperModal + delete dialogs + page test (Wave 2, parallel with 03-02)
 - [ ] 03-04-search-import-PLAN.md — importCampersAction (SheetJS, all-or-nothing transaction), SearchBar, PaginationControls, ImportModal, campers page search+pagination wiring, sample template (Wave 3)
@@ -178,7 +178,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 2. Admin User Management | 3/3 | Complete   | 2026-06-28 |
 | 2.1. User Name Fields | 0/? | Not started | - |
 | 2.2. Admin Nav & UI Polish | 0/2 | Not started | - |
-| 3. Admin Data Setup | 0/4 | Not started | - |
+| 3. Admin Data Setup | 1/4 | In Progress|  |
 | 4. Sessions & Buddy Pairs | 0/? | Not started | - |
 | 5. Real-time & Live Board | 0/? | Not started | - |
 | 6. Buddy Call Screen & Polish | 0/? | Not started | - |
