@@ -1,6 +1,6 @@
 "use client";
 
-import { useTransition, useState, useRef } from "react";
+import { useTransition, useState, useRef, useId } from "react";
 import { searchCampersAction, type CamperSuggestion } from "../actions";
 
 type Props = {
@@ -19,7 +19,7 @@ export function CamperField({ sessionId, label, onResolved, error, inputRef }: P
   const [activeIndex, setActiveIndex] = useState(-1);
   const [isPending, startTransition] = useTransition();
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const fieldId = useRef(`camper-field-${Math.random().toString(36).slice(2)}`);
+  const fieldId = useId();
 
   function handleInput(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
@@ -95,7 +95,7 @@ export function CamperField({ sessionId, label, onResolved, error, inputRef }: P
   return (
     <div className="flex flex-col gap-1">
       <label
-        htmlFor={fieldId.current}
+        htmlFor={fieldId}
         className="text-sm font-semibold text-slate-900"
       >
         {label}
@@ -124,7 +124,7 @@ export function CamperField({ sessionId, label, onResolved, error, inputRef }: P
           </div>
         ) : (
           <input
-            id={fieldId.current}
+            id={fieldId}
             ref={inputRef}
             type="text"
             value={inputValue}
