@@ -106,13 +106,13 @@ Seed script pattern (from RESEARCH.md):
     7. Confirm .env.local is NOT in git staging: run `git status` and verify .env.local does not appear in untracked or modified files (it should be ignored by .gitignore).
   </how-to-complete>
   <resume-signal>Type "supabase ready" after .env.local is created and the Supabase project is provisioned.</resume-signal>
-  <acceptance_criteria>
+  <done>
     - .env.local exists in project root with all 5 variables populated
     - DATABASE_URL in .env.local contains port 6543 (Transaction pooler)
     - DATABASE_URL_DIRECT in .env.local contains port 5432 (direct connection)
     - BETTER_AUTH_SECRET in .env.local is 32+ characters
     - `git status` does not show .env.local (it is gitignored)
-  </acceptance_criteria>
+  </done>
 </task>
 
 <task type="auto">
@@ -137,16 +137,16 @@ Seed script pattern (from RESEARCH.md):
     Also install `tsx` as a dev dependency if not already present: `npm install -D tsx`.
   </action>
   <verify>
-    <automated>npx tsx scripts/seed-admin.ts</automated>
+    <human-check>In the Supabase dashboard (https://supabase.com/dashboard), open the project → Table Editor → user table. Confirm: (1) tables user, session, account, verification all exist in the public schema, and (2) the user table has at least 1 row with username = "admin". This is a read-only check — do NOT re-run the seed script to verify (it may fail with a duplicate-user error even when state is correct).</human-check>
   </verify>
-  <acceptance_criteria>
+  <done>
     - `npx drizzle-kit migrate` exits with code 0
     - Supabase Table Editor shows tables: `user`, `session`, `account`, `verification` in the public schema
     - scripts/seed-admin.ts exists and contains `auth.api.signUpEmail` or equivalent Better Auth user creation call
     - `npx tsx scripts/seed-admin.ts` exits with code 0
     - Supabase Table Editor `user` table has at least 1 row with a non-null `username` column value of "admin"
     - `npx tsx scripts/seed-admin.ts` run a SECOND time either exits cleanly (idempotent) or returns a clear "user already exists" error (not a crash)
-  </acceptance_criteria>
+  </done>
 </task>
 
 </tasks>

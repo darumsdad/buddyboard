@@ -591,22 +591,25 @@ await auth.api.signUpEmail({
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Does `updateAge: 0` create a true per-request sliding window?**
    - What we know: `updateAge` controls refresh frequency in seconds; 0 may mean "always refresh" or may not be a valid value
    - What's unclear: Whether 0 is honored, or if it defaults to some minimum
    - Recommendation: Use `updateAge: 60 * 5` (5 min) as a safe minimum for MVP; test in dev and adjust. True per-request refresh would require `updateAge: 0` to be validated.
+   - **RESOLVED: Plan uses `updateAge: 60*30`. The `updateAge: 0` question is moot — plan avoids this configuration entirely.**
 
 2. **Better Auth v1.6 schema column names with username plugin**
    - What we know: `npx @better-auth/cli generate` produces the correct schema; user table gets a `username` column from the plugin
    - What's unclear: Exact column name used for the username field (could be `username` or `display_name` or similar)
    - Recommendation: Run `npx @better-auth/cli generate` and inspect the output before writing schema by hand.
+   - **RESOLVED: `@better-auth/cli generate` determines column names automatically — no hand-rolling needed. The executor runs this command and inspects output; schema is not written by hand.**
 
 3. **Vercel preview deployment URLs and BETTER_AUTH_URL**
    - What we know: Preview deployments get random subdomains like `buddyboard-abc123.vercel.app`
    - What's unclear: Whether `allowedHosts: ["*.vercel.app"]` in the `baseURL` object config is sufficient, or if each preview needs its own env var
    - Recommendation: Use `BETTER_AUTH_URL` for production only; for previews, configure dynamic `baseURL` with `allowedHosts`. Test with first preview deployment.
+   - **RESOLVED for Phase 1: production-only `BETTER_AUTH_URL` is sufficient. Preview URL behavior is deferred to the first Vercel preview deployment in Phase 2+.**
 
 ---
 

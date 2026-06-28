@@ -118,14 +118,14 @@ GitHub push command sequence:
     In the Vercel dashboard, confirm: build logs show no errors, deployment status is "Ready", and the production URL is accessible.
   </how-to-complete>
   <resume-signal>Type "vercel deployed" once the deployment shows "Ready" status in the Vercel dashboard, with the production URL available.</resume-signal>
-  <acceptance_criteria>
+  <done>
     - Vercel project exists and is connected to the GitHub repository
     - All 5 environment variables (DATABASE_URL, DATABASE_URL_DIRECT, BETTER_AUTH_SECRET, BETTER_AUTH_URL, NEXT_PUBLIC_APP_URL) are configured in Vercel
     - BETTER_AUTH_URL value matches the actual Vercel production domain (https://[project].vercel.app)
     - Vercel deployment shows "Ready" status (green)
     - Build log in Vercel shows no errors
     - The production URL is accessible (returns HTTP 200, not 404 or 500)
-  </acceptance_criteria>
+  </done>
 </task>
 
 <task type="checkpoint:human-verify" gate="blocking">
@@ -168,13 +168,13 @@ GitHub push command sequence:
     If any criterion fails, document the failure and the URL where it was observed. Common issues and solutions are in RESEARCH.md Pitfalls section.
   </how-to-verify>
   <resume-signal>Type "phase 1 complete" if all four criteria pass. Describe any failures in detail if criteria do not pass (include the exact URL and behavior observed).</resume-signal>
-  <acceptance_criteria>
+  <done>
     - Criterion 1: https://[vercel-url] shows login page with "BuddyBoard" heading (not 404/500/blank)
     - Criterion 2: Login with admin/BuddyBoard2024! redirects to /pools showing three pool buttons; DevTools shows HttpOnly cookie
     - Criterion 3: After closing all browser windows and reopening, /pools loads without requiring re-login
     - Criterion 4: Fresh incognito window navigating to /pools redirects to /login
     - Auto-deploy: git push to main triggers a Vercel redeploy (confirmed in Vercel dashboard)
-  </acceptance_criteria>
+  </done>
 </task>
 
 </tasks>

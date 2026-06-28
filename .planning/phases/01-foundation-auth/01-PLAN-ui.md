@@ -169,7 +169,7 @@ UI-SPEC reference values (from 01-UI-SPEC.md):
   <verify>
     <automated>npx vitest run</automated>
   </verify>
-  <acceptance_criteria>
+  <done>
     - src/app/(auth)/login/login.test.tsx exists and contains at least 5 test cases
     - src/app/(auth)/login/page.tsx starts with `"use client"` as its first line
     - src/app/(auth)/login/page.tsx contains `authClient.signIn.username(`
@@ -181,7 +181,7 @@ UI-SPEC reference values (from 01-UI-SPEC.md):
     - src/app/(auth)/login/page.tsx contains `text-3xl font-semibold` on the BuddyBoard heading
     - src/app/(auth)/login/page.tsx contains `bg-blue-600` on the submit button
     - `npx vitest run` exits with code 0 (all tests pass)
-  </acceptance_criteria>
+  </done>
 </task>
 
 <task type="auto">
@@ -211,7 +211,7 @@ UI-SPEC reference values (from 01-UI-SPEC.md):
   <verify>
     <automated>npx tsc --noEmit</automated>
   </verify>
-  <acceptance_criteria>
+  <done>
     - src/app/(protected)/pools/page.tsx does NOT contain `"use client"` (server component)
     - src/app/(protected)/pools/page.tsx contains `auth.api.getSession({ headers: await headers() })`
     - src/app/(protected)/pools/page.tsx contains `redirect("/login")`
@@ -225,7 +225,7 @@ UI-SPEC reference values (from 01-UI-SPEC.md):
     - src/middleware.ts config matcher contains `login` in the exclusion pattern
     - `npx tsc --noEmit` exits with code 0
     - `npx vitest run` exits with code 0 (existing tests still pass)
-  </acceptance_criteria>
+  </done>
 </task>
 
 </tasks>

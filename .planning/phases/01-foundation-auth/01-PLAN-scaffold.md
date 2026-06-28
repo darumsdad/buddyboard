@@ -158,7 +158,7 @@ drizzle.config.ts must use:
   <verify>
     <automated>npm run lint</automated>
   </verify>
-  <acceptance_criteria>
+  <done>
     - package.json contains `"next"` with version `"16.2.9"` or compatible range in dependencies
     - package.json contains `"better-auth"`, `"@better-auth/drizzle-adapter"`, `"drizzle-orm"`, `"postgres"` in dependencies
     - package.json contains `"drizzle-kit"`, `"@better-auth/cli"`, `"vitest"`, `"@testing-library/react"` in devDependencies
@@ -177,7 +177,7 @@ drizzle.config.ts must use:
     - vitest.config.ts contains `jsdom`
     - src/test/setup.ts contains `@testing-library/jest-dom`
     - `npm run lint` exits with code 0
-  </acceptance_criteria>
+  </done>
 </task>
 
 <task type="auto">
@@ -213,7 +213,7 @@ drizzle.config.ts must use:
   <verify>
     <automated>npx tsc --noEmit</automated>
   </verify>
-  <acceptance_criteria>
+  <done>
     - src/db/index.ts contains `prepare: false`
     - src/db/index.ts contains `drizzle(client, { schema })`
     - src/lib/auth.ts contains `betterAuth(`
@@ -231,7 +231,7 @@ drizzle.config.ts must use:
     - src/db/schema.ts contains `export const verification`
     - drizzle/ directory contains at least one .sql file
     - `npx tsc --noEmit` exits with code 0
-  </acceptance_criteria>
+  </done>
 </task>
 
 </tasks>
