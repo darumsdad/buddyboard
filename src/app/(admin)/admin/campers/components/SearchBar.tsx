@@ -1,11 +1,12 @@
 "use client";
 
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useCallback, useRef } from "react";
 
 export function SearchBar({ defaultValue = "" }: { defaultValue?: string }) {
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleChange = useCallback(
@@ -13,13 +14,13 @@ export function SearchBar({ defaultValue = "" }: { defaultValue?: string }) {
       if (timer.current) clearTimeout(timer.current);
       const q = e.target.value;
       timer.current = setTimeout(() => {
-        const params = new URLSearchParams();
-        if (q) params.set("q", q);
+        const params = new URLSearchParams(searchParams.toString());
+        if (q) params.set("q", q); else params.delete("q");
         params.set("page", "1");
         router.push(`${pathname}?${params.toString()}`);
       }, 300);
     },
-    [router, pathname],
+    [router, pathname, searchParams],
   );
 
   return (
