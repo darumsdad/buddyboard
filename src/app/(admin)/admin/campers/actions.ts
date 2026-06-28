@@ -218,11 +218,12 @@ export async function importCampersAction(
     return { success: true, count: parsed.length };
   } else {
     // D-04: Merge — insert only new SwimCodes, skip existing
-    const existingCodes = new Set(
-      (await db.select({ code: camper.code }).from(camper)).map((r) => r.code),
-    );
-    const toInsert = parsed.filter((r) => !existingCodes.has(r.code));
+    // existingCodes select is inside the transaction to eliminate TOCTOU race
+    let insertedCount = 0;
     await db.transaction(async (tx) => {
+      const existingRows = await tx.select({ code: camper.code }).from(camper);
+      const existingCodes = new Set(existingRows.map((r) => r.code));
+      const toInsert = parsed.filter((r) => !existingCodes.has(r.code));
       if (toInsert.length > 0) {
         await tx.insert(camper).values(
           toInsert.map((r) => ({
@@ -235,8 +236,9 @@ export async function importCampersAction(
           })),
         );
       }
+      insertedCount = toInsert.length;
     });
     revalidatePath("/admin/campers");
-    return { success: true, count: toInsert.length };
+    return { success: true, count: insertedCount };
   }
 }
