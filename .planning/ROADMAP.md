@@ -14,6 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation & Auth** - Project scaffolding, Supabase schema, Drizzle migrations, Better Auth setup, and login flow (completed 2026-06-28)
 - [x] **Phase 2: Admin User Management** - Admin can create, remove, and reset passwords for counselor accounts (completed 2026-06-28)
+- [ ] **Phase 2.1: User Name Fields** *(INSERTED)* - Admin can store and see first/last name on each user account (schema migration + form + table column)
 - [ ] **Phase 3: Admin Data Setup** - Admin can configure pools and load the full camper roster (Excel import + CRUD)
 - [ ] **Phase 4: Sessions & Buddy Pairs** - Counselors can run a complete pool session and manage buddy pairs over HTTP
 - [ ] **Phase 5: Real-time & Live Board** - All devices at a pool see live buddy board updates with connection status
@@ -64,6 +65,18 @@ Plans:
 - `requireAdmin()` enforced in every Server Action — layout gate handles UX redirect, actions handle security
 - `displayRole()` is the single source of truth — raw `"user"` string is never rendered in the UI
 
+**UI hint**: yes
+
+### Phase 2.1: User Name Fields *(INSERTED)*
+**Goal**: Admin can store a counselor's real first and last name on their account and see it in the user management table
+**Mode:** mvp
+**Depends on**: Phase 2
+**Requirements**: AUTH-03 (extension — adds firstName/lastName to the create user flow)
+**Success Criteria** (what must be TRUE):
+  1. Admin can enter first name and last name when creating a new user account (both required)
+  2. The User Management table shows a Name column (first + last) for every user
+  3. The seed admin account has a name after migration and backfill run
+**Plans**: TBD
 **UI hint**: yes
 
 ### Phase 3: Admin Data Setup
@@ -129,6 +142,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 |-------|----------------|--------|-----------|
 | 1. Foundation & Auth | 4/4 | Complete   | 2026-06-28 |
 | 2. Admin User Management | 3/3 | Complete   | 2026-06-28 |
+| 2.1. User Name Fields | 0/? | Not started | - |
 | 3. Admin Data Setup | 0/? | Not started | - |
 | 4. Sessions & Buddy Pairs | 0/? | Not started | - |
 | 5. Real-time & Live Board | 0/? | Not started | - |
