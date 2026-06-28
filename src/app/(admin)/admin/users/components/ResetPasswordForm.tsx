@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Key } from "lucide-react";
 import { setUserPasswordAction } from "../actions";
 
 type Props = {
@@ -36,9 +37,10 @@ export function ResetPasswordForm({ userId }: Props) {
     <div>
       <button
         onClick={() => setOpen(!open)}
-        className="min-h-[44px] text-base text-slate-600 underline-offset-2 hover:underline"
+        title="Reset password"
+        className="w-10 h-10 rounded-full flex items-center justify-center text-slate-600 hover:bg-slate-100 transition-colors"
       >
-        Reset password
+        <Key size={18} />
       </button>
       {open && (
         <div className="bg-slate-50 border-t border-slate-200 px-4 py-3">
