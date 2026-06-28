@@ -1,0 +1,159 @@
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+import { auth } from "@/lib/auth";
+import { db } from "@/db";
+import { poolSession, pair, pairMember, pool, camper } from "@/db/schema";
+import { eq, and, sql } from "drizzle-orm";
+import { SessionBoard } from "./components/SessionBoard";
+import { JoinSessionModal } from "./components/JoinSessionModal";
+
+// -------------------------------------------------------------------
+// Private helper: get-or-create the active session for a pool.
+// Pattern from RESEARCH.md Pattern 2 — onConflictDoNothing handles
+// concurrent session creation races at the DB level.
+// -------------------------------------------------------------------
+async function getOrCreateActiveSession(
+  poolId: string,
+  openedById: string,
+): Promise<{
+  session: typeof poolSession.$inferSelect;
+  wasJustCreated: boolean;
+}> {
+  // 1. Check for an existing active session first.
+  const existing = await db
+    .select()
+    .from(poolSession)
+    .where(and(eq(poolSession.poolId, poolId), eq(poolSession.status, "active")))
+    .limit(1);
+
+  if (existing.length > 0) {
+    return { session: existing[0], wasJustCreated: false };
+  }
+
+  // 2. Try to insert a new session. onConflictDoNothing handles the race
+  //    condition where two concurrent requests arrive simultaneously.
+  const [created] = (await db
+    .insert(poolSession)
+    .values({
+      id: crypto.randomUUID(),
+      poolId,
+      status: "active",
+      openedById,
+      openedAt: new Date(),
+    })
+    .onConflictDoNothing()
+    .returning()) ?? [];
+
+  if (created) {
+    return { session: created, wasJustCreated: true };
+  }
+
+  // 3. Race condition path: another request won the insert race.
+  //    Re-fetch the session that the concurrent request created.
+  const afterRace = await db
+    .select()
+    .from(poolSession)
+    .where(and(eq(poolSession.poolId, poolId), eq(poolSession.status, "active")))
+    .limit(1);
+
+  return { session: afterRace[0], wasJustCreated: false };
+}
+
+// -------------------------------------------------------------------
+// Private helper: fetch all pairs for a session, grouped by pairId.
+// -------------------------------------------------------------------
+async function getPairsForSession(sessionId: string) {
+  const rows = await db
+    .select({
+      pairId: pairMember.pairId,
+      camperId: pairMember.camperId,
+      firstName: camper.firstName,
+      lastName: camper.lastName,
+      bunk: camper.bunk,
+    })
+    .from(pairMember)
+    .innerJoin(camper, eq(pairMember.camperId, camper.id))
+    .where(eq(pairMember.sessionId, sessionId));
+
+  // Group by pairId in application code.
+  const pairMap = new Map<
+    string,
+    { id: string; members: Array<{ camperId: string; firstName: string; lastName: string; bunk: string }> }
+  >();
+
+  for (const row of rows) {
+    const entry = pairMap.get(row.pairId) ?? { id: row.pairId, members: [] };
+    entry.members.push({
+      camperId: row.camperId,
+      firstName: row.firstName,
+      lastName: row.lastName,
+      bunk: row.bunk,
+    });
+    pairMap.set(row.pairId, entry);
+  }
+
+  return Array.from(pairMap.values());
+}
+
+// -------------------------------------------------------------------
+// Page: params is a Promise in Next.js 16 (Pitfall 5 in RESEARCH.md)
+// -------------------------------------------------------------------
+export default async function PoolSessionPage({
+  params,
+}: {
+  params: Promise<{ poolId: string }>;
+}) {
+  const { poolId } = await params;
+
+  // Step 1 — Auth check.
+  const authSession = await auth.api.getSession({ headers: await headers() });
+  if (!authSession) redirect("/login");
+
+  // Step 2 — Pool lookup: validates the poolId URL parameter (T-04-14).
+  const poolRecord = await db
+    .select()
+    .from(pool)
+    .where(eq(pool.id, poolId))
+    .limit(1);
+
+  if (!poolRecord[0]) redirect("/pools");
+
+  // Step 3 — Get or create the active session (T-04-16 — race handled by onConflictDoNothing).
+  const { session, wasJustCreated } = await getOrCreateActiveSession(
+    poolId,
+    authSession.user.id,
+  );
+
+  // Step 4 — Fetch pairs for the session.
+  const pairs = await getPairsForSession(session.id);
+
+  // Step 5 — Count swimmers and pairs in parallel.
+  const [swimmerCount, pairCount] = await Promise.all([
+    db
+      .select({ count: sql<number>`count(*)` })
+      .from(pairMember)
+      .where(eq(pairMember.sessionId, session.id))
+      .then((r) => Number(r[0]?.count ?? 0)),
+    db
+      .select({ count: sql<number>`count(*)` })
+      .from(pair)
+      .where(eq(pair.sessionId, session.id))
+      .then((r) => Number(r[0]?.count ?? 0)),
+  ]);
+
+  // Step 6 — Render.
+  // JoinSessionModal overlays the board when a session pre-existed this page load.
+  return (
+    <>
+      {!wasJustCreated && <JoinSessionModal poolName={poolRecord[0].name} />}
+      <SessionBoard
+        poolName={poolRecord[0].name}
+        swimmerCount={swimmerCount}
+        pairCount={pairCount}
+        sessionId={session.id}
+        poolId={poolId}
+        pairs={pairs}
+      />
+    </>
+  );
+}
