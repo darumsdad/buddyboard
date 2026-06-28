@@ -141,7 +141,7 @@ Plans:
 **Plans**: 5 plans
 
 Plans:
-- [ ] 04-01-PLAN.md — Schema additions (poolSession + pair + pairMember tables, relations), drizzle-kit push [BLOCKING] (Wave 1)
+- [x] 04-01-PLAN.md — Schema additions (poolSession + pair + pairMember tables, relations), drizzle-kit push [BLOCKING] (Wave 1)
 - [ ] 04-02-PLAN.md — Server Actions (requireAuth, searchCampersAction, addPairAction, addPairMemberAction, removePairAction, closeSessionAction), unit test files (Wave 2)
 - [ ] 04-03-PLAN.md — Leaf UI components: JoinSessionModal, CloseSessionDialog, TrioPicker, CamperField, PairRow (Wave 3)
 - [ ] 04-04-PLAN.md — Composite components: LogoutButton, AddPairForm, PairList, SessionHeader, SessionBoard (Wave 4)
@@ -199,6 +199,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 2.1. User Name Fields | 0/? | Not started | - |
 | 2.2. Admin Nav & UI Polish | 0/2 | Not started | - |
 | 3. Admin Data Setup | 4/4 | Complete   | 2026-06-28 |
-| 4. Sessions & Buddy Pairs | 0/5 | Not started | - |
+| 4. Sessions & Buddy Pairs | 1/5 | In Progress|  |
 | 5. Real-time & Live Board | 0/? | Not started | - |
 | 6. Buddy Call Screen & Polish | 0/? | Not started | - |

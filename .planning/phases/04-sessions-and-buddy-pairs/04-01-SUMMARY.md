@@ -25,16 +25,16 @@ decisions:
   - Table named poolSession (DB: pool_session) to avoid collision with Better Auth session table
   - Relations appended after all table definitions to satisfy TypeScript forward-reference rules
 metrics:
-  duration_seconds: 480
+  duration_seconds: 520
   completed_date: "2026-06-28"
-  tasks_completed: 1
+  tasks_completed: 2
   tasks_total: 2
   files_modified: 1
 ---
 
 # Phase 04 Plan 01: Schema Tables (poolSession, pair, pairMember) Summary
 
-**One-liner:** Added poolSession/pair/pairMember Drizzle tables with partial unique index for D-01 and unique_camper_per_session constraint for PAIR-04, ready for drizzle-kit push.
+**One-liner:** Added poolSession/pair/pairMember Drizzle tables with partial unique index for D-01 and unique_camper_per_session constraint for PAIR-04; pushed to Supabase PostgreSQL with no conflicts.
 
 ## What Was Built
 
@@ -53,7 +53,7 @@ Three corresponding Drizzle relation definitions (`poolSessionRelations`, `pairR
 | Task | Name | Commit | Files |
 |------|------|--------|-------|
 | 1 | Add poolSession, pair, pairMember tables and relations | 7d225c5 | src/db/schema.ts |
-| 2 | [CHECKPOINT] Run drizzle-kit push and verify tables | — | — (awaiting human) |
+| 2 | Run drizzle-kit push and verify tables | human-verified | pool_session, pair, pair_member in Supabase |
 
 ## Deviations from Plan
 
@@ -84,3 +84,4 @@ No new network endpoints, auth paths, or file access patterns introduced. Schema
 - [x] `src/db/schema.ts` exists and contains `export const poolSession`
 - [x] Commit 7d225c5 exists
 - [x] `npx tsc --noEmit` produces zero errors in schema.ts (pre-existing test file errors excluded per scope rule)
+- [x] `npx drizzle-kit push` exited 0 — pool_session, pair, pair_member tables created in Supabase with no conflicts with existing session table
