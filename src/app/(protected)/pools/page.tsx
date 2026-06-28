@@ -2,10 +2,14 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
+import { db } from "@/db";
+import { pool } from "@/db/schema";
 
 export default async function PoolsPage() {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) redirect("/login");
+
+  const pools = await db.select().from(pool).orderBy(pool.name);
 
   return (
     <div className="bg-white min-h-screen flex items-center justify-center relative">
@@ -17,14 +21,21 @@ export default async function PoolsPage() {
           Select a Pool
         </h1>
         <div className="flex flex-col gap-3">
-          {["Main Pool", "Lap Pool", "Kiddie Pool"].map((pool) => (
-            <button
-              key={pool}
-              className="min-h-[44px] w-full bg-blue-600 hover:bg-blue-700 text-white text-base font-semibold rounded-md transition-colors duration-150"
-            >
-              {pool}
-            </button>
-          ))}
+          {pools.length === 0 ? (
+            <p className="text-base text-slate-500 text-center">
+              No pools configured — contact your administrator.
+            </p>
+          ) : (
+            pools.map((p) => (
+              <Link
+                key={p.id}
+                href={`/pools/${p.id}`}
+                className="min-h-[44px] w-full bg-blue-600 hover:bg-blue-700 text-white text-base font-semibold rounded-md transition-colors duration-150 flex items-center justify-center"
+              >
+                {p.name}
+              </Link>
+            ))
+          )}
         </div>
       </div>
     </div>
