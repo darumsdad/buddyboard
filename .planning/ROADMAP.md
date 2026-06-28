@@ -31,7 +31,14 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. Counselor can enter a username and password and reach the protected app
   3. Closing the browser and reopening restores the authenticated session without requiring a new login
   4. Navigating to a protected route while unauthenticated redirects to the login page
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] 01-PLAN-scaffold.md — Next.js scaffold, packages, Better Auth wiring, schema generation (Wave 1)
+- [ ] 01-PLAN-db.md — Supabase creation, DB migration, admin seed (Wave 2, blocking human action)
+- [ ] 01-PLAN-ui.md — Login page, pools placeholder, middleware (Wave 2, parallel)
+- [ ] 01-PLAN-deploy.md — Vercel deployment and end-to-end verification (Wave 3)
+
 **UI hint**: yes
 
 ### Phase 2: Admin User Management
