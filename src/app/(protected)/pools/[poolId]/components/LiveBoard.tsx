@@ -55,6 +55,30 @@ export function LiveBoard({ initialPairs, sessionId, poolId, poolName }: LiveBoa
     refreshTimer.current = setTimeout(refreshPairs, 150);
   }, [refreshPairs]);
 
+  // Socket-level disconnect detection — fires immediately when the WebSocket closes
+  // (channel subscribe callbacks only fire after the 30s heartbeat timeout)
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const callbacks = (supabase.realtime as any).stateChangeCallbacks as {
+      open: (() => void)[];
+      close: (() => void)[];
+    };
+
+    const handleClose = () => setConnectionStatus("disconnected");
+    const handleOpen = () => {
+      setConnectionStatus("connected");
+      refreshPairs();
+    };
+
+    callbacks.close.push(handleClose);
+    callbacks.open.push(handleOpen);
+
+    return () => {
+      callbacks.close = callbacks.close.filter((cb) => cb !== handleClose);
+      callbacks.open = callbacks.open.filter((cb) => cb !== handleOpen);
+    };
+  }, [refreshPairs]);
+
   useEffect(() => {
     const channel = supabase
       .channel(`session:${sessionId}:pairs`)
@@ -73,7 +97,7 @@ export function LiveBoard({ initialPairs, sessionId, poolId, poolName }: LiveBoa
       )
       .subscribe((status, err) => {
         if (status === "SUBSCRIBED") setConnectionStatus("connected");
-        if (status === "CHANNEL_ERROR" || status === "TIMED_OUT" || status === "CLOSED") {
+        if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
           setConnectionStatus("disconnected");
         }
         if (err) console.error("[Realtime]", err);
