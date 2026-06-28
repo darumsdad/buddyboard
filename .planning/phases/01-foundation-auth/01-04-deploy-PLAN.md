@@ -4,8 +4,8 @@ plan: 04
 type: execute
 wave: 3
 depends_on:
-  - 01-PLAN-db
-  - 01-PLAN-ui
+  - 01-02-db
+  - 01-03-ui
 files_modified: []
 autonomous: false
 requirements:

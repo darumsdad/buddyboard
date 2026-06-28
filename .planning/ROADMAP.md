@@ -34,10 +34,10 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 4 plans
 
 Plans:
-- [ ] 01-PLAN-scaffold.md — Next.js scaffold, packages, Better Auth wiring, schema generation (Wave 1)
-- [ ] 01-PLAN-db.md — Supabase creation, DB migration, admin seed (Wave 2, blocking human action)
-- [ ] 01-PLAN-ui.md — Login page, pools placeholder, middleware (Wave 2, parallel)
-- [ ] 01-PLAN-deploy.md — Vercel deployment and end-to-end verification (Wave 3)
+- [ ] 01-01-scaffold-PLAN.md — Next.js scaffold, packages, Better Auth wiring, schema generation (Wave 1)
+- [ ] 01-02-db-PLAN.md — Supabase creation, DB migration, admin seed (Wave 2, blocking human action)
+- [ ] 01-03-ui-PLAN.md — Login page, pools placeholder, middleware (Wave 2, parallel)
+- [ ] 01-04-deploy-PLAN.md — Vercel deployment and end-to-end verification (Wave 3)
 
 **UI hint**: yes
 

@@ -4,7 +4,7 @@ plan: 03
 type: execute
 wave: 2
 depends_on:
-  - 01-PLAN-scaffold
+  - 01-01-scaffold
 files_modified:
   - src/app/(auth)/login/page.tsx
   - src/app/(auth)/login/login.test.tsx

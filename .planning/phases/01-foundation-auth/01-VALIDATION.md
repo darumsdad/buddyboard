@@ -38,14 +38,14 @@ created: 2026-06-27
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| scaffold-T1 | 01-PLAN-scaffold | 1 | AUTH-01, AUTH-02 | T-01-SC | Packages from legitimacy-audited list only; .env.local gitignored | lint | `npm run lint` | ❌ W0 | ⬜ pending |
-| scaffold-T2 | 01-PLAN-scaffold | 1 | AUTH-01, AUTH-02 | T-01-01, T-01-02, T-01-03 | prepare:false present; BETTER_AUTH_SECRET documented; schema generated via CLI not by hand | type-check | `npx tsc --noEmit` | ❌ W0 | ⬜ pending |
-| db-T1 | 01-PLAN-db | 2 | AUTH-01, AUTH-02 | T-02-01 | .env.local not in git; DATABASE_URL_DIRECT never committed | manual | See Manual-Only section | manual | ⬜ pending |
-| db-T2 | 01-PLAN-db | 2 | AUTH-01, AUTH-02 | T-02-03, T-02-04 | Seed password documented as temporary; migration against correct DB | manual | See Manual-Only section | manual | ⬜ pending |
-| ui-T1 | 01-PLAN-ui | 2 | AUTH-01 | T-03-01, T-03-02 | HTTP-only cookie; generic error message hardcoded; dontRemember never passed | unit | `npx vitest run` | ❌ W0 | ⬜ pending |
-| ui-T2 | 01-PLAN-ui | 2 | AUTH-01, AUTH-02 | T-03-03, T-03-05, T-03-06 | Middleware excludes api/auth; no dontRemember; pools validates via auth.api.getSession() | type-check | `npx tsc --noEmit` | ❌ W0 | ⬜ pending |
-| deploy-T1 | 01-PLAN-deploy | 3 | AUTH-01, AUTH-02 | T-04-01, T-04-03 | BETTER_AUTH_URL matches exact Vercel domain; no secrets in git | manual | See Manual-Only section | manual | ⬜ pending |
-| deploy-T2 | 01-PLAN-deploy | 3 | AUTH-01, AUTH-02 | T-04-01 | All 4 ROADMAP success criteria verified on live URL | manual | See Manual-Only section | manual | ⬜ pending |
+| scaffold-T1 | 01-01-scaffold | 1 | AUTH-01, AUTH-02 | T-01-SC | Packages from legitimacy-audited list only; .env.local gitignored | lint | `npm run lint` | ❌ W0 | ⬜ pending |
+| scaffold-T2 | 01-01-scaffold | 1 | AUTH-01, AUTH-02 | T-01-01, T-01-02, T-01-03 | prepare:false present; BETTER_AUTH_SECRET documented; schema generated via CLI not by hand | type-check | `npx tsc --noEmit` | ❌ W0 | ⬜ pending |
+| db-T1 | 01-02-db | 2 | AUTH-01, AUTH-02 | T-02-01 | .env.local not in git; DATABASE_URL_DIRECT never committed | manual | See Manual-Only section | manual | ⬜ pending |
+| db-T2 | 01-02-db | 2 | AUTH-01, AUTH-02 | T-02-03, T-02-04 | Seed password documented as temporary; migration against correct DB | manual | See Manual-Only section | manual | ⬜ pending |
+| ui-T1 | 01-03-ui | 2 | AUTH-01 | T-03-01, T-03-02 | HTTP-only cookie; generic error message hardcoded; dontRemember never passed | unit | `npx vitest run` | ❌ W0 | ⬜ pending |
+| ui-T2 | 01-03-ui | 2 | AUTH-01, AUTH-02 | T-03-03, T-03-05, T-03-06 | Middleware excludes api/auth; no dontRemember; pools validates via auth.api.getSession() | type-check | `npx tsc --noEmit` | ❌ W0 | ⬜ pending |
+| deploy-T1 | 01-04-deploy | 3 | AUTH-01, AUTH-02 | T-04-01, T-04-03 | BETTER_AUTH_URL matches exact Vercel domain; no secrets in git | manual | See Manual-Only section | manual | ⬜ pending |
+| deploy-T2 | 01-04-deploy | 3 | AUTH-01, AUTH-02 | T-04-01 | All 4 ROADMAP success criteria verified on live URL | manual | See Manual-Only section | manual | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 

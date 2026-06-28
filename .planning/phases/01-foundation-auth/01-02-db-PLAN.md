@@ -4,7 +4,7 @@ plan: 02
 type: execute
 wave: 2
 depends_on:
-  - 01-PLAN-scaffold
+  - 01-01-scaffold
 files_modified:
   - .env.local
   - scripts/seed-admin.ts
