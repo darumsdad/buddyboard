@@ -17,6 +17,12 @@ export const auth = betterAuth({
     },
   }),
   emailAndPassword: { enabled: true, minPasswordLength: 8 },
+  user: {
+    additionalFields: {
+      firstName: { type: "string", required: false, fieldName: "firstName" },
+      lastName: { type: "string", required: false, fieldName: "lastName" },
+    },
+  },
   plugins: [username(), admin()],
   session: {
     expiresIn: 60 * 60 * 5, // 5-hour idle window (D-05)

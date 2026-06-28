@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 
@@ -36,11 +37,23 @@ export default function LoginPage() {
 
   return (
     <div className="bg-white h-screen flex items-center justify-center">
-      <div className="bg-slate-50 rounded-lg p-8 w-full max-w-sm shadow-sm">
-        <h1 className="text-3xl font-semibold text-slate-900 text-center mb-8">
+      <div className="w-full max-w-sm">
+        <div className="flex justify-center mb-2">
+          <Image
+            src="/camp-regesh-logo.png"
+            alt="Camp Regesh"
+            width={300}
+            height={150}
+            className="object-contain"
+            priority
+            unoptimized
+          />
+        </div>
+        <p className="text-center text-sm font-semibold text-slate-500 tracking-widest uppercase mb-6">
           BuddyBoard
-        </h1>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        </p>
+        <div className="bg-slate-50 rounded-lg p-8 shadow-sm">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div>
             <label
               htmlFor="username"
@@ -87,7 +100,8 @@ export default function LoginPage() {
           >
             Log in
           </button>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   );

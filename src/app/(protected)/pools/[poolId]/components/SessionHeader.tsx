@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Users } from "lucide-react";
+import { Users, ChevronLeft } from "lucide-react";
 import { CloseSessionDialog } from "./CloseSessionDialog";
 import { LogoutButton } from "./LogoutButton";
 
@@ -24,7 +24,17 @@ export function SessionHeader({
     <header className="sticky top-0 z-10 bg-white border-b border-slate-200">
       {/* Top row — always single row (mobile and md+) */}
       <div className="flex items-center justify-between px-4 py-3">
-        <span className="text-xl font-semibold text-slate-900">{poolName}</span>
+        <div className="flex items-center gap-3">
+          <Link
+            href="/pools"
+            className="flex items-center gap-0.5 text-sm text-slate-500 hover:text-slate-900 min-h-[44px]"
+            aria-label="Back to pool list"
+          >
+            <ChevronLeft size={16} />
+            Pools
+          </Link>
+          <span className="text-xl font-semibold text-slate-900">{poolName}</span>
+        </div>
 
         {/* Count inline on md+ */}
         <div className="hidden md:block text-center">
