@@ -6,15 +6,21 @@ import type { ImportResult } from "../actions";
 
 export function ImportModal() {
   const [open, setOpen] = useState(false);
+  const [modalKey, setModalKey] = useState(0);
   const [state, formAction, isPending] = useActionState<ImportResult | null, FormData>(
     importCampersAction,
     null,
   );
 
+  function handleOpen() {
+    setModalKey((k) => k + 1);
+    setOpen(true);
+  }
+
   return (
     <>
       <button
-        onClick={() => setOpen(true)}
+        onClick={handleOpen}
         className="min-h-[44px] px-4 border border-slate-300 rounded-md text-base text-slate-700 font-semibold hover:bg-slate-50 transition-colors"
       >
         Import roster
@@ -27,7 +33,7 @@ export function ImportModal() {
               Import roster
             </h2>
 
-            <form action={formAction} className="flex flex-col gap-4">
+            <form key={modalKey} action={formAction} className="flex flex-col gap-4">
               {/* D-04: Merge / Replace radio toggle */}
               <fieldset>
                 <legend className="text-base font-semibold text-slate-900 mb-2">
