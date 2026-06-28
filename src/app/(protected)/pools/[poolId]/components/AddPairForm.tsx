@@ -14,6 +14,7 @@ export function AddPairForm({ sessionId, poolId }: AddPairFormProps) {
   const [camper2, setCamper2] = useState<CamperSuggestion | null>(null);
   const [pair04Error, setPair04Error] = useState<string | null>(null);
   const [genericError, setGenericError] = useState<string | null>(null);
+  const [resetKey, setResetKey] = useState(0);
   const camper1Ref = useRef<HTMLInputElement>(null);
   const [isPending, startTransition] = useTransition();
 
@@ -29,7 +30,7 @@ export function AddPairForm({ sessionId, poolId }: AddPairFormProps) {
       if (result.success) {
         setCamper1(null);
         setCamper2(null);
-        camper1Ref.current?.focus();
+        setResetKey((k) => k + 1);
       } else if (result.error === "PAIR-04") {
         setPair04Error(
           "One of these campers is already in an active pair in this session. Choose a different camper.",
@@ -46,6 +47,7 @@ export function AddPairForm({ sessionId, poolId }: AddPairFormProps) {
     <form onSubmit={handleSubmit} className="bg-slate-50 rounded-md p-4">
       <div className="flex flex-col gap-4 md:flex md:flex-row md:gap-3 md:items-end">
         <CamperField
+          key={`camper1-${resetKey}`}
           sessionId={sessionId}
           label="Camper 1"
           onResolved={setCamper1}
@@ -53,6 +55,7 @@ export function AddPairForm({ sessionId, poolId }: AddPairFormProps) {
           inputRef={camper1Ref}
         />
         <CamperField
+          key={`camper2-${resetKey}`}
           sessionId={sessionId}
           label="Camper 2"
           onResolved={setCamper2}

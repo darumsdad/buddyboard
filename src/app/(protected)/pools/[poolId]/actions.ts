@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { db } from "@/db";
 import { poolSession, pair, pairMember, camper } from "@/db/schema";
-import { eq, and, or, ilike, notInArray } from "drizzle-orm";
+import { eq, and, or, ilike, notExists, sql } from "drizzle-orm";
 
 async function requireAuth() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -44,24 +44,34 @@ export async function searchCampersAction(
   const q = query.trim();
   if (!q) return [];
 
-  // Subquery: campers already paired in this session
-  const alreadyPaired = db
-    .select({ camperId: pairMember.camperId })
-    .from(pairMember)
-    .where(eq(pairMember.sessionId, sessionId));
+  const cols = {
+    id: camper.id,
+    firstName: camper.firstName,
+    lastName: camper.lastName,
+    bunk: camper.bunk,
+    code: camper.code,
+  };
+
+  // "not already paired in this session" via NOT EXISTS — safe when subquery returns 0 rows
+  const notAlreadyPaired = notExists(
+    db
+      .select({ _: sql`1` })
+      .from(pairMember)
+      .where(and(eq(pairMember.camperId, camper.id), eq(pairMember.sessionId, sessionId))),
+  );
 
   // 1. Exact code match first (fast path for PAIR-01)
   const exact = await db
-    .select()
+    .select(cols)
     .from(camper)
-    .where(and(eq(camper.code, q), notInArray(camper.id, alreadyPaired)))
+    .where(and(eq(camper.code, q), notAlreadyPaired))
     .limit(1);
 
   if (exact.length > 0) return exact;
 
   // 2. Fuzzy name / partial code match (PAIR-02)
   return db
-    .select()
+    .select(cols)
     .from(camper)
     .where(
       and(
@@ -70,7 +80,7 @@ export async function searchCampersAction(
           ilike(camper.lastName, `%${q}%`),
           ilike(camper.code, `%${q}%`),
         ),
-        notInArray(camper.id, alreadyPaired),
+        notAlreadyPaired,
       ),
     )
     .limit(10);

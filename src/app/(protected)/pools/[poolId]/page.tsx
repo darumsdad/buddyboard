@@ -143,9 +143,12 @@ export default async function PoolSessionPage({
 
   // Step 6 — Render.
   // JoinSessionModal overlays the board when a session pre-existed this page load.
+  const sessionOpenedByOtherUser =
+    !wasJustCreated && session.openedById !== authSession.user.id;
+
   return (
     <>
-      {!wasJustCreated && <JoinSessionModal poolName={poolRecord[0].name} />}
+      {sessionOpenedByOtherUser && <JoinSessionModal poolName={poolRecord[0].name} />}
       <SessionBoard
         poolName={poolRecord[0].name}
         swimmerCount={swimmerCount}
