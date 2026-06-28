@@ -553,21 +553,21 @@ alter publication supabase_realtime add table pair;
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Does subscribing to `pair` DELETE without a session_id filter cause false-positive refetches from other sessions?**
    - What we know: `pair` table has no `session_id` column, so filtering at subscription level is impossible. The Route Handler re-fetch is session-scoped and will return the correct data regardless.
    - What's unclear: If many concurrent sessions are active (unlikely at camp scale), every pair DELETE from any session triggers a refetch on all connected clients.
-   - Recommendation: Accept this at camp scale (<10 concurrent sessions). If it becomes an issue post-launch, consider adding `session_id` to the `pair` table as a denormalized column to enable subscription-level filtering.
+   - RESOLVED: Accept this at camp scale (<10 concurrent sessions). If it becomes an issue post-launch, consider adding `session_id` to the `pair` table as a denormalized column to enable subscription-level filtering.
 
 2. **Should `revalidatePath` be completely removed from ALL Server Actions?**
    - What we know: D-03 says remove from `addPairAction` and `removePairAction`. `closeSessionAction` calls `revalidatePath('/pools')` which is for the pool listing, not the live board.
-   - Recommendation: Remove `revalidatePath` from `addPairAction`, `addPairMemberAction`, and `removePairAction`. Retain it in `closeSessionAction` since session close navigates away from the live board.
+   - RESOLVED: Remove `revalidatePath` from `addPairAction`, `addPairMemberAction`, and `removePairAction`. Retain it in `closeSessionAction` since session close navigates away from the live board.
 
 3. **Is Supabase Row Level Security (RLS) required for the anon key to access pair_member and pair tables?**
    - What we know: STATE.md records "Supabase RLS: skip for v1, handle auth at Next.js middleware layer." The Route Handler validates auth via Better Auth before returning data.
    - What's unclear: The Supabase Realtime subscription uses the anon key. If RLS is disabled and the anon key has read access, subscriptions work. If RLS is enabled with restrictive policies, subscriptions may silently return no events.
-   - Recommendation: Since RLS is skipped for v1, no action needed. The subscription will receive all events as expected. Document this in the plan for future reference.
+   - RESOLVED: Since RLS is skipped for v1, no action needed. The subscription will receive all events as expected. Documented in 05-01-PLAN.md as a known accepted risk.
 
 ---
 
