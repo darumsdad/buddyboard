@@ -148,8 +148,9 @@ describe("BuddyCallClient", () => {
       />,
     );
 
-    expect(screen.getByText("0")).toBeInTheDocument();
-    // pairCount also 0 — but "0" appears once for swimmerCount; pair "0" is also 0
+    // Both swimmerCount and pairCount are 0 — two elements with "0"
+    const zeros = screen.getAllByText("0");
+    expect(zeros).toHaveLength(2);
     expect(screen.queryByRole("list", { name: /active pairs/i })).not.toBeInTheDocument();
   });
 
