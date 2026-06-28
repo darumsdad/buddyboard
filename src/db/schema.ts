@@ -1,5 +1,5 @@
-import { relations } from "drizzle-orm";
-import { pgTable, text, timestamp, boolean, index } from "drizzle-orm/pg-core";
+import { relations, sql } from "drizzle-orm";
+import { pgTable, text, timestamp, boolean, index, uniqueIndex } from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -131,3 +131,69 @@ export const pool = pgTable("pool", {
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
 });
+
+// CRITICAL: Do NOT name this table "session" — that name is taken by Better Auth (line 25 of schema.ts)
+export const poolSession = pgTable(
+  "pool_session",
+  {
+    id: text("id").primaryKey(),
+    poolId: text("pool_id")
+      .notNull()
+      .references(() => pool.id, { onDelete: "cascade" }),
+    status: text("status").notNull().default("active"), // 'active' | 'closed'
+    openedById: text("opened_by_id").references(() => user.id, { onDelete: "set null" }),
+    openedAt: timestamp("opened_at").defaultNow().notNull(),
+    closedAt: timestamp("closed_at"),
+  },
+  (table) => [
+    // Enforces D-01: one active session per pool at a time (DB level)
+    uniqueIndex("unique_active_session_per_pool")
+      .on(table.poolId)
+      .where(sql`status = 'active'`),
+    index("pool_session_pool_id_idx").on(table.poolId),
+    index("pool_session_status_idx").on(table.status),
+  ],
+);
+
+export const pair = pgTable("pair", {
+  id: text("id").primaryKey(),
+  sessionId: text("session_id")
+    .notNull()
+    .references(() => poolSession.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const pairMember = pgTable(
+  "pair_member",
+  {
+    pairId: text("pair_id")
+      .notNull()
+      .references(() => pair.id, { onDelete: "cascade" }),
+    camperId: text("camper_id")
+      .notNull()
+      .references(() => camper.id, { onDelete: "cascade" }),
+    sessionId: text("session_id") // denormalized for the unique constraint
+      .notNull()
+      .references(() => poolSession.id, { onDelete: "cascade" }),
+  },
+  (table) => [
+    // Enforces PAIR-04: a camper cannot appear twice in the same session (DB level)
+    uniqueIndex("unique_camper_per_session").on(table.camperId, table.sessionId),
+    index("pair_member_pair_id_idx").on(table.pairId),
+  ],
+);
+
+export const poolSessionRelations = relations(poolSession, ({ one, many }) => ({
+  pool: one(pool, { fields: [poolSession.poolId], references: [pool.id] }),
+  pairs: many(pair),
+}));
+
+export const pairRelations = relations(pair, ({ one, many }) => ({
+  session: one(poolSession, { fields: [pair.sessionId], references: [poolSession.id] }),
+  members: many(pairMember),
+}));
+
+export const pairMemberRelations = relations(pairMember, ({ one }) => ({
+  pair: one(pair, { fields: [pairMember.pairId], references: [pair.id] }),
+  camper: one(camper, { fields: [pairMember.camperId], references: [camper.id] }),
+}));
