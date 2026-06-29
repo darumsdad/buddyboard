@@ -170,6 +170,57 @@
     .device-card p { font-size: 12px; color: #6b7280; margin: 0; }
     .primary .device-name { color: #1a56db; }
 
+    /* User guide steps */
+    .guide-section {
+      margin-top: 20px;
+    }
+    .guide-steps {
+      counter-reset: step;
+      list-style: none;
+      padding: 0;
+      margin-top: 12px;
+    }
+    .guide-steps li {
+      counter-increment: step;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+    .guide-steps li::before {
+      content: counter(step);
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      background: #1a56db;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+    .guide-steps li p {
+      margin: 0;
+      font-size: 13px;
+      color: #374151;
+    }
+    .guide-steps li strong {
+      color: #111827;
+    }
+    .guide-tip {
+      background: #f0fdf4;
+      border-left: 4px solid #16a34a;
+      padding: 12px 16px;
+      border-radius: 0 6px 6px 0;
+      margin: 16px 0;
+      font-size: 13px;
+      color: #374151;
+    }
+    .guide-tip strong { color: #15803d; }
+
     /* Footer */
     .footer {
       margin-top: 48px;
@@ -184,6 +235,7 @@
       body { padding: 24px 32px; font-size: 12px; }
       .feature-grid { break-inside: avoid; }
       h2 { break-after: avoid; }
+      .guide-steps li { break-inside: avoid; }
     }
   </style>
 </head>
@@ -191,7 +243,7 @@
 
   <div class="header">
     <h1>BuddyBoard</h1>
-    <div class="tagline">Real-Time Pool Safety Tracking for Camp</div>
+    <div class="tagline">Real-Time Pool Safety Tracking for Camp Regesh</div>
     <div class="meta">Project Overview &nbsp;·&nbsp; Prepared June 2026 &nbsp;·&nbsp; Confidential</div>
   </div>
 
@@ -205,8 +257,8 @@
   </p>
   <p>
     When kids leave the pool, their pair is removed. When it's time for a <strong>buddy call</strong>,
-    counselors open a clean, easy-to-read screen and call off every pair by name. If everyone answers,
-    the pool is safe.
+    counselors open a clean, easy-to-read screen and call off every pair by name, checking each one off
+    as they're confirmed. If everyone answers, the pool is safe.
   </p>
 
   <div class="callout">
@@ -228,7 +280,7 @@
       <tr>
         <td><strong>Pool Counselor</strong></td>
         <td>Staff at the poolside, managing kids checking in and out</td>
-        <td>Start a pool session, register buddy pairs, view the live buddy board, run buddy calls, remove pairs when kids leave</td>
+        <td>Start a pool session, register buddy pairs, view the live buddy board, run buddy calls, remove pairs when kids leave, close the session at end of swim</td>
       </tr>
       <tr>
         <td><strong>Admin</strong></td>
@@ -249,6 +301,7 @@
         <li>Look up by <strong>camper code</strong> (fastest — single field)</li>
         <li>Or look up by <strong>name typeahead</strong> (start typing, pick from list)</li>
         <li>Pair appears on all devices at that pool instantly</li>
+        <li>Prevents the same camper from being in two pairs at once</li>
       </ul>
     </div>
 
@@ -256,19 +309,21 @@
       <h4>Live Buddy Board</h4>
       <ul>
         <li>All current pairs shown in a scrollable list</li>
-        <li>Live swimmer count: "12 swimmers — 6 pairs"</li>
+        <li>Live swimmer count: "12 swimmers · 6 pairs"</li>
         <li>Updates in real time as counselors add or remove pairs</li>
-        <li>Clear status when disconnected — never silently stale</li>
+        <li>Multiple counselors can add pairs simultaneously</li>
+        <li>Clear alert when disconnected — never silently stale</li>
       </ul>
     </div>
 
     <div class="feature-card">
       <h4>Buddy Call Screen</h4>
       <ul>
-        <li>Full-screen, high-contrast view for outdoor use</li>
-        <li>Large text and touch targets for iPad / poolside conditions</li>
-        <li>Scrollable ordered list of all active pairs</li>
-        <li>Designed for bright sunlight readability</li>
+        <li>Full-screen, high-contrast view optimized for outdoor use</li>
+        <li>Large pair count and swimmer count displayed prominently</li>
+        <li>Scrollable list of all active pairs, each with a checkbox</li>
+        <li>Check off each pair as they answer — names strike through to show who's been accounted for</li>
+        <li>Stays live: updates if a pair is added or removed mid-call</li>
       </ul>
     </div>
 
@@ -279,15 +334,19 @@
         <li>Add, edit, or remove individual campers at any time</li>
         <li>Each camper has a staff-assigned code for fast check-in</li>
         <li>Search and filter the full roster by name or code</li>
+        <li>Clear all campers at once when the summer ends</li>
       </ul>
     </div>
 
     <div class="feature-card">
       <h4>Pool &amp; Session Management</h4>
       <ul>
-        <li>Configurable pool list (defaults to 3 pools)</li>
-        <li>Counselors start and close sessions per pool</li>
-        <li>Confirmation required before closing with active pairs</li>
+        <li>Configurable pool list (set up by admins)</li>
+        <li>Pool picker shows a <strong>Live</strong> badge on pools with an active session</li>
+        <li>Session opens automatically when a counselor enters a pool</li>
+        <li>Multiple counselors can join the same pool's session simultaneously</li>
+        <li>Confirmation required before closing a session with active pairs</li>
+        <li>When a session closes, all connected devices redirect automatically</li>
         <li>Session history is archived — records are never deleted</li>
       </ul>
     </div>
@@ -296,9 +355,11 @@
       <h4>User &amp; Account Management</h4>
       <ul>
         <li>Counselors log in with username and password</li>
-        <li>Sessions persist across browser restarts</li>
+        <li>Sessions persist across browser restarts (5-hour idle window)</li>
+        <li>Logged-in username shown on every screen next to the logout button</li>
         <li>Admins add and remove staff accounts</li>
         <li>Admins reset passwords directly — no email flow needed</li>
+        <li>Admin panel is separate from the counselor-facing pool screens</li>
       </ul>
     </div>
   </div>
@@ -339,6 +400,13 @@
     bypassed by a fast enough click.
   </p>
 
+  <h3>Session Close Broadcasts to All Devices</h3>
+  <p>
+    When a counselor closes a pool session, every other device currently viewing that pool is
+    automatically redirected back to the pool list. This ensures no device is left showing a stale,
+    closed session as if it were still active.
+  </p>
+
   <!-- Devices -->
   <h2>Devices &amp; Access</h2>
   <p>BuddyBoard is a web application — no installation required. Open a browser and log in.</p>
@@ -374,8 +442,112 @@
     independent and clean.
   </p>
 
+  <!-- ── USER GUIDE ── -->
+  <h2>Counselor Quick-Start Guide</h2>
+  <p>Everything a counselor needs to run a safe pool swim from start to finish.</p>
+
+  <div class="guide-section">
+    <h3>Starting a Swim Session</h3>
+    <ol class="guide-steps">
+      <li><p>Open the BuddyBoard URL in your browser and log in with your username and password. Your name will appear in the top corner of every screen so you know you're logged into the right account.</p></li>
+      <li><p>On the <strong>Pool List</strong> screen, tap your pool. If another counselor already opened a session, you'll see a <strong>Live</strong> badge on that pool and a confirmation prompt when you enter — tap <strong>Join Session</strong> to connect to the live board.</p></li>
+      <li><p>The <strong>Session Board</strong> opens. Any pairs already registered appear immediately. You're live.</p></li>
+    </ol>
+  </div>
+
+  <div class="guide-section">
+    <h3>Registering a Buddy Pair</h3>
+    <ol class="guide-steps">
+      <li><p>In the <strong>Add Pair</strong> form at the top of the session board, enter the first camper. The fastest method is their <strong>camper code</strong> — type it in the code field and press Tab or Enter. The camper's name will fill in automatically.</p></li>
+      <li><p>If you don't have the code, type the camper's name in the name field. A list of matches appears — tap the right camper to select them.</p></li>
+      <li><p>Repeat for the second camper, then tap <strong>Add Pair</strong>. The pair appears on the board immediately for all counselors at this pool.</p></li>
+    </ol>
+
+    <div class="guide-tip">
+      <strong>Tip:</strong> The system will warn you if a camper is already in an active pair — this prevents double-counting.
+    </div>
+  </div>
+
+  <div class="guide-section">
+    <h3>Removing a Pair (Kids Leave the Pool)</h3>
+    <ol class="guide-steps">
+      <li><p>Find the pair in the list on the session board.</p></li>
+      <li><p>Tap the <strong>×</strong> remove button next to their names. The pair disappears from all devices once the server confirms the removal.</p></li>
+    </ol>
+  </div>
+
+  <div class="guide-section">
+    <h3>Running a Buddy Call</h3>
+    <ol class="guide-steps">
+      <li><p>Tap the <strong>Buddy Call</strong> button on the session board. This opens a full-screen view designed for outdoor, bright-sunlight conditions.</p></li>
+      <li><p>The screen shows the total pair count and swimmer count in large numbers, followed by a list of every active pair.</p></li>
+      <li><p>Call each pair by name. When they answer, tap the <strong>checkbox</strong> next to their names — it strikes through to show they've been accounted for.</p></li>
+      <li><p>When all pairs are checked off, every camper in the water is accounted for. If a pair doesn't answer, their names remain unchecked — a clear visual cue.</p></li>
+      <li><p>Tap <strong>Back to board</strong> to return to the session board.</p></li>
+    </ol>
+
+    <div class="guide-tip">
+      <strong>Note:</strong> Check-off marks are local to your device and reset when you navigate away — they're a working tool during a call, not a permanent record.
+    </div>
+  </div>
+
+  <div class="guide-section">
+    <h3>Ending a Swim Session</h3>
+    <ol class="guide-steps">
+      <li><p>When swim is over and all kids are out of the water, make sure all pairs have been removed from the board (the swimmer count should read 0).</p></li>
+      <li><p>Tap <strong>Close Session</strong> in the top-right corner of the session board.</p></li>
+      <li><p>If any pairs are still active, you'll see a warning — confirm you want to close anyway, or go back and remove them first.</p></li>
+      <li><p>Once confirmed, the session closes. All other devices connected to this pool are automatically redirected to the pool list.</p></li>
+    </ol>
+  </div>
+
+  <h2>Admin Quick-Start Guide</h2>
+  <p>Admin accounts have access to a separate management panel for setting up and maintaining the system.</p>
+
+  <div class="guide-section">
+    <h3>Accessing the Admin Panel</h3>
+    <ol class="guide-steps">
+      <li><p>Log in with an admin account. On the Pool List screen, you'll see an <strong>Admin</strong> link in the top bar — tap it.</p></li>
+      <li><p>The admin panel has three sections: <strong>Users</strong>, <strong>Campers</strong>, and <strong>Pools</strong>.</p></li>
+    </ol>
+  </div>
+
+  <div class="guide-section">
+    <h3>Setting Up Counselor Accounts (Users)</h3>
+    <ol class="guide-steps">
+      <li><p>Go to <strong>Users</strong> and tap <strong>Add User</strong>.</p></li>
+      <li><p>Enter the counselor's first name, last name, username, a temporary password, and their role (<em>User</em> for a regular counselor, <em>Admin</em> for someone who needs management access).</p></li>
+      <li><p>Share the username and temporary password with the counselor. They can log in immediately — there's no email verification step.</p></li>
+      <li><p>To reset a forgotten password, find the user in the list and tap <strong>Reset Password</strong>.</p></li>
+      <li><p>To remove a staff member's access, tap <strong>Delete</strong> next to their account.</p></li>
+    </ol>
+  </div>
+
+  <div class="guide-section">
+    <h3>Loading the Camper Roster</h3>
+    <ol class="guide-steps">
+      <li><p>Go to <strong>Campers</strong>. For a new season, tap <strong>Import from Excel</strong> and upload your roster spreadsheet. Campers are added in bulk.</p></li>
+      <li><p>To add a single camper, tap <strong>Add Camper</strong> and fill in their name, bunk, and camper code.</p></li>
+      <li><p>To update a camper's details (e.g., correct a name or change their code), tap <strong>Edit</strong> next to their row.</p></li>
+      <li><p>At the end of summer, use <strong>Clear All Campers</strong> to reset the roster before importing next year's list.</p></li>
+    </ol>
+
+    <div class="guide-tip">
+      <strong>Tip:</strong> Camper codes are the key to fast check-in at the pool. Make sure every camper has a unique code before the first swim day — short codes (3–4 characters) work best.
+    </div>
+  </div>
+
+  <div class="guide-section">
+    <h3>Managing Pools</h3>
+    <ol class="guide-steps">
+      <li><p>Go to <strong>Pools</strong> to see the list of configured pools.</p></li>
+      <li><p>Tap <strong>Add Pool</strong> to create a new pool and give it a name (e.g., "Main Pool", "Lap Pool").</p></li>
+      <li><p>Tap <strong>Edit</strong> to rename an existing pool. Changes are reflected immediately on the counselor-facing pool list.</p></li>
+    </ol>
+  </div>
+
   <div class="footer">
-    BuddyBoard &nbsp;·&nbsp; Camp Pool Safety Tracking &nbsp;·&nbsp; June 2026
+    BuddyBoard &nbsp;·&nbsp; Camp Regesh Pool Safety Tracking &nbsp;·&nbsp; June 2026
   </div>
 
 </body>
