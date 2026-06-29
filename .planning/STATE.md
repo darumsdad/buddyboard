@@ -1,104 +1,47 @@
 ---
 gsd_state_version: 1.0
 milestone: v1.0
-milestone_name: milestone
-status: ready_to_plan
-stopped_at: Phase 05 complete (6/6) — ready to discuss Phase 06
-last_updated: 2026-06-28T23:01:55.292Z
-last_activity: 2026-06-28 -- Phase 06 execution started
+milestone_name: MVP
+status: milestone_complete
+stopped_at: v1.0 milestone archived — all 8 phases complete
+last_updated: 2026-06-28T00:00:00.000Z
+last_activity: 2026-06-28 -- v1.0 milestone closed
 progress:
   total_phases: 8
-  completed_phases: 5
+  completed_phases: 8
   total_plans: 28
-  completed_plans: 27
-  percent: 63
+  completed_plans: 28
+  percent: 100
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-06-26)
+See: .planning/PROJECT.md (updated 2026-06-28 after v1.0 milestone)
 
 **Core value:** Every counselor at every pool can always see — in real time — exactly which camper pairs are currently in the water, so no child goes unaccounted for.
-**Current focus:** Phase 06 — buddy call screen polish
+**Current focus:** v1.0 shipped — planning v1.1
 
 ## Current Position
 
-Phase: 06
-Plan: Not started
-Status: Ready to plan
+Phase: —
+Plan: —
+Status: Milestone complete — ready for /gsd:new-milestone
 Last activity: 2026-06-28
 
-Progress: [██████████] 100%
+Progress: [████████████████████] 100% — v1.0 SHIPPED
 
-## Performance Metrics
+## Milestone Archive
 
-**Velocity:**
-
-- Total plans completed: 13
-- Average duration: —
-- Total execution time: 0 hours
-
-**By Phase:**
-
-| Phase | Plans | Total | Avg/Plan |
-|-------|-------|-------|----------|
-| 01 | 4 | - | - |
-| 02 | 3 | - | - |
-| 02.2 | 2 | - | - |
-| 05 | 6 | - | - |
-
-**Recent Trend:**
-
-- Last 5 plans: —
-- Trend: —
-
-*Updated after each plan completion*
-| Phase 02-admin-user-management P01 | 356 | 2 tasks | 5 files |
-| Phase 02-admin-user-management P02 | 168 | 2 tasks | 5 files |
-| Phase 02-admin-user-management P03 | 21 | 2 tasks | 6 files |
-| Phase 03-admin-data-setup P01 | 5 | 1 tasks | 2 files |
-| Phase 03-admin-data-setup P01 | continuation | 3 tasks | 4 files |
-| Phase 03 P04 | 485 | 2 tasks | 10 files |
-| Phase 04 P02 | 209 | 2 tasks | 4 files |
-| Phase 04-sessions-and-buddy-pairs P03 | 420 | 2 tasks | 5 files |
-| Phase 04-sessions-and-buddy-pairs P04 | 15 | 2 tasks | 6 files |
-| Phase 04-sessions-and-buddy-pairs P05 | 300 | 2 tasks | 2 files |
-
-## Accumulated Context
-
-### Decisions
-
-Decisions are logged in PROJECT.md Key Decisions table.
-Recent decisions affecting current work:
-
-- — see PROJECT.md for pending decisions (hosting, RLS, pair ordering)
-- [Phase ?]: admin() plugin registered in auth.ts; adminClient() in auth-client.ts; Supabase schema updated; admin user role backfilled
-- [Phase ?]: D-08 override confirmed: layout-level role check via (admin)/layout.tsx; middleware.ts unchanged
-- [Phase ?]: Pragmatic approach for jsdom/vitest without experimental React APIs
-- [Phase ?]: Phase 03-04 complete
-- [Phase ?]: Phase 03-04 complete
-- [Phase 04-02]: redirect() in closeSessionAction must be outside try/catch — Next.js 16 implements redirect by throwing internally
-- [Phase 04-02]: pools/page.tsx updated to DB-driven pool list with Link navigation (prerequisite for SESS-04 test coverage)
-
-### Pending Todos
-
-None — logout button todo folded into Phase 4 scope.
-
-### Blockers/Concerns
-
-- Hosting decision (Vercel vs Hostinger) should be resolved before or during Phase 1 to set up CI/CD correctly
-- Supabase Row Level Security: skip for v1, handle auth at Next.js middleware layer (revisit post-launch)
+- `.planning/milestones/v1.0-ROADMAP.md`
+- `.planning/milestones/v1.0-REQUIREMENTS.md`
+- `.planning/MILESTONES.md`
 
 ## Deferred Items
 
 | Category | Item | Status | Deferred At |
 |----------|------|--------|-------------|
-| *(none)* | | | |
-
-## Session Continuity
-
-Last session: 2026-06-28T22:12:50.030Z
-Stopped at: context exhaustion at 75% (2026-06-28)
-Resume file: None
+| security | Supabase Row Level Security | Accepted for v1 | 2026-06-28 |
+| tests | Admin action test failures (DB ECONNREFUSED in test env) | Pre-existing | 2026-06-28 |
+| infra | Subdomain at campregeshonline.com | Planned for v1.1 | 2026-06-28 |
