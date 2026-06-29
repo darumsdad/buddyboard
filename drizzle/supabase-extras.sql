@@ -8,6 +8,9 @@
 -- do not fire their own Realtime events — this is why both tables are needed).
 alter publication supabase_realtime add table pair;
 alter publication supabase_realtime add table pair_member;
+-- pool_session UPDATE events redirect connected clients when a session is closed.
+-- No REPLICA IDENTITY FULL needed — we only read payload.new, not payload.old.
+alter publication supabase_realtime add table pool_session;
 
 -- Required so that cascade deletes from pair → pair_member succeed when
 -- pair_member is a member of the supabase_realtime publication.
