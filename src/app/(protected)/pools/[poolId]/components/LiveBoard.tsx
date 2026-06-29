@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase-browser";
 import { SessionBoard } from "./SessionBoard";
 import { ConnectionBanner } from "./ConnectionBanner";
@@ -27,6 +28,7 @@ type LiveBoardProps = {
 };
 
 export function LiveBoard({ initialPairs, sessionId, poolId, poolName }: LiveBoardProps) {
+  const router = useRouter();
   // SSR hydration — no loading gap on first paint (D-11 / BOARD-01)
   const [pairs, setPairs] = useState<Pair[]>(initialPairs);
   const [connectionStatus, setConnectionStatus] = useState<
@@ -90,6 +92,16 @@ export function LiveBoard({ initialPairs, sessionId, poolId, poolName }: LiveBoa
         { event: "DELETE", schema: "public", table: "pair" },
         debouncedRefresh,
       )
+      // Redirect all connected users when the session is closed by any counselor
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "pool_session", filter: `id=eq.${sessionId}` },
+        (payload) => {
+          if ((payload.new as { status: string }).status === "closed") {
+            router.push("/pools");
+          }
+        },
+      )
       .subscribe((status, err) => {
         if (status === "SUBSCRIBED") setConnectionStatus("connected");
         if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
@@ -103,7 +115,7 @@ export function LiveBoard({ initialPairs, sessionId, poolId, poolName }: LiveBoa
       if (refreshTimer.current) clearTimeout(refreshTimer.current);
       supabase.removeChannel(channel);
     };
-  }, [sessionId, debouncedRefresh]);
+  }, [sessionId, debouncedRefresh, router]);
 
   // Derived counts — updated on every pairs state change
   const swimmerCount = pairs.reduce((sum, p) => sum + p.members.length, 0);

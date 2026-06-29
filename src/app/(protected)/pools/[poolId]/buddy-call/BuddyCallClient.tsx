@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import { supabase } from "@/lib/supabase-browser";
 import { ConnectionBanner } from "../components/ConnectionBanner";
@@ -19,6 +20,7 @@ export function BuddyCallClient({
   poolId,
   poolName,
 }: BuddyCallClientProps) {
+  const router = useRouter();
   const [pairs, setPairs] = useState<Pair[]>(initialPairs);
   const [connectionStatus, setConnectionStatus] = useState<
     "connected" | "reconnecting" | "disconnected"
@@ -78,6 +80,16 @@ export function BuddyCallClient({
         { event: "DELETE", schema: "public", table: "pair" },
         debouncedRefresh,
       )
+      // Redirect when the session is closed
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "pool_session", filter: `id=eq.${sessionId}` },
+        (payload) => {
+          if ((payload.new as { status: string }).status === "closed") {
+            router.push("/pools");
+          }
+        },
+      )
       .subscribe((status, err) => {
         if (status === "SUBSCRIBED") setConnectionStatus("connected");
         if (status === "CHANNEL_ERROR" || status === "TIMED_OUT" || status === "CLOSED") {
@@ -91,7 +103,7 @@ export function BuddyCallClient({
       if (timerRef.current) clearTimeout(timerRef.current);
       supabase.removeChannel(channel);
     };
-  }, [sessionId, debouncedRefresh]);
+  }, [sessionId, debouncedRefresh, router]);
 
   // Checked pair IDs — local only, resets on navigation
   const [checkedIds, setCheckedIds] = useState<Set<string>>(new Set());
