@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import { supabase } from "@/lib/supabase-browser";
 import { ConnectionBanner } from "../components/ConnectionBanner";
+import { LogoutButton } from "../components/LogoutButton";
 import type { Pair } from "@/lib/pairs";
 
 type BuddyCallClientProps = {
@@ -12,6 +13,7 @@ type BuddyCallClientProps = {
   sessionId: string;
   poolId: string;
   poolName: string;
+  userName?: string;
 };
 
 export function BuddyCallClient({
@@ -19,6 +21,7 @@ export function BuddyCallClient({
   sessionId,
   poolId,
   poolName,
+  userName,
 }: BuddyCallClientProps) {
   const router = useRouter();
   const [pairs, setPairs] = useState<Pair[]>(initialPairs);
@@ -134,8 +137,7 @@ export function BuddyCallClient({
           <span className="flex-1 text-center text-base font-semibold text-slate-700 truncate px-4">
             {poolName}
           </span>
-          {/* Spacer to balance the back link */}
-          <div className="w-[110px]" aria-hidden="true" />
+          <LogoutButton userName={userName} />
         </div>
       </header>
 

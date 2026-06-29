@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ExternalLink } from "lucide-react";
+import { LogoutButton } from "@/app/(protected)/pools/[poolId]/components/LogoutButton";
 
 const links = [
   { href: "/admin/users", label: "Users" },
@@ -10,7 +11,11 @@ const links = [
   { href: "/admin/pools", label: "Pools" },
 ];
 
-export function AdminSidebar() {
+type AdminSidebarProps = {
+  userName?: string;
+};
+
+export function AdminSidebar({ userName }: AdminSidebarProps) {
   const pathname = usePathname();
   return (
     <nav className="w-48 shrink-0 bg-slate-50 border-r border-slate-200 min-h-screen p-4 flex flex-col">
@@ -33,7 +38,7 @@ export function AdminSidebar() {
           );
         })}
       </ul>
-      <div className="border-t border-slate-200 pt-3 mt-3">
+      <div className="border-t border-slate-200 pt-3 mt-3 flex flex-col gap-2">
         <Link
           href="/pools"
           className="flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-slate-500 hover:bg-slate-200 hover:text-slate-900 transition-colors"
@@ -41,6 +46,9 @@ export function AdminSidebar() {
           <ExternalLink size={14} />
           View Buddy Board
         </Link>
+        <div className="px-3 py-1">
+          <LogoutButton userName={userName} className="text-sm text-slate-500 hover:text-slate-900" />
+        </div>
       </div>
     </nav>
   );

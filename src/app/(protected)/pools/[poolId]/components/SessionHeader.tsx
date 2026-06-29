@@ -11,6 +11,7 @@ type SessionHeaderProps = {
   pairCount: number;
   sessionId: string;
   poolId: string;
+  userName?: string;
 };
 
 export function SessionHeader({
@@ -19,6 +20,7 @@ export function SessionHeader({
   pairCount,
   sessionId,
   poolId,
+  userName,
 }: SessionHeaderProps) {
   return (
     <header className="sticky top-0 z-10 bg-white border-b border-slate-200">
@@ -50,13 +52,15 @@ export function SessionHeader({
           </Link>
         </div>
 
-        <div className="flex items-center">
+        <div className="flex items-center gap-4">
           <CloseSessionDialog
             sessionId={sessionId}
             poolId={poolId}
             activePairCount={pairCount}
           />
-          <LogoutButton className="text-sm text-slate-600 hover:text-slate-900 ml-4" />
+          <div className="border-l border-slate-200 pl-4">
+            <LogoutButton className="text-sm text-slate-600 hover:text-slate-900" userName={userName} />
+          </div>
         </div>
       </div>
 

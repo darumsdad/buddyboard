@@ -1,4 +1,6 @@
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 import { db } from "@/db";
 import { pool, poolSession } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
@@ -16,6 +18,7 @@ export default async function BuddyCallPage({
   const { poolId } = await params; // params is a Promise in Next.js 16
 
   // Step 1 — Pool lookup: validates the poolId URL parameter (T-06-01 threat model).
+  const authSession = await auth.api.getSession({ headers: await headers() });
   const poolRecord = await db.select().from(pool).where(eq(pool.id, poolId)).limit(1);
   if (!poolRecord[0]) redirect("/pools");
 
@@ -41,6 +44,7 @@ export default async function BuddyCallPage({
       sessionId={session.id}
       poolId={poolId}
       poolName={poolRecord[0].name}
+      userName={authSession?.user.name}
     />
   );
 }

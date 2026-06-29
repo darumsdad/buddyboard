@@ -29,7 +29,7 @@ export default async function PoolsPage() {
             Admin
           </Link>
         )}
-        <LogoutButton />
+        <LogoutButton userName={session.user.name} />
       </div>
 
       {/* Main content */}

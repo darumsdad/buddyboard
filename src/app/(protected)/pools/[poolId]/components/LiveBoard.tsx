@@ -25,9 +25,10 @@ type LiveBoardProps = {
   sessionId: string;
   poolId: string;
   poolName: string;
+  userName?: string;
 };
 
-export function LiveBoard({ initialPairs, sessionId, poolId, poolName }: LiveBoardProps) {
+export function LiveBoard({ initialPairs, sessionId, poolId, poolName, userName }: LiveBoardProps) {
   const router = useRouter();
   // SSR hydration — no loading gap on first paint (D-11 / BOARD-01)
   const [pairs, setPairs] = useState<Pair[]>(initialPairs);
@@ -131,6 +132,7 @@ export function LiveBoard({ initialPairs, sessionId, poolId, poolName }: LiveBoa
         sessionId={sessionId}
         poolId={poolId}
         pairs={pairs}
+        userName={userName}
         onPairMutated={refreshPairs}
         isRefreshing={isRefreshing}
       />

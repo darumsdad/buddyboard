@@ -22,6 +22,7 @@ type SessionBoardProps = {
   sessionId: string;
   poolId: string;
   pairs: Pair[];
+  userName?: string;
   /** Callback fired by AddPairForm (onSuccess) and PairList (onPairRemoved). Wired by LiveBoard in Plan 05-05. */
   onPairMutated?: () => void;
   /** When true, PairList renders PairSkeleton instead of pair rows. Wired by LiveBoard in Plan 05-05. */
@@ -35,6 +36,7 @@ export function SessionBoard({
   sessionId,
   poolId,
   pairs,
+  userName,
   onPairMutated = () => {},
   isRefreshing = false,
 }: SessionBoardProps) {
@@ -46,6 +48,7 @@ export function SessionBoard({
         pairCount={pairCount}
         sessionId={sessionId}
         poolId={poolId}
+        userName={userName}
       />
       <div className="p-4">
         <AddPairForm sessionId={sessionId} poolId={poolId} onSuccess={onPairMutated} />

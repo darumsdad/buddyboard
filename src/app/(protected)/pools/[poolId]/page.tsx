@@ -105,6 +105,7 @@ export default async function PoolSessionPage({
         sessionId={session.id}
         poolId={poolId}
         poolName={poolRecord[0].name}
+        userName={authSession.user.name}
       />
     </>
   );

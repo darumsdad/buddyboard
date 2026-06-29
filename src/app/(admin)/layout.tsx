@@ -14,7 +14,7 @@ export default async function AdminLayout({
   if (session.user.role !== "admin") redirect("/pools");
   return (
     <div className="flex min-h-screen">
-      <AdminSidebar />
+      <AdminSidebar userName={session.user.name} />
       <div className="flex-1 min-w-0">{children}</div>
       <Toaster position="bottom-right" richColors />
     </div>
