@@ -12,6 +12,9 @@
 
 # testing
 /coverage
+/playwright-report/
+/test-results/
+tests/perf/.perf-state.json
 
 # next.js
 /.next/
